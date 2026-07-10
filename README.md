@@ -7,13 +7,16 @@ Claude Code를 어떻게 세팅하고 사용하는지 정리해둔 저장소입�
 ```
 claude-setting/
 ├── .claude/               # ~/.claude 예시 (글로벌 설정)
-│   ├── CLAUDE.md          # GLOBAL CLAUDE MD
+│   ├── CLAUDE.md               # GLOBAL CLAUDE MD (절대 규칙 + 모드 라우터)
+│   ├── CLAUDE.local.coding.md  # SESSION MD 마스터 — coding 모드
+│   ├── CLAUDE.local.docs.md    # SESSION MD 마스터 — docs 모드
 │   ├── chores.template.md
 │   ├── progress.template.md
 │   ├── progress.granularity.md
 │   └── settings.local.json
 └── work_space/            # 실제 작업 폴더(work_space) 예시
     ├── CLAUDE.md          # WORK CLAUDE MD
+    ├── CLAUDE.local.md    # SESSION MD (모드 마스터의 사본, setup 시 생성)
     ├── .claude-docs/      # AI 작업 기록
     │   ├── overview.md
     │   ├── progress.md
@@ -39,7 +42,9 @@ claude-setting/
 
 | 문서 | 위치 | 역할 |
 | --- | --- | --- |
-| GLOBAL CLAUDE MD | `.claude/CLAUDE.md` | 모든 프로젝트에 적용되는 규칙 (응답 언어, 브랜치·커밋 정책, 비밀정보 취급 등) |
+| GLOBAL CLAUDE MD | `.claude/CLAUDE.md` | 모든 프로젝트에 적용되는 규칙 (응답 언어, 브랜치·커밋 정책, 비밀정보 취급 등) + 모드 라우팅 |
+| SESSION MD 마스터 | `.claude/CLAUDE.local.<mode>.md` | 모드별(`coding`·`docs` 등) 작업 규칙 원본. setup 때 SESSION MD로 복사됨 |
+| SESSION MD | `work_space/CLAUDE.local.md` | 현재 세션의 작업 모드 규칙 (모드 마스터의 사본). 세션 1개 = 모드 1개, walk-up 자동 로드 |
 | WORK CLAUDE MD | `work_space/CLAUDE.md` | 이 작업 공간에서만 적용되는 라우팅·규칙 (REPO CLAUDE MD 목록, 이슈 자산화 규칙 등) |
 | REPO CLAUDE MD | `work_space/<repo>/CLAUDE.md` | 레포(또는 모노레포 app)별 팀 공용 규칙. git에 커밋됨 |
 | `.claude-docs/` | `work_space/.claude-docs/` | AI가 남기는 작업 기록 — 진행 상황, 완료된 목표 스냅샷, 잡일 목록 |
