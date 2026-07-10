@@ -58,7 +58,7 @@ work_space/
 ├── chores.md                 # 목표로 안 묶이는 자잘한 단발 [ ] 모음
 ├── progresses/               # 완료된 progress 스냅샷 (목표 하나당 파일 하나, flat)
 │   └── YYYYMMDD-<주제>.md     # 같은 날 주제 충돌 시에만 -HHmm. 여러 repo 걸치면 파일 안 `## [repo]:`로 구분
-├── issues/                   # 복잡한 이슈 기록 (YYYYMMDDHHmm-<이슈>.md) — 아래 ISSUE 자산화 참조
+├── issues/                   # 복잡한 이슈 기록 (YYYYMMDD-<이슈>.md, 충돌 시 -HHmm) — 아래 ISSUE 자산화 참조
 └── rules/                         # 현재 작업 공간의 규칙·양식 보관 (선택)
     ├── progress.template.md       # progress 작성 양식
     ├── progress.granularity.md    # progress 작업 단위 끊기 규칙
@@ -66,7 +66,7 @@ work_space/
 ```
 
 - 위 `.claude-docs/`은 기본 작업 폴더이다. (default)
-- `.claude-docs/`가 없다면 위 구조대로 만든다. 
+- `.claude-docs/`는 setup이 빈 폴더로 만들어 둔다(GLOBAL). 코딩 세션은 그 안에서 **위 구조 중 없는 항목만** 채운다 (필요해질 때 만들어도 됨). 
     - `overview.md`·`progress.md`는 **빈 파일**로 생성한다.
     - `chores.md`는 [chores.template.md](./chores.template.md) seed를 **복사해서** 생성한다.
     - `rules/`의 `progress.template.md`·`progress.granularity.md`·`issues.template.md`는 예외 — 빈 파일이 아니라 seed 원본을 보고 채워서 생성한다:
@@ -91,7 +91,7 @@ work_space/
     - 단, 다음 작업을 해야만 에러가 해결된다면 다음 작업을 진행.(ex: 타입 미선언 이슈)
 2. 보고 후 `chores.md`에 `[repo] issue:` 형태로 작성하고, 이슈 해결을 먼저 진행한다.(repo 구분 없다면 생략 가능)
     - 모노레포라면 `[api] issue:` 등 영역별로 구분.
-3. 이슈가 간단하지 않거나, 바로 해결되지 않는 이슈라면 `.claude-docs/issues/YYYYMMDDHHmm-<이슈 내용>.md`로, `rules/issues.template.md` 양식에 맞춰 기록한다.
+3. 이슈가 간단하지 않거나, 바로 해결되지 않는 이슈라면 `.claude-docs/issues/YYYYMMDD-<이슈 내용>.md`로, `rules/issues.template.md` 양식에 맞춰 기록한다.
     - 간단한 이슈는 해결 후 체크박스 체크.
     - 이슈 해결 이후 '어떻게' 기준으로 해결 방법을 기록.
 
