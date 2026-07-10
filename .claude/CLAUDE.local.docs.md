@@ -8,7 +8,15 @@
 - 워크스페이스 루트 = 세션 cwd. 대상 문서는 대체로 루트나 하위 폴더의 `.md`.
 - `work_space/CLAUDE.local.md` = SESSION MD (이 문서의 사본), `work_space/CLAUDE.md` = WORK CLAUDE MD.
 - CLAUDE.md 계열 파일은 읽기만 한다. 단 `CLAUDE.local.md`(SESSION MD)는 setup이 관리 — 예외.
-- `.claude-docs/`: 진행 관리가 필요할 때만 그 안에 `progress.md` 등을 만든다 (문서 작업은 대개 가벼우니 필수 아님).
+- `.claude-docs/`: 문서 작업은 대개 가벼우니 **경량 구조**만 setup이 만든다 (GLOBAL의 SESSION SETUP 절차 참조).
+    ```
+    .claude-docs/
+    ├── progress.md            # 빈 파일 (진행 관리 필요 시 사용)
+    └── rules/
+        ├── progress.template.md       # seed 원본 채워 생성
+        └── progress.granularity.md    # seed 원본 채워 생성
+    ```
+    - seed 원본은 `~/.claude/`(예시 repo에선 `.claude/`)의 동명 파일을 참고한다. 코딩용 `overview.md`·`chores.md`·`progresses/`·`issues/`는 docs 모드에서 만들지 않는다.
 
 ## DOCS (문서 작성·수정 시)
 

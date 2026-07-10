@@ -66,7 +66,7 @@ work_space/
 ```
 
 - 위 `.claude-docs/`은 기본 작업 폴더이다. (default)
-- `.claude-docs/`는 setup이 빈 폴더로 만들어 둔다(GLOBAL). 코딩 세션은 그 안에서 **위 구조 중 없는 항목만** 채운다 (필요해질 때 만들어도 됨). 
+- 위 구조는 **setup이 만든다**(GLOBAL의 SESSION SETUP 절차 참조). 세션 중엔 없는 항목만 추가로 채운다.
     - `overview.md`·`progress.md`는 **빈 파일**로 생성한다.
     - `chores.md`는 [chores.template.md](./chores.template.md) seed를 **복사해서** 생성한다.
     - `rules/`의 `progress.template.md`·`progress.granularity.md`·`issues.template.md`는 예외 — 빈 파일이 아니라 seed 원본을 보고 채워서 생성한다:
