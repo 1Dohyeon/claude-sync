@@ -1,12 +1,36 @@
 # claude-setting
 
-Claude Code를 어떻게 세팅하고 사용하는지 정리해둔 저장소입니다.
+Claude Code 글로벌 설정 모음입니다. 저장소는 각 컴퓨터에 `clone`으로 받아두고, 실제 사용할 `~/.claude/`는 이 저장소의 **루트 디렉터리**를 가리키도록 심링크합니다.
+
+저장소 주소: [1Dohyeon/claude-setting](https://github.com/1Dohyeon/claude-setting)
+
+## 연결 방법
+
+1. 저장소를 원하는 위치에 clone합니다.
+2. 기존 `~/.claude/`가 있으면 백업하거나 이름을 바꿉니다.
+3. `~/.claude/`를 clone한 저장소의 **루트 디렉터리**로 심링크합니다.
+
+즉, `clone`은 저장소를 로컬에 가져오는 작업이고, `심링크`는 Claude Code가 실제로 읽는 `~/.claude/`를 그 저장소의 루트에 연결하는 작업입니다.
+
+### Windows PowerShell
+
+```powershell
+Rename-Item $env:USERPROFILE\.claude .claude.backup
+New-Item -ItemType SymbolicLink -Path $env:USERPROFILE\.claude -Target C:\path\to\claude-setting
+```
+
+### macOS / Linux
+
+```bash
+mv ~/.claude ~/.claude.backup
+ln -s /path/to/claude-setting ~/.claude
+```
 
 ## 구조
 
 ```
 claude-setting/
-├── .claude/               # ~/.claude 예시 (글로벌 설정)
+├── .claude/               # ~/.claude로 동기화되는 글로벌 설정 묶음
 │   ├── CLAUDE.md               # GLOBAL CLAUDE MD (절대 규칙 + 모드 라우터)
 │   ├── CLAUDE.local.coding.md  # SESSION MD 마스터 — coding 모드
 │   ├── CLAUDE.local.docs.md    # SESSION MD 마스터 — docs 모드
@@ -35,8 +59,13 @@ claude-setting/
 
 ## 매핑
 
-- `.claude/` ↔ `~/.claude` (사용자 홈의 글로벌 Claude 설정)
+- 저장소 루트 ↔ `~/.claude` (각 기기에 clone한 저장소의 루트를 심링크로 연결)
 - `work_space/` ↔ 실제로 작업할 때 쓰는 루트 폴더
+
+## 주의
+
+- `hooks/`에 둔 훅 스크립트는 `settings.json`에서 `node`로 연결해야 합니다.
+- Windows와 macOS를 같이 쓰는 경우, 훅은 `sh`보다 `js`로 통일하는 편이 안전합니다.
 
 ## 문서 역할
 

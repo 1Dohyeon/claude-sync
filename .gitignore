@@ -1,26 +1,47 @@
 # ===== .claude 기기 메모리, 로컬 설정 등 =====
 settings.local.json
 CLAUDE.local.md
+# 기기별 로컬 보조 설정/실험 파일
+local/
 
-# runtime / cache / machine-specific state
+# ===== runtime / cache / machine-specific state =====
+# 세션 기록과 재개용 상태
 sessions/
+# 세션별 환경 변수/실행 컨텍스트
 session-env/
+# 설치된 플러그인 및 플러그인 상태
 plugins/
+# 파일 변경 이력 스냅샷
 file-history/
+# 자동 백업본
 backups/
+# 공용 캐시 데이터
 cache/
+# 셸 실행 스냅샷/복구용 기록
 shell-snapshots/
+# IDE별 내부 상태
 ide/
+# 디버그 로그와 임시 진단 자료
 debug/
+# 붙여넣기 캐시
 paste-cache/
+# 다운로드한 산출물/임시 파일
 downloads/
+# 작업 실행 기록/태스크 산출물
 tasks/
+# 마지막 정리 시각/상태 마커
 .last-cleanup
+# 마지막 업데이트 결과 캐시
 .last-update-result.json
+# MCP 인증 필요 여부 캐시
 mcp-needs-auth-cache.json
+# 통계 집계 캐시
 stats-cache.json
 
-# secrets / personal logs
+# ===== secrets / personal logs =====
+# 자격 증명/비밀 정보
 .credentials.json
+# 사용자 활동/명령 기록
 history.jsonl
+# 프로젝트별 개인 데이터 및 로컬 작업 공간
 projects/
