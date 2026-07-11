@@ -1,1 +1,26 @@
+# ===== .claude 기기 메모리, 로컬 설정 등 =====
 settings.local.json
+CLAUDE.local.md
+
+# runtime / cache / machine-specific state
+sessions/
+session-env/
+plugins/
+file-history/
+backups/
+cache/
+shell-snapshots/
+ide/
+debug/
+paste-cache/
+downloads/
+tasks/
+.last-cleanup
+.last-update-result.json
+mcp-needs-auth-cache.json
+stats-cache.json
+
+# secrets / personal logs
+.credentials.json
+history.jsonl
+projects/
