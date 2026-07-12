@@ -16,7 +16,6 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 ```
 claude-setting/             # ~/.claude로 심링크되는 저장소 루트
 ├── docs/                   # claude가 작업할 때, 읽고 쓰는 문서 저장 (git)
-├── meta/                   # 저장소 관리용 문서 — claude는 읽지 않음 (git)
 ├── hooks/                  # 훅 스크립트 (git)
 ├── CLAUDE.md               # Claude 응답·행동 규칙 (git)
 ├── settings.json           # Claude Code 앱 설정 — 테마·업데이트 채널 등 (git)
