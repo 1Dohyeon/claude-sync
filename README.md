@@ -1,12 +1,13 @@
-# claude-setting
+# claude-sync
 
 Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으로 받아두고, 실제 사용할 `~/.claude/`는 이 저장소의 **루트**를 가리키도록 심링크합니다.
 
-저장소 주소: [1Dohyeon/.claude-sync](https://github.com/1Dohyeon/.claude-sync)
+> 저장소 주소: [1Dohyeon/.claude-sync](https://github.com/1Dohyeon/.claude-sync)
 
 ## 연결 방법
 
-[.docs/setup.md](.docs/setup.md) 참고.
+1. **Node.js 설치 확인** — `hooks/`의 훅 스크립트가 모두 `.js`로 작성되어 있고 `node`로 실행되므로, 연결할 기기에 Node.js가 먼저 설치되어 있어야 합니다.
+2. **clone 후 심링크 연결** — 절차는 [meta/setup.md](meta/setup.md) 참고.
 
 ## 구조
 
@@ -14,7 +15,8 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 
 ```
 claude-setting/             # ~/.claude로 심링크되는 저장소 루트
-├── .claude-docs/           # claude가 작업할 때, 읽고 쓰는 문서 저장 (git)
+├── docs/                   # claude가 작업할 때, 읽고 쓰는 문서 저장 (git)
+├── meta/                   # 저장소 관리용 문서 — claude는 읽지 않음 (git)
 ├── hooks/                  # 훅 스크립트 (git)
 ├── CLAUDE.md               # Claude 응답·행동 규칙 (git)
 ├── settings.json           # Claude Code 앱 설정 — 테마·업데이트 채널 등 (git)
