@@ -27,8 +27,8 @@ debug/
 paste-cache/
 # 다운로드한 산출물/임시 파일
 downloads/
-# 작업 실행 기록/태스크 산출물
-tasks/
+# 작업 실행 기록/태스크 산출물 (루트의 런타임 tasks/만; docs/<repo>/tasks/는 git으로 추적)
+/tasks/
 # 마지막 정리 시각/상태 마커
 .last-cleanup
 # 마지막 업데이트 결과 캐시
@@ -45,3 +45,18 @@ stats-cache.json
 history.jsonl
 # 프로젝트별 개인 데이터 및 로컬 작업 공간
 projects/
+
+# ===== OS =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

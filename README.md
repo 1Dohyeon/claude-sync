@@ -1,38 +1,60 @@
-# claude-setting
+# claude-sync
 
 Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으로 받아두고, 실제 사용할 `~/.claude/`는 이 저장소의 **루트**를 가리키도록 심링크합니다.
 
-저장소 주소: [1Dohyeon/.claude-sync](https://github.com/1Dohyeon/.claude-sync)
+> 저장소 주소: [1Dohyeon/.claude-sync](https://github.com/1Dohyeon/.claude-sync)
 
 ## 연결 방법
 
-[.docs/setup.md](.docs/setup.md) 참고.
+1. **Node.js 설치 확인** - `hooks/`의 훅 스크립트가 모두 `.js`로 작성되어 있고 `node`로 실행되므로, 연결할 기기에 Node.js가 먼저 설치되어 있어야 합니다.
+2. **clone 후 심링크 연결** - 절차는 [meta/setup.md](meta/setup.md) 참고.
 
 ## 구조
 
-> 클로드 작업에 직/간접적 영향 있는 파일 및 폴더만 표기
-
 ```
-claude-setting/             # ~/.claude로 심링크되는 저장소 루트
-├── .claude-docs/           # claude가 작업할 때, 읽고 쓰는 문서 저장 (git)
-├── hooks/                  # 훅 스크립트 (git)
+.claude-sync(~/.claude)/    # ~/.claude로 심링크되는 저장소 루트
+├── docs/                   # claude가 작업할 때, 읽고 쓰는 repo별 문서 저장 (git)
+├── hooks/                  # settings.json에 등록된 훅 진입점만 (git)
+├── utils/                  # 훅들이 공유하는 헬퍼 로직 (git)
 ├── CLAUDE.md               # Claude 응답·행동 규칙 (git)
-├── settings.json           # Claude Code 앱 설정 — 테마·업데이트 채널 등 (git)
+├── settings.json           # Claude Code 앱 설정 - 테마·업데이트 채널 등 (git)
 ├── CLAUDE.local.md         # 응답·행동 규칙의 기기별 오버라이드/추가 (gitignore)
-└── settings.local.json     # 앱 설정의 기기별 오버라이드 — 권한 허용 목록 등 (gitignore)
+└── settings.local.json     # 앱 설정의 기기별 오버라이드 - 권한 허용 목록 등 (gitignore)
 ```
 
-## 매핑
+> `docs/` 안 폴더 구조는 해당 repository에 없음(private 작업 기록)
 
-- 저장소 루트 ↔ `~/.claude` (각 기기에 clone한 저장소의 루트를 심링크로 연결)
+## `docs` 구조
 
-## 주의
+`docs/` 폴더는 repo별로 다음 구조대로 정리합니다.
 
-- `hooks/`에 둔 훅 스크립트는 `settings.json`에서 `node`로 연결해야 합니다.
-- Windows와 macOS를 같이 쓰는 경우, 훅은 `sh`보다 `js`로 통일하는 편이 안전합니다.
+```
+.claude-sync(~/.claude)/
+└── docs/
+    ├── .rules/                     # 작업 시 지켜야할 규율
+    ├── .templates/                 # 문서 작업 시 참고할 템플릿
+    └── <repo>/                     # global 세팅이라 여러 저장소가 공유 - repo별로 분리
+```
 
-## 문서 역할
+- **`<repo>` 값**: `git remote get-url origin`로 매번 직접 계산(실제 repo 이름)
+  - git 저장소가 아니면 관련 훅은 조용히 통과
 
-| 문서             | 위치        | 역할                                                                               |
-| ---------------- | ----------- | ---------------------------------------------------------------------------------- |
-| GLOBAL CLAUDE MD | `CLAUDE.md` | 모든 프로젝트에 적용되는 절대 규칙 (응답 언어, 브랜치·커밋 정책, 비밀정보 취급 등) |
+### `docs/<repo>` 구조
+
+```
+.claude-sync(~/.claude)/docs/<repo>/
+├── overview.md             # 해당 repo의 서비스 도메인 이해를 돕는 정적 문서
+└── tasks/
+    ├── <branch>.md         # 병렬 task 작업을 위해 branch별로 분리 (진행 중인 task)
+    └── done/
+        └── <branch>-YYYYMMDD.md   # 완료된 task를 옮겨두는 곳
+```
+
+- **`<repo>/overview.md`**: 해당 repo가 어떤 서비스·도메인인지 이해하기 위한 문서.(훅을 통해 세션 시작 시 항상 주입됨)
+- **`tasks/<branch>.md`**: 보통 브랜치 하나는 task 하나를 뜻하므로 브랜치 이름으로 task 관리
+  - **`<branch>` 값**: `git rev-parse --abbrev-ref HEAD`로 매번 직접 계산(실제 브랜치 이름)
+  - 클로드는 해당 브랜치에서 작업하는 일을 설계하여 참고하며 작업
+- **`tasks/done/<branch>-YYYYMMDD.md`**: task 완료 시 `tasks/<branch>.md`를 여기로 옮김(`mv`)
+  - 나중에 재사용해도 예전 완료 같은 브랜치명을 기록이 안 섞임
+
+> Claude가 tasks를 어떻게 관리하는지는 [meta/tasks.md](meta/tasks.md)를 참고하세요.
