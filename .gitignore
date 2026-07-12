@@ -3,6 +3,7 @@ settings.local.json
 CLAUDE.local.md
 # 기기별 로컬 보조 설정/실험 파일
 local/
+docs
 
 # ===== runtime / cache / machine-specific state =====
 # 세션 기록과 재개용 상태
