@@ -1,12 +1,17 @@
 {
-  "autoUpdatesChannel": "latest",
-  "tui": "fullscreen",
-  "theme": "dark",
   "hooks": {
     "SessionStart": [
       {
-        "hooks": [{ "type": "command", "command": "node \"$HOME/.claude/hooks/load-progress.js\"" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/load-progress.js\""
+          }
+        ]
       }
     ]
-  }
+  },
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "theme": "dark"
 }
