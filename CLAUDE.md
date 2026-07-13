@@ -39,4 +39,5 @@
 6. task 작업이 완료되면
    - task 파일 끝에 `## 완료 (HH:MM)` 섹션을 추가해 마무리 요약을 남긴다.
    - 그 파일을 `~/.claude/docs/<repo>/tasks/done/<branch>-YYYYMMDD.md`로 옮긴다(`mv`).
+      - 옮기기 전 꼭 사용자에게 허락을 요구한다.
    - **`done/` 아래는 평탄(1-depth) 유지**: 브랜치명의 `/`는 `-`로 치환한다. (ex: `feature/search-ignore-space` → `done/feature-search-ignore-space-YYYYMMDD.md`) — `done/` 안에 `feature/` 등 하위폴더를 만들지 않는다.
