@@ -61,3 +61,22 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
   - 나중에 재사용해도 예전 완료 같은 브랜치명을 기록이 안 섞임
 
 > Claude가 tasks를 어떻게 관리하는지는 [CLAUDE.md의 HOW TO WORK](CLAUDE.md#how-to-work)를 참고하세요.
+
+
+## `docs/` 관리 — 훅과 커맨드
+
+`docs/`(repo별 작업 문서)를 **git repo로 관리할지는 선택**입니다. 저는 별개 개인 private repo(`.claude-sync-docs`)를 `docs/`에 중첩해 두고 씁니다 — 메인 repo에선 gitignore라 커밋되지 않고, 자체 remote로 따로 커밋/푸시해 여러 기기에서 작업기록을 동기화합니다. **repo로 안 써도 됩니다**(그냥 로컬 문서로만 둬도 됨).
+
+아래 장치들은 **docs/를 repo로 관리하는지에 따라 동작이 갈립니다.**
+
+### repo 여부와 무관하게 동작 (파일만 다룸)
+
+- **SessionStart → `hooks/load-progress.js`**: 세션 시작 시 현재 repo의 `overview.md` + 현재 브랜치 `tasks/<branch>.md`를 읽어 컨텍스트에 **주입**(읽기 전용). docs/가 git repo가 아니어도 파일만 있으면 동작.
+- **`/done-index [repo]`**: `tasks/done/INDEX.md`(완료 task 원장)를 생성/갱신 — 파일만 읽고 쓰므로 git과 무관. repo 미지정 시 전체.
+
+### docs/를 git repo로 관리할 때만 의미 있음 (git 커밋/푸시)
+
+- **SessionEnd → `hooks/snapshot-docs.js`**: 세션 종료 시 `docs/`의 현재 상태를 **커밋·푸시(스냅샷)**. **docs/가 git repo가 아니면 조용히 통과**(no-op). 변경 없거나 오프라인·에러여도 세션을 막지 않음.
+- **`/curr-task-status [repo]`**: 위 스냅샷을 **수동으로** 실행(훅 미발동 대비). repo가 아니면 마찬가지로 통과. repo 미지정 시 전체.
+
+> 즉 overview/task 주입·완료 색인은 누구나 쓸 수 있고, 스냅샷(훅+커맨드)은 docs/를 git repo로 쓰는 사람용입니다 — 아니면 안전하게 통과합니다.
