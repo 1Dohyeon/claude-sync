@@ -1,34 +1,34 @@
-# Git 워크플로우 규율
+# Git workflow rules
 
-브랜치·worktree·커밋·PR 관련 작업 시 지켜야 할 규율. (요약 결정 규칙은 CLAUDE.md의 HOW TO WORK 4번 참고)
+Rules for branch / worktree / commit / PR work. (The summary decision rule lives in HOW TO WORK step 4 of CLAUDE.md.)
 
-## 브랜치 vs worktree 결정
+## Branch vs worktree decision
 
-새 task를 시작할 때, **대상 브랜치가 현재 체크아웃과 다르면** 아래로 판단한다.
+When starting a new task, **if the target branch differs from the current checkout**, decide as follows:
 
-- **현재 브랜치가 `develop`/`main` 등 베이스** → 이 체크아웃은 진행 중 작업이 없으므로 **새 브랜치**로 작업.
-- **현재 브랜치가 `feature/`·`fix/`·`chore/` 등** → 그 체크아웃에서 이미 다른 작업 중이라는 뜻이므로 **worktree**로 분리해 작업.
-- **대상 브랜치 == 현재 브랜치** → 새로 만들지 말고 그대로 이어서 작업 (이미 그 task를 진행 중).
+- **Current branch is a base like `develop`/`main`** → this checkout has no work in progress, so work on a **new branch**.
+- **Current branch is `feature/`·`fix/`·`chore/` etc** → that checkout is already busy with other work, so split off via a **worktree**.
+- **Target branch == current branch** → don't create anything; just continue (you're already on that task).
 
-## 승인 규칙 (중요)
+## Approval rule (important)
 
-- **브랜치/worktree 생성은 항상 사용자 승인 후에만** 실행한다. Claude가 임의로 만들지 않는다.
-- **새 브랜치**는 보통 사용자가 수동으로 만든다 → Claude는 브랜치명·시점만 제안한다.
-- **worktree(+병렬 세션 브랜치)** 는 사용자가 수동으로 안 만드는 케이스라 Claude가 만들 수 있으나, **반드시 먼저 허락을 받는다.**
+- **Creating branches/worktrees happens only after user approval.** Claude never creates them on its own.
+- **New branches** are usually created manually by the user → Claude only proposes the name and timing.
+- **Worktrees (+ their parallel-session branches)** are the case the user does NOT create manually, so Claude may create them — but **must get permission first**.
 
-## worktree가 필요한 이유
+## Why a worktree is needed
 
-한 작업 디렉터리는 브랜치를 **하나만** 체크아웃할 수 있다. 그래서 브랜치 A에 체크아웃된 폴더에서 새 세션만 열어도 그 세션은 여전히 A를 본다 — B를 병렬로 작업하려면 B 전용 worktree 폴더가 **반드시** 있어야 한다.
+One working directory can check out **only one** branch. So opening a new session in a folder checked out to branch A still sees A — to work on B in parallel, a dedicated worktree folder for B is **required**.
 
-- 태스크가 2개 이상으로 갈리면, 설계 단계에서 브랜치별 task 문서를 미리 나눠 써 둔다. 그래야 나중에 각 브랜치로 새 세션을 열었을 때 그 세션이 자기 몫의 설계를 처음부터 알고 시작한다. (안 그러면 base 브랜치에만 있어서 빈 상태로 시작)
-- 지금 체크아웃된 브랜치를 제외한 나머지는 `git worktree add`로 별도 디렉터리까지 만든다. (브랜치만 만들면 병렬 세션이 안 됨)
+- When a task splits into two or more, write the per-branch task docs up front during design. That way, opening a new session on each branch later starts already knowing its own design. (Otherwise it lives only on the base branch and starts empty.)
+- For every branch except the currently checked-out one, create a separate directory with `git worktree add`. (Just creating the branch won't enable parallel sessions.)
 
-## 병렬 task 진행
+## Parallel task execution
 
-- 태스크가 하나면 설계자 세션이 그대로 작업을 진행한다.
-- 태스크가 여러 개면 기존(설계자) 세션은 **감독 역할로 전환**되고, 사용자는 만들어둔 worktree 폴더별로 세션을 새로 연다. (같은 폴더에서 새 세션만 열면 여전히 원래 브랜치를 봄)
+- With a single task, the designer session just proceeds with the work.
+- With multiple tasks, the original (designer) session **switches to a supervisor role**, and the user opens a new session per worktree folder created earlier. (Opening only a new session in the same folder still sees the original branch.)
 
-## 커밋 / PR
+## Commit / PR
 
-- **커밋·푸시는 사용자가 요청할 때만** 한다.
-- 완료 판정은 task 파일을 `done/`으로 옮기는 것으로 하며, **PR·머지 여부는 task 문서에 기록하지 않는다.** (PR은 반환될 수 있어 신뢰할 수 있는 완료 신호가 아님)
+- **Commit/push only when the user asks.**
+- Completion is signaled by moving the task file into `done/`; **do NOT record PR/merge status in the task doc.** (A PR can be sent back, so it isn't a reliable completion signal.)
