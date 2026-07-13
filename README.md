@@ -19,6 +19,7 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 ├── hooks/                  # settings.json에 등록된 훅 진입점만 (git)
 ├── utils/                  # 훅들이 공유하는 헬퍼 로직 (git)
 ├── agents/                 # 커스텀 서브에이전트 정의 (git)
+├── commands/               # 커스텀 슬래시 커맨드 (git)
 ├── CLAUDE.md               # Claude 응답·행동 규칙 (git)
 ├── settings.json           # Claude Code 앱 설정 - 테마·업데이트 채널·권한 허용 목록 등 (git)
 ├── CLAUDE.local.md         # 응답·행동 규칙의 기기별 오버라이드/추가 (gitignore)

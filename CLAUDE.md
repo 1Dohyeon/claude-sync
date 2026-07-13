@@ -15,6 +15,7 @@
 |---|---|
 | 새 코딩 task 설계·문서 작성 | `~/.claude/.templates/task.md` |
 | 커밋 · 브랜치 · worktree · PR | `~/.claude/.rules/git-workflow.md` |
+| 과거·완료된 작업 참조·검색 | `~/.claude/docs/<repo>/tasks/done/INDEX.md` (없거나 부족하면 `done/` grep) |
 
 ## HOW TO WORK
 
