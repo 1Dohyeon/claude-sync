@@ -65,7 +65,7 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 
 ## `docs/` 관리 — 훅과 커맨드
 
-`docs/`(repo별 작업 문서)를 **git repo로 관리할지는 선택**입니다. 저는 별개 개인 private repo(`.claude-sync-docs`)를 `docs/`에 중첩해 두고 씁니다 — 메인 repo에선 gitignore라 커밋되지 않고, 자체 remote로 따로 커밋/푸시해 여러 기기에서 작업기록을 동기화합니다. **repo로 안 써도 됩니다**(그냥 로컬 문서로만 둬도 됨).
+`docs/`(repo별 작업 문서)를 **git repo로 관리할지는 선택**입니다. 메인 repo에선 gitignore라 커밋되지 않고, 자체 remote로 따로 커밋/푸시해 여러 기기에서 작업기록을 동기화합니다. **repo로 안 써도 됩니다**(그냥 로컬 문서로만 둬도 됨).
 
 아래 장치들은 **docs/를 repo로 관리하는지에 따라 동작이 갈립니다.**
 
