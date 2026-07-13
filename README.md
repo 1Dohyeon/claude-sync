@@ -13,7 +13,9 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 
 ```
 .claude-sync(~/.claude)/    # ~/.claude로 심링크되는 저장소 루트
-├── docs/                   # claude가 작업할 때, 읽고 쓰는 repo별 문서 저장 (git)
+├── docs/                   # repo별 작업 문서 - 별도 private repo, 루트 repo에선 gitignore
+├── .rules/                 # 작업 시 지켜야 할 규율 (git)
+├── .templates/             # 문서 작성 시 참고할 템플릿 (git)
 ├── hooks/                  # settings.json에 등록된 훅 진입점만 (git)
 ├── utils/                  # 훅들이 공유하는 헬퍼 로직 (git)
 ├── CLAUDE.md               # Claude 응답·행동 규칙 (git)
@@ -31,13 +33,12 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 ```
 .claude-sync(~/.claude)/
 └── docs/
-    ├── .rules/                     # 작업 시 지켜야할 규율
-    ├── .templates/                 # 문서 작업 시 참고할 템플릿
     └── <repo>/                     # global 세팅이라 여러 저장소가 공유 - repo별로 분리
 ```
 
 - **`<repo>` 값**: `git remote get-url origin`로 매번 직접 계산(실제 repo 이름)
   - git 저장소가 아니면 관련 훅은 조용히 통과
+- `.rules/`, `.templates/`는 여러 기기가 공유하는 "claude 설정"이라 `docs/` 밖 **루트**에 둔다(`docs/`는 gitignore라 커밋 안 됨).
 
 ### `docs/<repo>` 구조
 
@@ -57,4 +58,4 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 - **`tasks/done/<branch>-YYYYMMDD.md`**: task 완료 시 `tasks/<branch>.md`를 여기로 옮김(`mv`)
   - 나중에 재사용해도 예전 완료 같은 브랜치명을 기록이 안 섞임
 
-> Claude가 tasks를 어떻게 관리하는지는 [meta/tasks.md](meta/tasks.md)를 참고하세요.
+> Claude가 tasks를 어떻게 관리하는지는 [CLAUDE.md의 HOW TO WORK](CLAUDE.md#how-to-work)를 참고하세요.
