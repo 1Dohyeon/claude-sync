@@ -9,6 +9,39 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/snapshot-docs.js\""
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git stash list:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git worktree list:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm check-types:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm build:*)",
+      "Bash(bun run lint:*)",
+      "Bash(bun run check-types:*)"
     ]
   },
   "autoUpdatesChannel": "latest",

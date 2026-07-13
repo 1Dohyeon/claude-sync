@@ -19,9 +19,9 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 ├── hooks/                  # settings.json에 등록된 훅 진입점만 (git)
 ├── utils/                  # 훅들이 공유하는 헬퍼 로직 (git)
 ├── CLAUDE.md               # Claude 응답·행동 규칙 (git)
-├── settings.json           # Claude Code 앱 설정 - 테마·업데이트 채널 등 (git)
+├── settings.json           # Claude Code 앱 설정 - 테마·업데이트 채널·권한 허용 목록 등 (git)
 ├── CLAUDE.local.md         # 응답·행동 규칙의 기기별 오버라이드/추가 (gitignore)
-└── settings.local.json     # 앱 설정의 기기별 오버라이드 - 권한 허용 목록 등 (gitignore)
+└── settings.local.json     # 앱 설정의 기기별 오버라이드 (필요 시, gitignore)
 ```
 
 > `docs/` 안 폴더 구조는 해당 repository에 없음(private 작업 기록)
@@ -38,7 +38,7 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 
 - **`<repo>` 값**: `git remote get-url origin`로 매번 직접 계산(실제 repo 이름)
   - git 저장소가 아니면 관련 훅은 조용히 통과
-- `.rules/`, `.templates/`는 여러 기기가 공유하는 "claude 설정"이라 `docs/` 밖 **루트**에 둔다(`docs/`는 gitignore라 커밋 안 됨).
+- `docs/`는 실제 작업 내용이라 커밋 안 됨
 
 ### `docs/<repo>` 구조
 
