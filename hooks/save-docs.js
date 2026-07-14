@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// docs/(별도 private repo: .claude-sync-docs)의 "현재 상태"를 스냅샷 커밋/푸시한다.
+// docs/(별도 private repo: works)의 "현재 상태"를 스냅샷 커밋/푸시한다.
 //   - SessionEnd 훅으로 자동 실행 (인자 없음 → 전체 repo)
 //   - /save-docs [repo] 커맨드로 수동 실행 (인자 있으면 그 repo만)
 // 목적: task 기록 유실 방지 + 크로스머신 이어작업.
