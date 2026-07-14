@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // docs/(별도 private repo: .claude-sync-docs)의 "현재 상태"를 스냅샷 커밋/푸시한다.
 //   - SessionEnd 훅으로 자동 실행 (인자 없음 → 전체 repo)
-//   - /curr-task-status [repo] 커맨드로 수동 실행 (인자 있으면 그 repo만)
+//   - /save-docs [repo] 커맨드로 수동 실행 (인자 있으면 그 repo만)
 // 목적: task 기록 유실 방지 + 크로스머신 이어작업.
 // 원칙(반드시 지킴): 변경 없으면 통과 / 오프라인·충돌·에러여도 세션을 절대 막지 않음.
 "use strict";
@@ -58,7 +58,7 @@ try {
     const d = new Date(); // 이 기기의 로컬 시각(KST 등)
     const p = (n) => String(n).padStart(2, "0");
     const stamp = `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
-    const msg = repo ? `chore: snapshot ${repo} ${stamp}` : `chore: auto-snapshot ${stamp}`;
+    const msg = repo ? `chore: save ${repo} ${stamp}` : `chore: auto-save ${stamp}`;
     git(["commit", "-m", msg]);
     console.log(`snapshot(${scopeLabel}): 커밋 — ${msg}`);
 

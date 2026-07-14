@@ -76,7 +76,7 @@ Claude Code 글로벌 설정입니다. 저장소는 각 컴퓨터에 `clone`으�
 
 ### docs/를 git repo로 관리할 때만 의미 있음 (git 커밋/푸시)
 
-- **SessionEnd → `hooks/snapshot-docs.js`**: 세션 종료 시 `docs/`의 현재 상태를 **커밋·푸시(스냅샷)**. **docs/가 git repo가 아니면 조용히 통과**(no-op). 변경 없거나 오프라인·에러여도 세션을 막지 않음.
-- **`/curr-task-status [repo]`**: 위 스냅샷을 **수동으로** 실행(훅 미발동 대비). repo가 아니면 마찬가지로 통과. repo 미지정 시 전체.
+- **SessionEnd → `hooks/save-docs.js`**: 세션 종료 시 `docs/`의 현재 상태를 **커밋·푸시(스냅샷)**. **docs/가 git repo가 아니면 조용히 통과**(no-op). 변경 없거나 오프라인·에러여도 세션을 막지 않음.
+- **`/save-docs [repo]`**: 위 스냅샷을 **수동으로** 실행(훅 미발동 대비). repo가 아니면 마찬가지로 통과. repo 미지정 시 전체.
 
 > 즉 overview/task 주입·완료 색인은 누구나 쓸 수 있고, 스냅샷(훅+커맨드)은 docs/를 git repo로 쓰는 사람용입니다 — 아니면 안전하게 통과합니다.
