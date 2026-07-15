@@ -66,3 +66,6 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+*.xlsx
+.DS_Store
