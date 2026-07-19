@@ -1,5 +1,6 @@
 # ===== .claude 기기 메모리, 로컬 설정 등 =====
 settings.local.json
+settings.json.bak
 CLAUDE.local.md
 # 기기별 로컬 보조 설정/실험 파일
 local/
