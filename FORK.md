@@ -1,8 +1,6 @@
 # FORK.md — fork 커스터마이징 규칙
 
-이 repo는 upstream(원본)을 fork해서 **개인 커스터마이징**하는 저장소다.
-아래 규칙은 커스텀 브랜치(`develop`, `feature/*`, `fix/*`, `chore/*` 등)에서만 적용된다.
-컨트리뷰트 브랜치(`<내계정>/*`)에서는 이 파일이 주입되지 않으며, repo의 `AGENTS.md`/`CLAUDE.md`만 따른다.
+이 파일은 upstream(원본)을 fork해서 **개인 커스터마이징**하는 저장소에서, 커스텀 브랜치로 작업할 때 적용되는 규칙이다.
 
 ## 최우선 판단 기준: rebase 충돌 최소화
 
@@ -20,11 +18,9 @@
 
 3. **upstream 관리 문서는 직접 수정하지 않는다.**
    - `AGENTS.md`, `CLAUDE.md`, `docs/STYLEGUIDE.md`, `.gitignore` 등은 rebase 충돌 단골이다.
-   - 개인 규칙은 이 파일(`~/.claude/docs/FORK.md`)에 쌓는다.
+   - fork 공통 규칙은 이 파일(`~/.claude/FORK.md`)에, repo 전용 세부사항은 해당 repo의 `CLAUDE.LOCAL.md`에 쌓는다.
 
 4. **커스텀 로직은 내 소유의 새 파일에 몰아넣는다.**
    - 원본 파일에는 진입점 한 줄만 남긴다 → 충돌이 그 한 줄로 축소된다.
 
-## 예외
-
-Electron 앱 구조상 손댈 수밖에 없는 지점(라우팅, 메뉴 등록, IPC 핸들러 등)은 "충돌 감수 구간"으로 받아들인다. 나머지를 새 파일로 빼는 것이 목표다.
+> 추가 규칙 및 예외는 `CLAUDE.LOCAL.md` 참고
