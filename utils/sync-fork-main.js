@@ -37,8 +37,10 @@ if (!remotes.ok || !remotes.out.split('\n').includes('upstream')) {
   fail('이 저장소에는 upstream remote가 없습니다.');
 }
 
-console.log('upstream fetch 중...');
-const fetch = tryGit(repoRoot, ['fetch', 'upstream']);
+console.log('upstream main fetch 중...');
+// upstream 전체를 fetch하면 브랜치가 매우 많은 repo에서 Windows 경로 길이 제한에
+// 걸릴 수 있어(예: 긴 브랜치명 -> "Filename too long"), main만 지정해서 가져온다.
+const fetch = tryGit(repoRoot, ['fetch', 'upstream', 'main']);
 if (!fetch.ok) fail('git fetch upstream 실패:\n' + fetch.out);
 
 const upstreamMain = tryGit(repoRoot, ['rev-parse', 'upstream/main']);
