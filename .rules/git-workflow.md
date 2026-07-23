@@ -4,17 +4,22 @@ Rules for branch / worktree / commit / PR work. (The summary decision rule lives
 
 ## Branch vs worktree decision
 
-When starting a new task, **if the target branch differs from the current checkout**, decide as follows:
+The main working directory (where `.git/` actually lives, not a linked worktree) is reserved for `main`/`develop`
+(base branches — `develop` may not exist in every repo) plus any branch the user personally pulled/checked out
+there. Claude never runs `git checkout -b` or switches the main working directory to a different branch.
 
-- **Current branch is a base like `develop`/`main`** → this checkout has no work in progress, so work on a **new branch**.
-- **Current branch is `feature/`·`fix/`·`chore/` etc** → that checkout is already busy with other work, so split off via a **worktree**.
-- **Target branch == current branch** → don't create anything; just continue (you're already on that task).
+When starting a new task, decide as follows:
+
+- **Target branch == current checkout** → don't create anything; just continue (you're already on that task).
+- **Anything else** (a brand-new branch, or an existing branch not currently checked out here) → always split off
+  into a **worktree**. This applies even when the main working directory is currently on a base branch — a base
+  branch being "idle" is no longer a reason to check out new work there.
 
 ## Approval rule (important)
 
-- **Creating branches/worktrees happens only after user approval.** Claude never creates them on its own.
-- **New branches** are usually created manually by the user → Claude only proposes the name and timing.
-- **Worktrees (+ their parallel-session branches)** are the case the user does NOT create manually, so Claude may create them — but **must get permission first**.
+- **Creating a worktree (and the branch it holds) happens only after user approval.** Claude never creates one on its own.
+- The main working directory's branch is the user's to manage directly (tracking `main`/`develop`, or manually
+  pulling a branch to inspect) — Claude does not check out or create branches there.
 
 ## Why a worktree is needed
 
