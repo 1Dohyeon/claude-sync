@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -51,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -73,7 +73,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -84,7 +84,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -96,7 +96,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -108,7 +108,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -120,7 +120,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -132,7 +132,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
             "timeout": 10
           }
         ]
@@ -167,6 +167,6 @@
   "theme": "dark",
   "statusLine": {
     "type": "command",
-    "command": "if [ -f '/Users/dohyeon/.orca/agent-hooks/claude-statusline.sh' ] && [ -r '/Users/dohyeon/.orca/agent-hooks/claude-statusline.sh' ] && [ -x '/Users/dohyeon/.orca/agent-hooks/claude-statusline.sh' ]; then /bin/sh '/Users/dohyeon/.orca/agent-hooks/claude-statusline.sh'; else cat >/dev/null 2>&1 || :; fi"
+    "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-statusline.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-statusline.cmd'; else cat >/dev/null 2>&1 || :; fi"
   }
 }
