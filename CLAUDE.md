@@ -5,7 +5,15 @@
 - 대답은 항상 한국어(사용자가 영어로 요청하더라도 한국어)
 - '오류가 있다'라고만 응답하지말고, **오류 메시지 원문도 함께** 답변할것
 - 결론·추천을 먼저 제시한다 (선택지 나열은 그다음).
-- 사용자가 `'않을까?', '더 좋지 않아?', 'why don't you'` 등 제안을 하면 제안에 대한 대답만 할 것.(절대 그 제안대로 먼저 수정하라는 의미가 아님)
+
+## LOOKUP RULE
+
+파일·코드 조회 시 지킨다. (`cat`·`head`·`tail`은 `settings.json`의 `deny`로 차단되어 있음)
+
+- 파일 내용은 `Read`, 검색은 `Grep`/`Glob`을 쓴다. `sed`·`awk`·`strings`·`find`로 대체하지 않는다.
+- `Bash`는 **단일 명령**만. `&&`·`;`·`|`·`for`·`$(...)`로 엮지 않는다 — 복합 명령은 allowlist의 접두 규칙에 걸리지 않아 매번 승인 프롬프트가 뜬다.
+- 여러 파일을 봐야 하면 `Read`를 한 응답에서 병렬로 여러 번 호출한다.
+- 위 방법으로 불가능한 조회(바이너리 문자열 확인 등)만 Bash를 쓰고, 왜 필요한지 먼저 한 줄로 밝힌다.
 
 ## ROUTING CONVENTION
 
@@ -13,14 +21,18 @@
 
 | 요청 유형 (트리거) | Read 대상 |
 |---|---|
+| 세션 첫 작업 요청 (repo 파악) | `~/.claude/docs/<repo>/overview.md` (없으면 스킵) |
+| 현재 브랜치 작업 이어받기 | `~/.claude/docs/<repo>/tasks/<branch>.md` (없으면 신규 task) |
 | 새 코딩 task 설계·문서 작성 | `~/.claude/.templates/task.md` |
 | 커밋 · 브랜치 · worktree · PR | `~/.claude/.rules/git-workflow.md` |
-| 과거·완료된 작업 참조·검색 | `~/.claude/docs/<repo>/tasks/done/INDEX.md` (없거나 부족하면 `done/` grep) |
+| 과거·완료된 작업 참조·검색 | `~/.claude/docs/<repo>/tasks/done/` grep |
+
+`<repo>` = `git remote get-url origin`의 마지막 세그먼트(`.git` 제외), `<branch>` = `git rev-parse --abbrev-ref HEAD`. 매번 직접 계산한다. git 저장소가 아니면 docs 관련 행은 건너뛴다.
 
 ## HOW TO WORK
 
-1. 세션 시작 시 [./hooks/load-progress.js](./hooks/load-progress.js) SessionStart 훅에 의하여 `~/.claude/docs/<repo>/overview.md`를 읽는다.
-   - checkout 브랜치 task 파일도 읽는다.(없으면 스킵)
+1. 세션에서 첫 작업 요청을 받으면 `~/.claude/docs/<repo>/overview.md`와 현재 브랜치의 `tasks/<branch>.md`를 Read 한다.(없으면 스킵)
+   - 자동 주입 훅은 없다. ROUTING CONVENTION 표에 따라 직접 읽는 것이 유일한 경로다.
 2. 사용자가 코딩 task를 보고하면 작업 시작 전 설계를 먼저 한다.
 3. 설계가 끝나면 `~/.claude/docs/<repo>/tasks/<branch>.md`에 문서로 남긴다.
    - `<branch>`는 지금 체크아웃된 브랜치가 아니라, **작업할 대상 브랜치**를 가리킨다.(ex: 작업할 브랜치가 `feature/authguard` 라면 `/tasks/feature/authguard.md`)

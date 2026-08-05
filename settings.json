@@ -19,30 +19,26 @@
       "Bash(pnpm test:*)",
       "Bash(pnpm build:*)",
       "Bash(bun run lint:*)",
-      "Bash(bun run check-types:*)"
+      "Bash(bun run check-types:*)",
+      "Edit(//Users/dohyeon/.claude/docs/**)",
+      "Write(//Users/dohyeon/.claude/docs/**)",
+      "Edit(//Users/dohyeon/Desktop/workspace/.claude-sync/docs/**)",
+      "Write(//Users/dohyeon/Desktop/workspace/.claude-sync/docs/**)"
+    ],
+    "deny": [
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)"
     ]
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/load-progress.js\""
-          },
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/fork-style.js\""
-          }
-        ]
-      }
-    ],
     "SessionEnd": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/save-docs.js\""
+            "command": "sh \"$HOME/.claude/hooks/save-docs.sh\"",
+            "timeout": 30
           }
         ]
       }
@@ -52,7 +48,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -63,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -74,7 +70,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -85,7 +81,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -96,7 +92,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -107,7 +103,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -119,7 +115,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -131,7 +127,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -143,7 +139,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -155,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-hook.cmd'; else cat >/dev/null 2>&1 || :; fi",
+            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
           }
         ]
@@ -164,10 +160,21 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "if [ -f 'C:/Users/user/.orca/agent-hooks/claude-statusline.cmd' ]; then 'C:/Users/user/.orca/agent-hooks/claude-statusline.cmd'; else cat >/dev/null 2>&1 || :; fi"
+    "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-statusline"
   },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "theme": "dark",
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "enabledPlugins": {
+    "gitkraken-hooks@gitkraken": true
+  },
+  "extraKnownMarketplaces": {
+    "gitkraken": {
+      "source": {
+        "path": "/Users/dohyeon/.claude/plugins/marketplaces/gitkraken",
+        "source": "directory"
+      }
+    }
+  }
 }
