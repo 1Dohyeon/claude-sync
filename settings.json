@@ -188,19 +188,19 @@
     "type": "command",
     "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-statusline"
   },
-  "autoUpdatesChannel": "latest",
-  "tui": "fullscreen",
-  "theme": "dark",
-  "skipDangerousModePermissionPrompt": true,
   "enabledPlugins": {
     "gitkraken-hooks@gitkraken": true
   },
   "extraKnownMarketplaces": {
     "gitkraken": {
       "source": {
-        "path": "/Users/dohyeon/.claude/plugins/marketplaces/gitkraken",
-        "source": "directory"
+        "source": "directory",
+        "path": "/Users/dohyeon/.claude/plugins/marketplaces/gitkraken"
       }
     }
-  }
+  },
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark"
 }
