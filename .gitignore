@@ -4,7 +4,7 @@ settings.json.bak
 CLAUDE.local.md
 # 기기별 로컬 보조 설정/실험 파일
 local/
-docs
+worklog
 
 # ===== runtime / cache / machine-specific state =====
 # 세션 기록과 재개용 상태
@@ -29,7 +29,7 @@ debug/
 paste-cache/
 # 다운로드한 산출물/임시 파일
 downloads/
-# 작업 실행 기록/태스크 산출물 (루트의 런타임 tasks/만; docs/<repo>/tasks/는 git으로 추적)
+# 작업 실행 기록/태스크 산출물 (루트의 런타임 tasks/만; worklog/<repo>/tasks/는 git으로 추적)
 /tasks/
 # 마지막 정리 시각/상태 마커
 .last-cleanup
@@ -39,7 +39,7 @@ downloads/
 mcp-needs-auth-cache.json
 # 통계 집계 캐시
 stats-cache.json
-# 작업 실행 기록/태스크 산출물 (루트의 런타임 jobs/만; docs/<repo>/jobs/는 git으로 추적)
+# 작업 실행 기록/태스크 산출물 (루트의 런타임 jobs/만; worklog/<repo>/jobs/는 git으로 추적)
 jobs
 # 정책/사용 한도 캐시
 policy-limits.json

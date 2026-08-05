@@ -21,24 +21,24 @@
 
 | 요청 유형 (트리거) | Read 대상 |
 |---|---|
-| 세션 첫 작업 요청 (repo 파악) | `~/.claude/docs/<repo>/overview.md` (없으면 스킵) |
-| 현재 브랜치 작업 이어받기 | `~/.claude/docs/<repo>/tasks/<branch>.md` (없으면 신규 task) |
-| 새 코딩 task 설계·문서 작성 | `~/.claude/.templates/task.md` |
-| 커밋 · 브랜치 · worktree · PR | `~/.claude/.rules/git-workflow.md` |
-| 과거·완료된 작업 참조·검색 | `~/.claude/docs/<repo>/tasks/done/` grep |
+| 세션 첫 작업 요청 (repo 파악) | `~/.claude/worklog/<repo>/overview.md` (없으면 스킵) |
+| 현재 브랜치 작업 이어받기 | `~/.claude/worklog/<repo>/tasks/<branch>.md` (없으면 신규 task) |
+| 새 코딩 task 설계·문서 작성 | `~/.claude/templates/task.md` |
+| 커밋 · 브랜치 · worktree · PR | `~/.claude/rules/git-workflow.md` |
+| 과거·완료된 작업 참조·검색 | `~/.claude/worklog/<repo>/tasks/done/` grep |
 
-`<repo>` = `git remote get-url origin`의 마지막 세그먼트(`.git` 제외), `<branch>` = `git rev-parse --abbrev-ref HEAD`. 매번 직접 계산한다. git 저장소가 아니면 docs 관련 행은 건너뛴다.
+`<repo>` = `git remote get-url origin`의 마지막 세그먼트(`.git` 제외), `<branch>` = `git rev-parse --abbrev-ref HEAD`. 매번 직접 계산한다. git 저장소가 아니면 worklog 관련 행은 건너뛴다.
 
 ## HOW TO WORK
 
-1. 세션에서 첫 작업 요청을 받으면 `~/.claude/docs/<repo>/overview.md`와 현재 브랜치의 `tasks/<branch>.md`를 Read 한다.(없으면 스킵)
+1. 세션에서 첫 작업 요청을 받으면 `~/.claude/worklog/<repo>/overview.md`와 현재 브랜치의 `tasks/<branch>.md`를 Read 한다.(없으면 스킵)
    - 자동 주입 훅은 없다. ROUTING CONVENTION 표에 따라 직접 읽는 것이 유일한 경로다.
 2. 사용자가 코딩 task를 보고하면 작업 시작 전 설계를 먼저 한다.
-3. 설계가 끝나면 `~/.claude/docs/<repo>/tasks/<branch>.md`에 문서로 남긴다.
+3. 설계가 끝나면 `~/.claude/worklog/<repo>/tasks/<branch>.md`에 문서로 남긴다.
    - `<branch>`는 지금 체크아웃된 브랜치가 아니라, **작업할 대상 브랜치**를 가리킨다.(ex: 작업할 브랜치가 `feature/authguard` 라면 `/tasks/feature/authguard.md`)
 4. 대상 브랜치가 아직 없어도 순서는 **문서 작성이 먼저, worktree 생성은 그다음**이다.
    - 경로는 폴더명일 뿐이라 실제 git 브랜치 존재 여부와 무관하게 문서를 쓸 수 있다.
-   - worktree 생성은 **반드시 사용자 승인 후** 진행한다. (상세: `~/.claude/.rules/git-workflow.md`)
+   - worktree 생성은 **반드시 사용자 승인 후** 진행한다. (상세: `~/.claude/rules/git-workflow.md`)
      - 메인 작업 폴더(`.git/`이 있는 원본 체크아웃)는 `main`/`develop`(베이스, develop 없을 수도 있음) +
        사용자가 직접 pull/checkout한 브랜치 전용. Claude는 여기서 새 브랜치를 만들거나 다른 브랜치로 전환하지 않는다.
      - 대상 브랜치 == 현재 체크아웃이면 새로 만들지 말고 그대로 이어서 작업한다.
@@ -53,6 +53,6 @@
 
 6. task 작업이 완료되면
    - task 파일 끝에 `## 완료 (HH:MM)` 섹션을 추가해 마무리 요약을 남긴다.
-   - 그 파일을 `~/.claude/docs/<repo>/tasks/done/<branch>-YYYYMMDD.md`로 옮긴다(`mv`).
+   - 그 파일을 `~/.claude/worklog/<repo>/tasks/done/<branch>-YYYYMMDD.md`로 옮긴다(`mv`).
       - 옮기기 전 꼭 사용자에게 허락을 요구한다.
    - **`done/` 아래는 평탄(1-depth) 유지**: 브랜치명의 `/`는 `-`로 치환한다. (ex: `feature/search-ignore-space` → `done/feature-search-ignore-space-YYYYMMDD.md`) — `done/` 안에 `feature/` 등 하위폴더를 만들지 않는다.

@@ -1,6 +1,6 @@
 ---
 name: overview-writer
-description: Explores a repository and writes/updates an overview.md summarizing its domain and architecture. Because the SessionStart hook injects this doc every session, "concise and domain-focused" is essential. Writes to ~/.claude/docs/<repo>/overview.md. Use when starting work in a new repo or when the overview is stale.
+description: Explores a repository and writes/updates an overview.md summarizing its domain and architecture. Because the SessionStart hook injects this doc every session, "concise and domain-focused" is essential. Writes to ~/.claude/worklog/<repo>/overview.md. Use when starting work in a new repo or when the overview is stale.
 tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
@@ -16,7 +16,7 @@ git -C <repo> rev-parse --show-toplevel        # repo root
 git -C <repo> remote get-url origin            # origin URL → last segment (minus .git) is <repo> name
 ```
 - `<repo>` = the repository name from the origin URL (e.g. `git@github.com:org/mobisell-back.git` → `mobisell-back`). If there is no origin, fall back to the repo root's folder name.
-- Output file: `$HOME/.claude/docs/<repo>/overview.md` (`mkdir -p` the directory if missing).
+- Output file: `$HOME/.claude/worklog/<repo>/overview.md` (`mkdir -p` the directory if missing).
 - If it already exists, **update** it (keep structure, replace stale content); otherwise create it.
 
 ### 2. Explore (evidence-based, no guessing)

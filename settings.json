@@ -20,15 +20,30 @@
       "Bash(pnpm build:*)",
       "Bash(bun run lint:*)",
       "Bash(bun run check-types:*)",
-      "Edit(//Users/dohyeon/.claude/docs/**)",
-      "Write(//Users/dohyeon/.claude/docs/**)",
-      "Edit(//Users/dohyeon/Desktop/workspace/.claude-sync/docs/**)",
-      "Write(//Users/dohyeon/Desktop/workspace/.claude-sync/docs/**)"
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr status:*)",
+      "Edit(//Users/dohyeon/.claude/worklog/**)",
+      "Write(//Users/dohyeon/.claude/worklog/**)"
     ],
     "deny": [
       "Bash(cat:*)",
       "Bash(head:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr close:*)",
+      "Bash(gh pr reopen:*)",
+      "Bash(gh pr ready:*)",
+      "Bash(gh pr review:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr lock:*)",
+      "Bash(gh pr unlock:*)",
+      "Bash(gh pr checkout:*)",
+      "Bash(git merge:*)"
     ]
   },
   "hooks": {
@@ -117,6 +132,17 @@
             "type": "command",
             "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__notion__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_name' | grep -qE '^mcp__notion__(notion-)?(search|fetch|get|list|view|retrieve|query)' || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Notion MCP는 읽기 전용으로 제한되어 있습니다. write 계열 툴은 차단됩니다.\"}}'",
+            "timeout": 10,
+            "statusMessage": "Notion read-only 검사"
           }
         ]
       }
