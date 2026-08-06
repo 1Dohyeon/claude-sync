@@ -21,6 +21,23 @@ When starting a new task, decide as follows:
 - The main working directory's branch is the user's to manage directly (tracking `main`/`develop`, or manually
   pulling a branch to inspect) — Claude does not check out or create branches there.
 
+## After creating a worktree (required, no extra approval)
+
+A fresh worktree has no `node_modules`, so setup is finished in the **same step** as creation — never hand back a
+worktree that still needs a manual install. Approval to create the worktree already covers both steps below; do
+not stop to ask in between.
+
+1. **Install dependencies** in the new worktree directory, using the repo's own package manager (detect it from
+   the lockfile / the repo's CLAUDE.md — `bun.lock` → `bun install`, `pnpm-lock.yaml` → `pnpm install`, etc.).
+2. **Discard any lockfile change the install produced**: `git -C <worktree> checkout -- <lockfile>`.
+   A freshly created worktree of an existing branch starts clean, so a modified lockfile here is environment noise
+   (e.g. a newer package-manager version rewriting metadata), not an intended change. Already-installed
+   `node_modules` are unaffected by the discard.
+3. **Verify and report** with `git -C <worktree> status -sb` — the tree must come back clean.
+
+If the discarded lockfile diff was more than metadata (actual dependency version changes), say so in the report —
+discard it anyway, but don't let it pass silently.
+
 ## Why a worktree is needed
 
 One working directory can check out **only one** branch. So opening a new session in a folder checked out to branch A still sees A — to work on B in parallel, a dedicated worktree folder for B is **required**.
