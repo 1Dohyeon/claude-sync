@@ -2,5 +2,8 @@
 settings.local.json
 CLAUDE.local.md
 
+# ===== 백업 파일 =====
+*.bak
+
 # ===== os 관련 =====
 .DS_Store
