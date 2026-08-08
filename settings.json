@@ -25,8 +25,9 @@
       "Bash(gh pr diff:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr status:*)",
-      "Edit(//Users/dohyeon/.claude/worklog/**)",
-      "Write(//Users/dohyeon/.claude/worklog/**)"
+      "Edit(~/.claude/worklog/**)",
+      "Write(~/.claude/worklog/**)",
+      "Read(~/.claude/worklog/**)"
     ],
     "deny": [
       "Bash(cat:*)",
@@ -58,83 +59,7 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "StopFailure": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SubagentStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "TeammateIdle": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      },
       {
         "matcher": "mcp__notion__.*",
         "hooks": [
@@ -146,58 +71,7 @@
           }
         ]
       }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-hook",
-            "timeout": 10
-          }
-        ]
-      }
     ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "sh \"$HOME/.claude/hooks/vendor-bridge.sh\" claude-statusline"
-  },
-  "enabledPlugins": {
-    "gitkraken-hooks@gitkraken": true
-  },
-  "extraKnownMarketplaces": {
-    "gitkraken": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/dohyeon/.claude/plugins/marketplaces/gitkraken"
-      }
-    }
   },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
