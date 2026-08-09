@@ -60,9 +60,9 @@
 
 아래 트리거에 매칭되면 요청 작업을 시작하기 전 연결된 파일을 무조건 Read 한다.
 
-| 요청 유형 (트리거)                   | Read 대상                                              |
-| ------------------------------------ | ------------------------------------------------------ |
-| 개발 태스크 작업                     | `~/.claude/rules/development.md` (+ `worklog.md` 동반) |
-| git 관련 작업(commit, worktree, ...) | `~/.claude/rules/git-workflow.md`                      |
-| worklog 저장소 최초 연결(심링크)     | `~/.claude/rules/worklog-setup.md`                     |
-| 작업 기록 · 이어받기 · 완료 처리     | `~/.claude/rules/worklog.md`                           |
+| 요청 유형 (트리거)                   | Read 대상                                                 |
+| ------------------------------------ | --------------------------------------------------------- |
+| 개발 태스크 작업                     | [`~/.claude/rules/development.md`](/rules/development.md)     |
+| git 관련 작업(commit, worktree, ...) | [`~/.claude/rules/git-workflow.md`](/rules/git-workflow.md)   |
+| worklog 저장소 최초 연결(심링크)     | [`~/.claude/rules/worklog-setup.md`](/rules/worklog-setup.md) |
+| 작업 기록 · 이어받기 · 완료 처리     | [`~/.claude/rules/worklog.md`](/rules/worklog.md)            |

@@ -1,84 +1,66 @@
-# Git workflow rules
+# Git 워크플로 규칙
 
-Rules for branch / worktree / commit / PR work. (The summary decision rule lives in HOW TO WORK step 4 of CLAUDE.md.)
+## worktree 생성
 
-## Branch vs worktree decision
+작업은 항상 새 worktree를 만들어 진행한다. 사용자가 요청하면 아래 순서로 만든다.
 
-The main working directory (where `.git/` actually lives, not a linked worktree) is reserved for `main`/`develop`
-(base branches — `develop` may not exist in every repo) plus any branch the user personally pulled/checked out
-there. Claude never runs `git checkout -b` or switches the main working directory to a different branch.
-
-When starting a new task, decide as follows:
-
-- **Target branch == current checkout** → don't create anything; just continue (you're already on that task).
-- **Anything else** (a brand-new branch, or an existing branch not currently checked out here) → always split off
-  into a **worktree**. This applies even when the main working directory is currently on a base branch — a base
-  branch being "idle" is no longer a reason to check out new work there.
-
-## Approval rule (important)
-
-- **Creating a worktree (and the branch it holds) happens only after user approval.** Claude never creates one on its own.
-- The main working directory's branch is the user's to manage directly (tracking `main`/`develop`, or manually
-  pulling a branch to inspect) — Claude does not check out or create branches there.
-
-## Creating a worktree — remote branch first (required)
-
-**Never let a worktree branch track a base branch.** `git worktree add -b <branch> <dir> origin/develop` sets the
-new branch's upstream to `origin/develop`, so a bare `git push` later lands **directly on develop**. The branch
-name in `git status` looks right, which is exactly why this goes unnoticed.
-
-Create the remote branch first, then point the worktree at it:
+1. 베이스 브랜치(`develop`, 없으면 `main`)에서 새 브랜치를 원격에 먼저 만든다(로컬엔 아직 없는 빈 브랜치):
 
 ```sh
 git fetch origin
-git push origin origin/develop:refs/heads/<branch>          # 1. remote branch, empty, at base
-git fetch origin
-git worktree add --track -b <branch> <dir> origin/<branch>  # 2. worktree tracks itself
-git -C <dir> status -sb                                     # 3. must read: ## <branch>...origin/<branch>
+git push origin origin/develop:refs/heads/<branch>
 ```
 
-- Step 1 is a push, but it only creates an empty branch at the base commit. **The approval to create the worktree
-  covers it** — don't stop to ask again. (Substitute the repo's actual base: `origin/main` where `develop` is absent.)
-- Step 3 is the guard. If the upstream reads `...origin/develop` (or any base branch), stop: run
-  `git -C <dir> branch --unset-upstream` and redo step 1–2. **Never commit on a branch whose upstream is a base branch.**
-- Precedent (2026-08-07, mobisell-back `feat/agency-telecom`): the worktree tracked `origin/develop`, and a routine
-  `git push` put a feature commit straight onto shared develop. Recovered with
-  `git push --force-with-lease=develop:<sha> origin <base-sha>:develop`.
+2. 메인 작업 폴더와 형제 위치에, 방금 만든 원격 브랜치를 추적하는 worktree를 만든다:
 
-## After creating a worktree (required, no extra approval)
+```sh
+git fetch origin
+git worktree add --track -b <branch> <dir> origin/<branch>
+```
 
-A fresh worktree has no `node_modules`, so setup is finished in the **same step** as creation — never hand back a
-worktree that still needs a manual install. Approval to create the worktree already covers both steps below; do
-not stop to ask in between.
+3. upstream이 베이스 브랜치가 아니라 `<branch>` 자신인지 확인한다. (`git worktree add -b <branch> <dir> origin/develop`처럼 만들면 upstream이 `develop`이 되어버려서, 이후 평범한 `git push` 한 번에 커밋이 바로 `develop`으로 들어간다.)
 
-1. **Install dependencies** in the new worktree directory, using the repo's own package manager (detect it from
-   the lockfile / the repo's CLAUDE.md — `bun.lock` → `bun install`, `pnpm-lock.yaml` → `pnpm install`, etc.).
-2. **Discard any lockfile change the install produced**: `git -C <worktree> checkout -- <lockfile>`.
-   A freshly created worktree of an existing branch starts clean, so a modified lockfile here is environment noise
-   (e.g. a newer package-manager version rewriting metadata), not an intended change. Already-installed
-   `node_modules` are unaffected by the discard.
-3. **Verify and report** with `git -C <worktree> status -sb` — the tree must come back clean **and the upstream
-   must be the branch's own remote**, not a base branch (see the section above).
+```sh
+git -C <dir> status -sb
+```
 
-If the discarded lockfile diff was more than metadata (actual dependency version changes), say so in the report —
-discard it anyway, but don't let it pass silently.
+`## <branch>...origin/<branch>`로 나와야 한다. `origin/develop`(또는 다른 베이스 브랜치)이면 `git -C <dir> branch --unset-upstream` 후 1~2단계를 다시 한다.
 
-## Why a worktree is needed
+4. 의존성을 설치한다. 새 worktree엔 `node_modules`가 없어서 이 단계까지 끝내야 바로 쓸 수 있다. 저장소 자체의 패키지 매니저를 쓴다(`bun.lock` → `bun install`, `pnpm-lock.yaml` → `pnpm install` 등).
 
-One working directory can check out **only one** branch. So opening a new session in a folder checked out to branch A still sees A — to work on B in parallel, a dedicated worktree folder for B is **required**.
+5. 설치 과정에서 생긴 lockfile 변경은 되돌린다.
 
-- When a task splits into two or more, write the per-branch task docs up front during design. That way, opening a new session on each branch later starts already knowing its own design. (Otherwise it lives only on the base branch and starts empty.)
-- For every branch except the currently checked-out one, create a separate directory with `git worktree add`. (Just creating the branch won't enable parallel sessions.)
+```sh
+git -C <dir> checkout -- <lockfile>
+```
 
-## Parallel task execution
+새 worktree는 원래 clean한 상태로 시작하므로, 여기서 생긴 lockfile 변경은 의도된 변경이 아니라 환경 노이즈다(예: 더 최신 패키지 매니저가 메타데이터를 다시 씀). 실제 의존성 버전이 바뀐 경우라면 그대로 되돌리되 보고에서 언급한다.
 
-- With a single task, the designer session just proceeds with the work.
-- With multiple tasks, the original (designer) session **switches to a supervisor role**, and the user opens a new session per worktree folder created earlier. (Opening only a new session in the same folder still sees the original branch.)
+6. 마지막으로 확인하고 보고한다.
 
-## Commit / PR
+```sh
+git -C <dir> status -sb
+```
 
-- **Commit/push only when the user asks.**
-- **Push the branch by name, never bare `git push`**: `git push -u origin <branch>`. A bare push follows whatever
-  upstream is configured, which is how a feature commit reaches a base branch.
-- Before the first push of a branch, re-check `git status -sb`. If the upstream is a base branch, fix it first.
-- Completion is signaled by moving the task file into `done/`; **do NOT record PR/merge status in the task doc.** (A PR can be sent back, so it isn't a reliable completion signal.)
+작업 트리가 clean해야 한다.
+
+## 커밋 메시지
+
+최우선 순위는 항상 저장소 자체 규칙이다. 아래 순서로 파악한다.
+
+1. commit/git 관련 문서(`CONTRIBUTING.md`, `.github/` 안의 문서, 저장소 `CLAUDE.md` 등)가 있으면 Read한다.
+2. `git log`로 기존 커밋 히스토리를 보고 실제 쓰이는 패턴을 파악한다.
+
+**제목**: 저장소에 규칙 문서가 없으면 1번에서 파악한 히스토리 패턴을 따른다.
+
+**본문(description)**: 저장소에 규칙이 있으면 그 규칙을 따른다. 없으면(대체로 없다) 다음을 따른다.
+
+- 1레벨 불릿 리스트로 구성한다.
+- why(이유)는 적지 않는다. what(무엇을 했는지)만 적는다.
+
+그 외의 규칙은 [`~/.claude/CLAUDE.local.md`](../CLAUDE.local.md)를 참고한다.
+
+## 푸시 · PR · 머지
+
+- 푸시는 항상 사용자 허락을 받은 뒤에만 한다.
+- PR 생성, 머지는 하지 않는다.

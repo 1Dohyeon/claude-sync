@@ -50,15 +50,29 @@ MSYS=winsymlinks:nativestrict ln -sfn "$WORKLOG" "$HOME/.claude/worklog"
 ln -sfn "$WORKLOG" "$HOME/.claude/worklog"
 ```
 
-## 4. 검증
+## 4. 저장소 안에서도 보이게 연결
 
+claude-sync 저장소 루트(`$SYNC`)에도 같은 대상으로 링크해서, `~/.claude/worklog`를 거치지 않고 저장소 폴더 안에서 바로 보이게 한다. `.gitignore`에 `worklog`가 등록되어 있어 커밋되지 않는다.
+
+Windows:
 ```sh
-ls -l "$HOME/.claude/worklog"
+MSYS=winsymlinks:nativestrict ln -sfn "$WORKLOG" "$SYNC/worklog"
 ```
 
-`->` 화살표로 `$WORKLOG`를 가리켜야 한다.
+macOS · Linux:
+```sh
+ln -sfn "$WORKLOG" "$SYNC/worklog"
+```
 
-## 5. 보고
+## 5. 검증
 
-- 연결 결과 (`$WORKLOG` 경로)
+```sh
+ls -l "$HOME/.claude/worklog" "$SYNC/worklog"
+```
+
+둘 다 `->` 화살표로 `$WORKLOG`를 가리켜야 한다.
+
+## 6. 보고
+
+- 연결 결과 (`$WORKLOG` 경로, `~/.claude/worklog`와 `$SYNC/worklog` 둘 다 연결됨)
 - 백업 발생 시 경로·목록 — 병합 여부 확인
