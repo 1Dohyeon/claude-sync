@@ -46,7 +46,9 @@ git -C <dir> status -sb
 
 ## 커밋 메시지
 
-최우선 순위는 항상 저장소 자체 규칙이다. 아래 순서로 파악한다.
+**커밋 메시지를 작성하기 전에 [`~/.claude/CLAUDE.local.md`](../CLAUDE.local.md)를 무조건 Read한다.** 거기 적힌 추가 커밋 규칙도 꼭 따른다.
+
+그 다음 저장소 자체 규칙을 아래 순서로 파악한다.
 
 1. commit/git 관련 문서(`CONTRIBUTING.md`, `.github/` 안의 문서, 저장소 `CLAUDE.md` 등)가 있으면 Read한다.
 2. `git log`로 기존 커밋 히스토리를 보고 실제 쓰이는 패턴을 파악한다.
@@ -57,8 +59,6 @@ git -C <dir> status -sb
 
 - 1레벨 불릿 리스트로 구성한다.
 - why(이유)는 적지 않는다. what(무엇을 했는지)만 적는다.
-
-그 외의 규칙은 [`~/.claude/CLAUDE.local.md`](../CLAUDE.local.md)를 참고한다.
 
 ## 푸시 · PR · 머지
 
