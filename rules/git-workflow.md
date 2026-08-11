@@ -15,8 +15,10 @@ git push origin origin/develop:refs/heads/<branch>
 
 ```sh
 git fetch origin
-git worktree add --track -b <branch> <dir> origin/<branch>
+git worktree add -b <branch> <dir> origin/<branch>
 ```
+
+`--track`은 붙이지 않는다. 시작점이 `origin/<branch>`라 upstream은 어차피 자동으로 잡히고, git 2.18 미만에서는 `unknown option 'track'`으로 실패한다.
 
 3. upstream이 베이스 브랜치가 아니라 `<branch>` 자신인지 확인한다. (`git worktree add -b <branch> <dir> origin/develop`처럼 만들면 upstream이 `develop`이 되어버려서, 이후 평범한 `git push` 한 번에 커밋이 바로 `develop`으로 들어간다.)
 
@@ -24,7 +26,15 @@ git worktree add --track -b <branch> <dir> origin/<branch>
 git -C <dir> status -sb
 ```
 
-`## <branch>...origin/<branch>`로 나와야 한다. `origin/develop`(또는 다른 베이스 브랜치)이면 `git -C <dir> branch --unset-upstream` 후 1~2단계를 다시 한다.
+`## <branch>...origin/<branch>`로 나와야 한다. 그렇지 않으면 아래로 고친다.
+
+| status 출력 | 상태 | 조치 |
+|---|---|---|
+| `## <branch>...origin/<branch>` | 정상 | 다음 단계로 |
+| `## <branch>...origin/develop` | 베이스 브랜치를 추적 | `git -C <dir> branch --set-upstream-to=origin/<branch>` |
+| `## <branch>` | upstream 없음 (`branch.autoSetupMerge=false`) | 위와 동일 |
+
+고친 뒤 `status -sb`로 다시 확인한다.
 
 4. 의존성을 설치한다. 새 worktree엔 `node_modules`가 없어서 이 단계까지 끝내야 바로 쓸 수 있다. 저장소 자체의 패키지 매니저를 쓴다(`bun.lock` → `bun install`, `pnpm-lock.yaml` → `pnpm install` 등).
 
