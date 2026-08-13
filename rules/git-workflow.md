@@ -54,6 +54,116 @@ git -C <dir> status -sb
 
 작업 트리가 clean해야 한다.
 
+## worktree 정리
+
+**"워크트리 삭제해줘" = 워크트리 폴더 + 로컬 브랜치를 지우고, 원격은 그대로 둔다.** 둘은 한 묶음이라 로컬 브랜치를 남길지 따로 묻지 않는다.
+
+작업은 항상 worktree에서만 한다(메인 클론에서 `checkout`으로 브랜치를 옮겨 작업하지 않는다). 그래서 worktree가 사라지면 그 로컬 브랜치는 쓸 곳이 없어 정리 대상이다. 반대로 원격 브랜치는 PR과 사본을 들고 있는 쪽이므로 손대지 않는다(삭제는 사용자가 직접 웹에서 진행).
+
+지울 것과 두는 것을 혼동하지 않는다.
+
+| | 실체 | 이 절차에서 |
+|---|---|---|
+| ① 로컬 브랜치 `<branch>` | `.git/refs/heads/<branch>` | **지운다** (`git branch -D`) |
+| ② 원격 추적 ref `origin/<branch>` | `.git/refs/remotes/origin/<branch>` | 두고, 건드리지 않는다 |
+| ③ GitHub의 원격 브랜치 | GitHub 서버 | 두고, 건드리지 않는다 |
+
+②③은 `git branch -D`로 지워지지 않는다. ③ 삭제(`git push origin --delete`, `git push origin :<branch>`)는 푸시가 끼는 동작이라 "푸시 · PR · 머지" 규칙에 걸린다 — 하지 않는다.
+
+worktree 제거만으로는 ①이 남는다. worktree 제거는 작업 디렉터리와 `.git/worktrees/<name>/` 메타데이터만 없애고 브랜치 ref는 건드리지 않는다(브랜치의 점유만 풀린다). 그래서 아래 2·3단계를 둘 다 해야 정리가 끝난다.
+
+### 1. 유실 확인
+
+**로컬에만 있는 것이 없는지 먼저 본다.** 원격에 사본이 있다는 것이 ①을 지워도 되는 근거다. 아래 중 하나라도 걸리면 중단하고 보고한다 — 조용히 우회하거나 `-D`로 밀지 않는다.
+
+```sh
+git -C <dir> status -sb
+```
+
+| status 출력 | 판정 |
+|---|---|
+| `## <branch>...origin/<branch>` + clean | 통과. 원격과 동일하다 |
+| `[ahead N]` | 미푸시 커밋이 있다 → 푸시 승인이 필요하므로 중단·보고 |
+| 변경·스테이징된 파일 | 중단·보고 |
+| `[behind N]`만 | 통과. 원격이 앞서 있을 뿐 잃을 것은 없다 |
+| `origin/<branch>: gone` | 원격 사본이 없다 → 아래 "원격이 이미 삭제된 경우"로 간다 |
+
+```sh
+git -C <dir> stash list
+```
+
+비어 있어야 한다. stash는 브랜치를 지워도 남지만 되찾을 실마리가 사라지므로 중단·보고한다.
+
+### 2. worktree 제거
+
+```sh
+git worktree remove <dir>
+```
+
+`git worktree remove`는 git 2.17부터다. 그 미만에서는 `usage: git worktree add ...`(exit 129)로 실패하므로 디렉터리를 지우고 prune한다.
+
+```sh
+rm -rf <dir>
+```
+
+```sh
+git -C <main-dir> worktree prune
+```
+
+### 3. 로컬 브랜치 삭제
+
+```sh
+git -C <main-dir> branch -D <branch>
+```
+
+`-d`가 아니라 `-D`다. 이 브랜치는 develop에 머지되지 않았거나 머지 전에 리베이스돼 조상이 아니어서 `-d`는 거부된다. `-D`를 쓰는 근거는 1단계에서 원격 사본을 확인한 것이며, 확인 없이 `-D`를 쓰지 않는다.
+
+2단계보다 먼저 실행하면 `checked out at ...`으로 거부된다. 순서를 지킨다.
+
+### 4. 검증
+
+```sh
+git -C <main-dir> worktree list
+```
+
+```sh
+git -C <main-dir> branch -vv
+```
+
+```sh
+git -C <main-dir> branch -r
+```
+
+worktree 목록과 로컬 브랜치 목록에서 `<branch>`가 사라지고, `origin/<branch>`는 **그대로 남아 있어야** 한다. 마지막 항목이 "로컬만 지웠다"의 증거이므로 보고에 함께 적는다.
+
+### 원격이 이미 삭제된 경우 (`: gone`)
+
+선임이 원격 브랜치를 지운 뒤라 ②③이 없다. 원격 사본이 없으니 1단계의 근거가 사라지므로, **develop에 반영됐는지를 대신 확인**하고 나서 지운다.
+
+| 확인 | 명령 | 판정 |
+|---|---|---|
+| 조상 여부 | `git branch --merged origin/develop` | 목록에 있으면 반영됨 |
+| patch 단위 | `git cherry origin/develop <branch>` | 모든 줄이 `-`면 반영됨 |
+
+`--merged`만 믿지 않는다. 머지 전에 리베이스(force-push)하는 저장소에서는 로컬 tip이 develop의 조상이 아니라 거의 아무것도 걸리지 않는다. `git cherry`의 `-`는 patch-id 동일본이 upstream에 있다는 뜻이라 리베이스를 통과한다.
+
+`git cherry`에 `+`가 남으면 곧바로 미반영으로 결론내지 않는다. 리베이스로 **주변 문맥**이 바뀌면 같은 변경도 patch-id가 달라진다. 그 커밋 제목으로 develop 히스토리를 찾아본다.
+
+```sh
+git log origin/develop --oneline --grep=<제목 일부>
+```
+
+같은 제목이 있으면 `git show --stat`으로 양쪽 stat을 비교하고, 파일 단위로 `git diff <로컬커밋> <develop커밋> -- <파일>`이 비는지 본다. 여기까지 확인되면 반영된 것으로 보고 지운다. 어느 것도 확인되지 않으면 중단하고 보고한다.
+
+### 정리를 빠뜨렸을 때
+
+이 절차의 3단계를 생략하면 로컬 브랜치가 계속 쌓인다. 자동으로 없어지는 경로가 없다.
+
+- 선임이 원격 브랜치를 지우고 `git fetch --prune`을 해도 ②만 사라진다. ①은 upstream이 `: gone`으로 표시만 되고 남는다. git은 로컬 브랜치를 자동 삭제하지 않는다.
+- GitHub Desktop의 BranchPruner는 **기본 브랜치(`main`)에 머지된** 브랜치만 정리한다(로그: `Pruning 0 branches that have been merged into the default branch, main`). PR을 `develop`으로 머지하는 저장소에서는 한 번도 걸리지 않는다.
+
+`git branch -vv`에서 `: gone`이 붙은 것들이 밀린 정리 후보다. 위 "원격이 이미 삭제된 경우"로 확인한 뒤 한 번에 지운다.
+
 ## 커밋 메시지
 
 **커밋 메시지를 작성하기 전에 [`~/.claude/CLAUDE.local.md`](../CLAUDE.local.md)를 무조건 Read한다.** 거기 적힌 추가 커밋 규칙도 꼭 따른다.
