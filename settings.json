@@ -83,6 +83,19 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/check-task-doc.sh\"",
+            "timeout": 10,
+            "statusMessage": "task 문서 규칙 검사"
+          }
+        ]
+      }
     ]
   },
   "autoUpdatesChannel": "latest",
