@@ -10,6 +10,9 @@ const fs = require("fs");
 
 const REPORT = ["지금 무엇이 문제인가", "어떻게 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "확인 방법"];
 const WORK = ["작업 목록", "진행", "검증", "완료"];
+// 단계 문서(<branch>.work.NN.md)는 보고서와 작업 문서를 한 파일에 합친 것이다.
+// 범위가 여러 단계로 쪼개지는 작업에서 파일이 두 배로 늘지 않게 하려고 둔 골격이다.
+const STAGE = ["지금 무엇이 문제인가", "어떻게 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "작업 목록", "확인 방법", "검증", "완료"];
 
 let raw;
 try { raw = fs.readFileSync(0, "utf8"); } catch { process.exit(0); }
@@ -26,8 +29,9 @@ if (/\/(overview|INDEX)\.md$/.test(file)) process.exit(0);
 let text;
 try { text = fs.readFileSync(file, "utf8"); } catch { process.exit(0); }
 
+const isStage = /\.work\.\d+\.md$/.test(file);
 const isWork = file.endsWith(".work.md");
-const allowed = isWork ? WORK : REPORT;
+const allowed = isStage ? STAGE : isWork ? WORK : REPORT;
 const list = allowed.map(h => "## " + h);
 
 // 안내 주석과 코드블록은 본문이 아니므로 검사에서 뺀다.
@@ -46,7 +50,13 @@ if (order.some((v, i) => i > 0 && v <= order[i - 1])) {
   bad.push("제목 순서가 템플릿과 다르다. 순서는 " + list.join(" → ") + " 다.");
 }
 
-if (!isWork) {
+if (!isWork && !isStage) {
+  // 보고서와 작업 문서는 짝이다. 보고서를 저장하는 시점에 짝이 없으면 그 자리에서 알린다.
+  const work = file.replace(/\.md$/, ".work.md");
+  if (!fs.existsSync(work)) {
+    bad.push("짝이 되는 작업 문서가 없다: " + work +
+      " — ~/.claude/templates/task-work.md 를 이 경로로 복사하고 ## 작업 목록을 채운다.");
+  }
   if (/^[ \t]*[-*] \[[ xX]\]/m.test(body)) {
     bad.push("보고서에 체크박스를 쓰지 않는다. 작업 목록은 같은 이름의 .work.md로 옮긴다.");
   }
