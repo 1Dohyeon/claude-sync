@@ -10,13 +10,19 @@ Claude가 읽고 그대로 실행하는 세팅 절차. 사용자가 "SETTING_GUI
 
 | `~/.claude/` | 대상 |
 |---|---|
-| `agents/` `commands/` `hooks/` `rules/` `templates/` | 저장소의 동명 디렉터리 |
+| `agents/` `commands/` `hooks/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리 |
 | `CLAUDE.md` `settings.json` | 저장소의 동명 파일 |
 | `CLAUDE.local.md` `settings.local.json` | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
 
 건드리지 않음: `sessions/` `projects/` `plugins/` `history.jsonl` `.credentials.json`
 
 ---
+
+## 0. 전제
+
+사용자가 fork한 저장소를 원하는 위치에 clone해 둔 상태에서 시작한다. **fork와 clone은 사용자가 직접 한다 — Claude가 저장소를 만들거나 가져오지 않는다.**
+
+이 문서를 그 폴더의 로컬 파일로 읽고 있어야 한다. 원격 URL을 그대로 읽고 실행하지 않는다 — 요약되면 명령이 뭉개진다. clone되어 있지 않으면 사용자에게 알리고 중단한다.
 
 ## 1. 경로 확정
 
@@ -75,13 +81,14 @@ stat "$HOME/.claude/_symlink_test"
 rm -f "$HOME/.claude/_symlink_test"
 ```
 
-통과하면 개별 명령 9개 실행:
+통과하면 개별 명령 10개 실행:
 
 ```sh
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/commands" "$HOME/.claude/commands"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/hooks" "$HOME/.claude/hooks"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/rules" "$HOME/.claude/rules"
+MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/skills" "$HOME/.claude/skills"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/templates" "$HOME/.claude/templates"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/settings.json" "$HOME/.claude/settings.json"
@@ -96,6 +103,7 @@ ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
 ln -sfn "$SYNC/commands" "$HOME/.claude/commands"
 ln -sfn "$SYNC/hooks" "$HOME/.claude/hooks"
 ln -sfn "$SYNC/rules" "$HOME/.claude/rules"
+ln -sfn "$SYNC/skills" "$HOME/.claude/skills"
 ln -sfn "$SYNC/templates" "$HOME/.claude/templates"
 ln -sfn "$SYNC/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 ln -sfn "$SYNC/settings.json" "$HOME/.claude/settings.json"
@@ -109,7 +117,7 @@ ln -sfn "$SYNC/settings.local.json" "$HOME/.claude/settings.local.json"
 ls -l "$HOME/.claude"
 ```
 
-전부 `->` 화살표로 9개 다 보여야 한다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
+전부 `->` 화살표로 10개 다 보여야 한다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
 
 ```sh
 find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print

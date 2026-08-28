@@ -1,3 +1,7 @@
+---
+description: git worktree를 만들거나 정리할 때, 커밋 메시지를 쓸 때, 푸시·PR을 다룰 때 따르는 절차. 원격 브랜치 선점 방식의 worktree 생성, 유실 확인 후 worktree·로컬 브랜치 삭제, 커밋 메시지 작성 규칙, 푸시 승인 규칙을 담는다.
+---
+
 # Git 워크플로 규칙
 
 ## worktree 생성
@@ -166,7 +170,7 @@ git log origin/develop --oneline --grep=<제목 일부>
 
 ## 커밋 메시지
 
-**커밋 메시지를 작성하기 전에 [`~/.claude/CLAUDE.local.md`](../CLAUDE.local.md)를 무조건 Read한다.** 거기 적힌 추가 커밋 규칙도 꼭 따른다.
+**커밋 메시지를 작성하기 전에 [`~/.claude/CLAUDE.local.md`](../../CLAUDE.local.md)를 무조건 Read한다.** 거기 적힌 추가 커밋 규칙도 꼭 따른다.
 
 그 다음 저장소 자체 규칙을 아래 순서로 파악한다.
 

@@ -8,11 +8,11 @@
 node -e '
 const fs = require("fs");
 
-const REPORT = ["지금 무엇이 문제인가", "어떻게 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "확인 방법"];
-const WORK = ["작업 목록", "진행", "검증", "완료"];
-// 단계 문서(<branch>.work.NN.md)는 보고서와 작업 문서를 한 파일에 합친 것이다.
-// 범위가 여러 단계로 쪼개지는 작업에서 파일이 두 배로 늘지 않게 하려고 둔 골격이다.
-const STAGE = ["지금 무엇이 문제인가", "어떻게 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "작업 목록", "확인 방법", "검증", "완료"];
+// 계획 섹션(문제 ~ 확인 방법)과 진행 섹션(작업 목록 ~ 완료)을 한 파일에 담는다.
+const PLAN = ["지금 무엇이 문제인가", "어떻게 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "확인 방법"];
+const PROGRESS = ["작업 목록", "진행", "검증", "완료"];
+const ALLOWED = PLAN.concat(PROGRESS);
+const LIST = ALLOWED.map(h => "## " + h);
 
 let raw;
 try { raw = fs.readFileSync(0, "utf8"); } catch { process.exit(0); }
@@ -29,44 +29,36 @@ if (/\/(overview|INDEX)\.md$/.test(file)) process.exit(0);
 let text;
 try { text = fs.readFileSync(file, "utf8"); } catch { process.exit(0); }
 
-const isStage = /\.work\.\d+\.md$/.test(file);
-const isWork = file.endsWith(".work.md");
-const allowed = isStage ? STAGE : isWork ? WORK : REPORT;
-const list = allowed.map(h => "## " + h);
-
 // 안내 주석과 코드블록은 본문이 아니므로 검사에서 뺀다.
 const body = text.replace(/<!--[\s\S]*?-->/g, "").replace(/^```[\s\S]*?^```/gm, "");
 const found = [...body.matchAll(/^## +(.+?)[ \t]*$/gm)].map(m => m[1]);
 const bad = [];
 
-const unknown = found.filter(h => !allowed.includes(h));
+const unknown = found.filter(h => !ALLOWED.includes(h));
 if (unknown.length) {
   bad.push("허용되지 않은 제목: " + unknown.map(h => "## " + h).join(", ") +
-    " — 쓸 수 있는 제목은 " + list.join(" / ") + " 뿐이다.");
+    " — 쓸 수 있는 제목은 " + LIST.join(" / ") + " 뿐이다.");
 }
 
-const order = found.filter(h => allowed.includes(h)).map(h => allowed.indexOf(h));
+const order = found.filter(h => ALLOWED.includes(h)).map(h => ALLOWED.indexOf(h));
 if (order.some((v, i) => i > 0 && v <= order[i - 1])) {
-  bad.push("제목 순서가 템플릿과 다르다. 순서는 " + list.join(" → ") + " 다.");
+  bad.push("제목 순서가 템플릿과 다르다. 순서는 " + LIST.join(" → ") + " 다.");
 }
 
-if (!isWork && !isStage) {
-  // 보고서와 작업 문서는 짝이다. 보고서를 저장하는 시점에 짝이 없으면 그 자리에서 알린다.
-  const work = file.replace(/\.md$/, ".work.md");
-  if (!fs.existsSync(work)) {
-    bad.push("짝이 되는 작업 문서가 없다: " + work +
-      " — ~/.claude/templates/task-work.md 를 이 경로로 복사하고 ## 작업 목록을 채운다.");
-  }
-  if (/^[ \t]*[-*] \[[ xX]\]/m.test(body)) {
-    bad.push("보고서에 체크박스를 쓰지 않는다. 작업 목록은 같은 이름의 .work.md로 옮긴다.");
-  }
-  const hash = body.match(/\b[0-9a-f]{7,40}\b/);
-  if (hash) {
-    bad.push("커밋 해시(" + hash[0] + ")를 보고서에 쓰지 않는다. 시점이 지나면 거짓이 되는 값은 .work.md에만 남긴다.");
-  }
-  if (!found.length) {
-    bad.push("섹션이 하나도 없다. " + list.join(" / ") + " 중 해당하는 것을 쓴다.");
-  }
+if (!found.length) {
+  bad.push("섹션이 하나도 없다. " + LIST.join(" / ") + " 중 해당하는 것을 쓴다.");
+}
+
+// 계획 섹션(작업 목록 이전)에는 체크박스·커밋 해시를 쓰지 않는다 — 그건 진행 섹션의 일이다.
+const planEnd = body.search(/^## +작업 목록[ \t]*$/m);
+const planBody = planEnd === -1 ? body : body.slice(0, planEnd);
+
+if (/^[ \t]*[-*] \[[ xX]\]/m.test(planBody)) {
+  bad.push("계획 섹션(작업 목록 이전)에 체크박스를 쓰지 않는다. 할 일은 ## 작업 목록에 옮긴다.");
+}
+const hash = planBody.match(/\b[0-9a-f]{7,40}\b/);
+if (hash) {
+  bad.push("커밋 해시(" + hash[0] + ")를 계획 섹션에 쓰지 않는다. 시점이 지나면 거짓이 되는 값은 ## 진행/## 검증에만 남긴다.");
 }
 
 if (!bad.length) process.exit(0);
@@ -76,7 +68,7 @@ process.stdout.write(JSON.stringify({
   systemMessage: msg,
   hookSpecificOutput: {
     hookEventName: "PostToolUse",
-    additionalContext: msg + "\n위 항목을 고쳐서 다시 저장하세요. 템플릿은 ~/.claude/templates/task.md 와 task-work.md 입니다."
+    additionalContext: msg + "\n위 항목을 고쳐서 다시 저장하세요. 템플릿은 ~/.claude/templates/task.md 입니다."
   }
 }));
 ' 2>/dev/null || :

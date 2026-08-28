@@ -1,6 +1,10 @@
+---
+description: worklog 저장소를 처음 이 기기에 연결할 때(아직 ~/.claude/worklog가 없을 때) 사용한다. 별도 private 저장소를 ~/.claude/worklog와 claude-sync 저장소 루트에 심링크로 연결하는 절차를 담는다.
+---
+
 # worklog 최초 연결
 
-`~/.claude/worklog`를 worklog 저장소(별도, private)로 심링크 연결하는 절차. 연결된 뒤의 사용 규칙은 `rules/worklog.md`.
+`~/.claude/worklog`를 worklog 저장소(별도, private)로 심링크 연결하는 절차. 연결된 뒤의 사용 규칙은 `/worklog` skill.
 
 ## 1. 경로 확인
 
