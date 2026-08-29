@@ -1,5 +1,4 @@
 {
-  "outputStyle": "fluent-korean",
   "permissions": {
     "allow": [
       "Bash(git status:*)",
@@ -98,8 +97,10 @@
       }
     ]
   },
+  "outputStyle": "fluent-korean",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark"
+  "theme": "dark",
+  "agentPushNotifEnabled": true
 }

@@ -9,9 +9,6 @@
 | ------------------------------------------- | ----------------- |
 | 코드 작성·수정(개발 작업)                   | `/development`    |
 | git 관련 작업(worktree, commit, push, ...)  | `/git-workflow`   |
-| worklog 저장소 최초 연결(심링크)            | `/worklog-setup`  |
-| 산출물이 남거나 한 세션을 넘길 만한 작업    | `/worklog`        |
-| 글로벌 Claude 설정 수정(CLAUDE.md, settings.json, rules/, skills/, hooks/, commands/, agents/, templates/) | `/claude-settings` |
 
 - 해당 skill이 없으면 그 규칙은 이 설정에 포함되지 않은 것이다. 만들어 내거나 우회하지 말고 사용자에게 알리고, 기록은 대화로 보고하는 것으로 대신한다.
 - `rules/`의 파일은 세션 시작 시 자동으로 로드되므로 이 표에 넣지 않는다. 항상 적용되는 원칙만 `rules/`에 둔다.
