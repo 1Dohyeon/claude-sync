@@ -3,9 +3,6 @@ settings.local.json
 CLAUDE.local.md
 .claude
 
-# ===== worklog 심링크 (기기별 절대경로) =====
-/worklog
-
 # ===== 백업 파일 =====
 *.bak
 
