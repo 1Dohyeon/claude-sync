@@ -25,16 +25,7 @@
       "Bash(gh pr diff:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr status:*)",
-      "Edit(~/.claude/worklog/**)",
-      "Write(~/.claude/worklog/**)",
-      "Read(~/.claude/worklog/**)"
-    ],
-    "deny": [
-      "Bash(cat:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)",
       "Bash(gh pr create:*)",
-      "Bash(gh pr merge:*)",
       "Bash(gh pr edit:*)",
       "Bash(gh pr close:*)",
       "Bash(gh pr reopen:*)",
@@ -44,6 +35,15 @@
       "Bash(gh pr lock:*)",
       "Bash(gh pr unlock:*)",
       "Bash(gh pr checkout:*)",
+      "Edit(~/.claude/worklog/**)",
+      "Write(~/.claude/worklog/**)",
+      "Read(~/.claude/worklog/**)"
+    ],
+    "deny": [
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(gh pr merge:*)",
       "Bash(git merge:*)"
     ]
   },

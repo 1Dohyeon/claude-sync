@@ -187,4 +187,4 @@ git log origin/develop --oneline --grep=<제목 일부>
 ## 푸시 · PR · 머지
 
 - 푸시는 항상 사용자 허락을 받은 뒤에만 한다.
-- PR 생성, 머지는 하지 않는다.
+- 머지(`git merge`, `gh pr merge`)는 하지 않는다. PR 생성·수정은 필요하면 한다.
