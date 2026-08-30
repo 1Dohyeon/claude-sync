@@ -1,0 +1,106 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote:*)",
+      "Bash(git stash list:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git worktree list:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm check-types:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm build:*)",
+      "Bash(bun run lint:*)",
+      "Bash(bun run check-types:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr status:*)",
+      "Edit(~/.claude/worklog/**)",
+      "Write(~/.claude/worklog/**)",
+      "Read(~/.claude/worklog/**)"
+    ],
+    "deny": [
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr close:*)",
+      "Bash(gh pr reopen:*)",
+      "Bash(gh pr ready:*)",
+      "Bash(gh pr review:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr lock:*)",
+      "Bash(gh pr unlock:*)",
+      "Bash(gh pr checkout:*)",
+      "Bash(git merge:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/load-overview.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/save-docs.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__notion__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_name' | grep -qE '^mcp__notion__(notion-)?(search|fetch|get|list|view|retrieve|query)' || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Notion MCP는 읽기 전용으로 제한되어 있습니다. write 계열 툴은 차단됩니다.\"}}'",
+            "timeout": 10,
+            "statusMessage": "Notion read-only 검사"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/check-task-doc.sh\"",
+            "timeout": 10,
+            "statusMessage": "task 문서 규칙 검사"
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": "fluent-korean",
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "agentPushNotifEnabled": true
+}
