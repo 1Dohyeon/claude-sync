@@ -51,18 +51,18 @@ claude-sync/               # 설정 저장소
 └── README.md              # 이 문서 (심링크 대상 아님)
 ```
 
-Claude는 세션을 시작할 때 `CLAUDE.md`, `rules/` 등을 컨텍스트에 주입합니다. 따라서 어떤 작업에서든 공통으로 지켜야 하는 규칙은 `rules/`에 담습니다.
+Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) 등을 컨텍스트에 주입합니다. 따라서 어떤 작업에서든 공통으로 지켜야 하는 규칙은 `rules/`에 담습니다.
 
-그 외에 작업 종류가 갈리는 경우(개발이면 개발, 리서치면 리서치 등)에는 `skills/`를 활용하도록 `CLAUDE.md`에서 라우팅합니다.
+그 외에 작업 종류가 갈리는 경우(개발이면 개발, 리서치면 리서치 등)에는 [`skills/`](skills/)를 활용하도록 `CLAUDE.md`에서 라우팅합니다.
 
-| 요청 유형                         | 호출되는 skill   |
-| --------------------------------- | ---------------- |
-| 코드 작성·수정                    | `/development`   |
-| 개발 태스크 사전 분석             | `/analyze-task`  |
-| 독립적인 코드 리뷰                | `/review-panel`  |
-| git 작업(worktree·commit·push 등) | `/git-workflow`  |
-| 조사·리서치·자료 종합             | `/research`      |
-| 논문·긴 기술 문서 정독            | `/paper-reading` |
+| 요청 유형                         | 호출되는 skill                                     |
+| --------------------------------- | ------------------------------------------------- |
+| 코드 작성·수정                    | [`/development`](skills/development/SKILL.md)     |
+| 개발 태스크 사전 분석             | [`/analyze-task`](skills/analyze-task/SKILL.md)   |
+| 독립적인 코드 리뷰                | [`/review-panel`](skills/review-panel/SKILL.md)   |
+| git 작업(worktree·commit·push 등) | [`/git-workflow`](skills/git-workflow/SKILL.md)   |
+| 조사·리서치·자료 종합             | [`/research`](skills/research/SKILL.md)           |
+| 논문·긴 기술 문서 정독            | [`/paper-reading`](skills/paper-reading/SKILL.md) |
 
 ## 세션 흐름
 
@@ -83,12 +83,12 @@ flowchart TD
     I --> J["이어받기<br/>worklog에 남음"]
 ```
 
-1. **세션 시작**: SessionStart 훅이 `rules/`를 컨텍스트에 주입합니다. `worklog/`에 이전에 진행하던 설계 문서가 있으면 함께 불러와 이어받습니다.
+1. **세션 시작**: SessionStart 훅이 [`rules/`](rules/)를 컨텍스트에 주입합니다. `worklog/`에 이전에 진행하던 설계 문서가 있으면 함께 불러와 이어받습니다.
 2. **요청**: "○○ 기능을 추가해줘"
-3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 `/analyze-task`가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다.
-4. **구현**: 이어서 "코드 작성·수정" 트리거로 `/development`가 호출됩니다. `rules/workflow.md`의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 `/git-workflow`로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다.
+3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다.
+4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다.
 5. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 무엇을 어떻게 확인했고 결과가 어땠는지를 설계 문서에 남깁니다.
-6. **리뷰**: "(커밋 또는 pr 범위 지정) 리뷰해줘"라고 요청하면 "독립적인 코드 리뷰" 트리거로 `/review-panel`이 호출됩니다.
+6. **리뷰**: "(커밋 또는 pr 범위 지정) 리뷰해줘"라고 요청하면 "독립적인 코드 리뷰" 트리거로 [`/review-panel`](skills/review-panel/SKILL.md)이 호출됩니다.
    - 6-1. **대상 확정**: 베이스 브랜치와의 diff를 리뷰 범위로 잡습니다. 사용자가 커밋 범위를 지정하면 그것을 우선합니다.
    - 6-2. **병렬 리뷰**: 아키텍처, 코드 레벨, 테스트, 컨벤션 네 축을, 각각 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다.
    - 6-3. **취합**: 네 결과가 다 오면 상위 모델이 중복을 합치고 심각도 순으로 하나의 리포트에 정리합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
