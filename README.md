@@ -70,7 +70,7 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 
 ```mermaid
 flowchart TD
-    A["세션 시작<br/>훅이 rules 주입, worklog 이어받기"] --> B["요청"]
+    A["세션 시작<br/>rules 자동 주입, 훅이 worklog 주입"] --> B["요청"]
     B --> C{"CLAUDE.md 라우팅"}
     C -->|"개발 태스크 사전 분석"| D["analyze-task"]
     C -->|"코드 작성·수정"| E["development<br/>workflow 5단계, git-workflow"]
@@ -83,7 +83,7 @@ flowchart TD
     I --> J["이어받기<br/>worklog에 남음"]
 ```
 
-1. **세션 시작**: SessionStart 훅이 [`rules/`](rules/)를 컨텍스트에 주입합니다. `worklog/`에 이전에 진행하던 설계 문서가 있으면 함께 불러와 이어받습니다.
+1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. SessionStart 훅은 `worklog/<repo>/overview.md`와 현재 브랜치의 task 문서를 주입하므로, 이전에 진행하던 설계 문서가 있으면 그대로 이어받습니다.
 2. **요청**: "○○ 기능을 추가해줘"
 3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다.
 4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다.

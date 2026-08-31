@@ -72,13 +72,13 @@ git -C <dir> status -sb
 | ② 원격 추적 ref `origin/<branch>` | `.git/refs/remotes/origin/<branch>` | 두고, 건드리지 않는다 |
 | ③ GitHub의 원격 브랜치 | GitHub 서버 | 두고, 건드리지 않는다 |
 
-②③은 `git branch -D`로 지워지지 않는다. ③ 삭제(`git push origin --delete`, `git push origin :<branch>`)는 푸시가 끼는 동작이라 "푸시 · PR · 머지" 규칙에 걸린다 — 하지 않는다.
+②③은 `git branch -D`로 지워지지 않는다. ③ 삭제(`git push origin --delete`, `git push origin :<branch>`)는 푸시가 끼는 동작이라 "푸시 · PR · 머지" 규칙에 걸리므로 하지 않는다.
 
 worktree 제거만으로는 ①이 남는다. worktree 제거는 작업 디렉터리와 `.git/worktrees/<name>/` 메타데이터만 없애고 브랜치 ref는 건드리지 않는다(브랜치의 점유만 풀린다). 그래서 아래 2·3단계를 둘 다 해야 정리가 끝난다.
 
 ### 1. 유실 확인
 
-**로컬에만 있는 것이 없는지 먼저 본다.** 원격에 사본이 있다는 것이 ①을 지워도 되는 근거다. 아래 중 하나라도 걸리면 중단하고 보고한다 — 조용히 우회하거나 `-D`로 밀지 않는다.
+**로컬에만 있는 것이 없는지 먼저 본다.** 원격에 사본이 있다는 것이 ①을 지워도 되는 근거다. 아래 중 하나라도 걸리면 중단하고 보고한다. 조용히 우회하거나 `-D`로 밀지 않는다.
 
 ```sh
 git -C <dir> status -sb
@@ -186,5 +186,4 @@ git log origin/develop --oneline --grep=<제목 일부>
 
 ## 푸시 · PR · 머지
 
-- 푸시는 항상 사용자 허락을 받은 뒤에만 한다.
 - 머지(`git merge`, `gh pr merge`)는 하지 않는다. PR 생성·수정은 필요하면 한다.

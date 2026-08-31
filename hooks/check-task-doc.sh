@@ -56,7 +56,8 @@ const planBody = planEnd === -1 ? body : body.slice(0, planEnd);
 if (/^[ \t]*[-*] \[[ xX]\]/m.test(planBody)) {
   bad.push("계획 섹션(작업 목록 이전)에 체크박스를 쓰지 않는다. 할 일은 ## 작업 목록에 옮긴다.");
 }
-const hash = planBody.match(/\b[0-9a-f]{7,40}\b/);
+// a~f가 한 글자도 없으면 날짜(20250101)나 숫자 ID이지 해시가 아니다.
+const hash = planBody.match(/\b(?=[0-9a-f]{7,40}\b)[0-9a-f]*[a-f][0-9a-f]*\b/);
 if (hash) {
   bad.push("커밋 해시(" + hash[0] + ")를 계획 섹션에 쓰지 않는다. 시점이 지나면 거짓이 되는 값은 ## 진행/## 검증에만 남긴다.");
 }

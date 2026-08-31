@@ -20,9 +20,9 @@ Claude가 읽고 그대로 실행하는 세팅 절차. 사용자가 "SETTING_GUI
 
 ## 0. 전제
 
-사용자가 fork한 저장소를 원하는 위치에 clone해 둔 상태에서 시작한다. **fork와 clone은 사용자가 직접 한다 — Claude가 저장소를 만들거나 가져오지 않는다.**
+사용자가 fork한 저장소를 원하는 위치에 clone해 둔 상태에서 시작한다. **fork와 clone은 사용자가 직접 한다. Claude가 저장소를 만들거나 가져오지 않는다.**
 
-이 문서를 그 폴더의 로컬 파일로 읽고 있어야 한다. 원격 URL을 그대로 읽고 실행하지 않는다 — 요약되면 명령이 뭉개진다. clone되어 있지 않으면 사용자에게 알리고 중단한다.
+이 문서를 그 폴더의 로컬 파일로 읽고 있어야 한다. 원격 URL을 그대로 읽고 실행하지 않는다. 요약되면 명령이 뭉개진다. clone되어 있지 않으면 사용자에게 알리고 중단한다.
 
 ## 1. 경로 확정
 
@@ -32,7 +32,7 @@ git rev-parse --show-toplevel
 
 → `$SYNC`.
 
-이후 명령의 `$SYNC`는 Bash 호출마다 실제 경로 문자열로 치환해서 실행한다 — 변수는 호출 간 유지되지 않는다.
+이후 명령의 `$SYNC`는 Bash 호출마다 실제 경로 문자열로 치환해서 실행한다. 변수는 호출 간 유지되지 않는다.
 
 ## 2. 상태 점검 (읽기 전용)
 
@@ -55,7 +55,7 @@ ls -l "$HOME/.claude"
 git -C "$SYNC" check-ignore -v CLAUDE.local.md settings.local.json
 ```
 
-출력 없으면 `.gitignore`/파일명 불일치 — 사용자에게 알린다.
+출력이 없으면 `.gitignore`나 파일명이 맞지 않는 것이므로 사용자에게 알린다.
 
 ## 4. 링크 생성
 
@@ -66,7 +66,7 @@ mkdir -p "$HOME/.claude/backups/pre-symlink"
 mv "$HOME/.claude/<이름>" "$HOME/.claude/backups/pre-symlink/"
 ```
 
-### Windows — 링크 전에 권한부터 확인
+### Windows: 링크 전에 권한부터 확인
 
 권한 없으면 `ln -s`가 에러 없이 복사본을 만든다:
 
@@ -97,7 +97,7 @@ MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/CLAUDE.local.md" "$HOME/.claude/CLA
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/settings.local.json" "$HOME/.claude/settings.local.json"
 ```
 
-### macOS · Linux — 바로 실행
+### macOS · Linux: 바로 실행
 
 ```sh
 ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
@@ -130,7 +130,7 @@ find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print
 ## 6. 보고
 
 - 연결된 링크 목록
-- 백업 발생 시 경로·목록 — 병합 여부 확인
+- 백업 발생 시 경로·목록 (병합 여부 확인)
 - 남은 수동 조치 중 해당 항목
 - 새 세션부터 `CLAUDE.md`·`settings.json` 적용됨(재시작 필요) 안내
 

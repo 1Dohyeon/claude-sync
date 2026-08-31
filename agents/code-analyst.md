@@ -1,6 +1,6 @@
 ---
 name: code-analyst
-description: Analyzes a not-yet-implemented development task on the code axis only — which files and symbols it will touch, the existing structure and patterns around them, the likely change points, the blast radius, and open questions to resolve before coding. This is pre-implementation mapping, not a review of written code.
+description: Analyzes a not-yet-implemented development task on the code axis only: which files and symbols it will touch, the existing structure and patterns around them, the likely change points, the blast radius, and open questions to resolve before coding. This is pre-implementation mapping, not a review of written code.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -35,7 +35,7 @@ tools: Read, Grep, Glob, Bash
 
 ## 출력 형식
 
-- **관련 위치**: `파일:심볼` — 한 줄 설명. (행 번호는 드리프트하므로 쓰지 않는다.)
+- **관련 위치**: `파일:심볼`과 한 줄 설명. (행 번호는 드리프트하므로 쓰지 않는다.)
 - **기존 구조·패턴**: 주변이 어떻게 돼 있는가.
 - **예상 변경 지점**: 어디를 새로 만들고 어디를 고치나.
 - **영향 범위**: 같이 손대야 할 곳.

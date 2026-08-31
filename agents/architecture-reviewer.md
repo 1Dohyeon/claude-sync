@@ -1,6 +1,6 @@
 ---
 name: architecture-reviewer
-description: Reviews a code change on the architecture axis only — module boundaries, dependency direction, responsibility separation, ease of change/extension, duplicated abstractions. Use as one lens of a multi-perspective review. Does not look at implementation-level bugs, style, or test coverage.
+description: Reviews a code change on the architecture axis only: module boundaries, dependency direction, responsibility separation, ease of change/extension, duplicated abstractions. Use as one lens of a multi-perspective review. Does not look at implementation-level bugs, style, or test coverage.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -41,7 +41,7 @@ tools: Read, Grep, Glob, Bash
 심각도 순으로 정렬한다.
 
 ```
-[심각도] <한 줄 요지> — file:line
+[심각도] <한 줄 요지> (file:line)
   문제: <구조상 무엇이 어긋나는가>
   근거: <어느 diff 라인이 / 어느 기존 파일의 구조가 그 판단의 바탕인가>
   제안: <어디에 두거나 어느 방향으로 돌려야 하는가>
