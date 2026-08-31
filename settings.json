@@ -6,6 +6,7 @@
       "Bash(git log:*)",
       "Bash(git show:*)",
       "Bash(git branch:*)",
+      "Bash(git merge-base:*)",
       "Bash(git remote:*)",
       "Bash(git stash list:*)",
       "Bash(git check-ignore:*)",
