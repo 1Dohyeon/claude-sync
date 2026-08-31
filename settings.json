@@ -72,11 +72,11 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "mcp__notion__.*",
+        "matcher": "mcp__.*[Nn]otion.*",
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_name' | grep -qE '^mcp__notion__(notion-)?(search|fetch|get|list|view|retrieve|query)' || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Notion MCP는 읽기 전용으로 제한되어 있습니다. write 계열 툴은 차단됩니다.\"}}'",
+            "command": "sh \"$HOME/.claude/hooks/notion-readonly.sh\"",
             "timeout": 10,
             "statusMessage": "Notion read-only 검사"
           }

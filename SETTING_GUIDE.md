@@ -10,7 +10,7 @@ Claude가 읽고 그대로 실행하는 세팅 절차. 사용자가 "SETTING_GUI
 
 | `~/.claude/` | 대상 |
 |---|---|
-| `agents/` `commands/` `hooks/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리 |
+| `agents/` `commands/` `hooks/` `output-styles/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리 |
 | `CLAUDE.md` `settings.json` | 저장소의 동명 파일 |
 | `CLAUDE.local.md` `settings.local.json` | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
 
@@ -81,12 +81,13 @@ stat "$HOME/.claude/_symlink_test"
 rm -f "$HOME/.claude/_symlink_test"
 ```
 
-통과하면 개별 명령 10개 실행:
+통과하면 개별 명령 11개 실행:
 
 ```sh
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/commands" "$HOME/.claude/commands"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/hooks" "$HOME/.claude/hooks"
+MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/output-styles" "$HOME/.claude/output-styles"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/rules" "$HOME/.claude/rules"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/skills" "$HOME/.claude/skills"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/templates" "$HOME/.claude/templates"
@@ -102,6 +103,7 @@ MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/settings.local.json" "$HOME/.claude
 ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
 ln -sfn "$SYNC/commands" "$HOME/.claude/commands"
 ln -sfn "$SYNC/hooks" "$HOME/.claude/hooks"
+ln -sfn "$SYNC/output-styles" "$HOME/.claude/output-styles"
 ln -sfn "$SYNC/rules" "$HOME/.claude/rules"
 ln -sfn "$SYNC/skills" "$HOME/.claude/skills"
 ln -sfn "$SYNC/templates" "$HOME/.claude/templates"
@@ -117,7 +119,7 @@ ln -sfn "$SYNC/settings.local.json" "$HOME/.claude/settings.local.json"
 ls -l "$HOME/.claude"
 ```
 
-전부 `->` 화살표로 10개 다 보여야 한다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
+전부 `->` 화살표로 11개 다 보여야 한다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
 
 ```sh
 find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print
@@ -138,5 +140,4 @@ find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print
 
 - 4단계 시점 승인 프롬프트는 정상 (settings.json 연결 전이라 allowlist 없음)
 - `deny`로 명령이 막히면 우회하지 말고 중단, 안내: `mv ~/.claude/settings.json ~/.claude/settings.json.before-sync`
-- 새 절대경로·기기별 값은 `settings.json`이 아니라 `settings.local.json`에 (`CLAUDE.md`의 SETTINGS RULE)
 - `git clean -dfx`는 `CLAUDE.local.md`·`settings.local.json`을 지움
