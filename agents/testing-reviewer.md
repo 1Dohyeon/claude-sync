@@ -10,9 +10,9 @@ tools: Read, Grep, Glob, Bash
 
 ## 영역 밖 (다루지 않는다)
 
-- 프로덕션 코드의 정확성 버그 → logic 리뷰어의 몫 (테스트가 **빠졌다**는 지적은 하되, 프로덕션 버그 자체는 넘긴다)
-- 모듈 경계·의존 방향 → architecture 리뷰어의 몫
-- 네이밍·포맷·저장소 컨벤션 → convention 리뷰어의 몫
+- 프로덕션 코드의 정확성 버그 → [logic 리뷰어](./logic-reviewer.md)의 몫 (테스트가 **빠졌다**는 지적은 하되, 프로덕션 버그 자체는 넘긴다)
+- 모듈 경계·의존 방향 → [architecture 리뷰어](./architecture-reviewer.md)의 몫
+- 네이밍·포맷·저장소 컨벤션 → [convention 리뷰어](./convention-reviewer.md)의 몫
 
 위에 속하는 것이 눈에 띄면 **부차적 메모로 한 줄만** 남기고 지적으로 세우지 않는다.
 

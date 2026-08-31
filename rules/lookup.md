@@ -1,6 +1,6 @@
 # LOOKUP RULE
 
-파일·코드 조회 시 지킨다. (`cat`·`head`·`tail`은 `settings.json`의 `deny`로 차단되어 있음)
+파일·코드 조회 시 지킨다. (`cat`·`head`·`tail`은 [`settings.json`](../settings.json)의 `deny`로 차단되어 있음)
 
 - 파일 내용은 `Read`, 검색은 `Grep`/`Glob`을 쓴다 — `sed`·`awk`·`strings`·`find`로 대체하지 않는다.
 - `Bash`는 **단일 명령**만 쓰고 `&&`·`;`·`|`·`for`·`$(...)`로 엮지 않는다 — 복합 명령은 allowlist의 접두 규칙에 걸리지 않아 매번 승인 프롬프트가 뜬다.

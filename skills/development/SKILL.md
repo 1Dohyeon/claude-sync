@@ -4,11 +4,11 @@ description: 코드를 작성·수정하는 개발 작업을 할 때 사용한�
 
 # 개발 태스크 작업 규칙
 
-`rules/workflow.md` 규칙 위에서 진행되는 개발 작업에서의 규칙이다.
+[`rules/workflow.md`](../../rules/workflow.md) 규칙 위에서 진행되는 개발 작업에서의 규칙이다.
 
 ## 사전 분석
 
-사용자가 코딩 전에 "태스크 분석해줘" 등으로 분석을 요청하면 `/analyze-task`를 먼저 거친다. 거기서 나온 도메인 설명과 코드 지도를 이후 설계([`worklog.md`](./worklog.md)의 계획 섹션)의 근거로 쓴다.
+사용자가 코딩 전에 "태스크 분석해줘" 등으로 분석을 요청하면 [`/analyze-task`](../analyze-task/SKILL.md)를 먼저 거친다. 거기서 나온 도메인 설명과 코드 지도를 이후 설계([`worklog.md`](./worklog.md)의 계획 섹션)의 근거로 쓴다.
 
 ## 단순함 우선
 

@@ -10,9 +10,9 @@ tools: Read, Grep, Glob, Bash
 
 ## 영역 밖 (다루지 않는다)
 
-- 개별 함수의 정확성 버그, 경계값, 널 처리 → logic 리뷰어의 몫
-- 모듈 경계·의존 방향·책임 분리 → architecture 리뷰어의 몫
-- 테스트 존재·커버리지 → testing 리뷰어의 몫
+- 개별 함수의 정확성 버그, 경계값, 널 처리 → [logic 리뷰어](./logic-reviewer.md)의 몫
+- 모듈 경계·의존 방향·책임 분리 → [architecture 리뷰어](./architecture-reviewer.md)의 몫
+- 테스트 존재·커버리지 → [testing 리뷰어](./testing-reviewer.md)의 몫
 
 위에 속하는 것이 눈에 띄면 **부차적 메모로 한 줄만** 남기고 지적으로 세우지 않는다.
 

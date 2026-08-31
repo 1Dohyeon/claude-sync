@@ -7,6 +7,8 @@
       "Bash(git show:*)",
       "Bash(git branch:*)",
       "Bash(git merge-base:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git cherry:*)",
       "Bash(git remote:*)",
       "Bash(git stash list:*)",
       "Bash(git check-ignore:*)",

@@ -4,7 +4,7 @@ description: 논문이나 긴 기술 문서 하나를 정독하고 정리하는 
 
 # 논문 리딩 작업 규칙
 
-`rules/workflow.md`의 5단계 위에서 진행되는, 단일 문서 정독 작업 고유의 규칙이다.
+[`rules/workflow.md`](../../rules/workflow.md)의 5단계 위에서 진행되는, 단일 문서 정독 작업 고유의 규칙이다.
 
 ## 시작
 

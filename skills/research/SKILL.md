@@ -4,7 +4,7 @@ description: 조사·리서치·자료 종합·브레인스토밍 요청을 받�
 
 # 리서치 작업 규칙
 
-`rules/workflow.md`의 5단계 위에서 진행되는, 조사·종합 작업 고유의 규칙이다.
+[`rules/workflow.md`](../../rules/workflow.md)의 5단계 위에서 진행되는, 조사·종합 작업 고유의 규칙이다.
 
 ## 시작
 
