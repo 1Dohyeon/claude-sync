@@ -2,15 +2,21 @@
 
 `~/.claude/`는 실제 폴더로 두고, 관리 대상 항목만 그 안으로 **심링크**합니다. Claude Code는 항상 `~/.claude/` 아래 고정 경로에서 읽으므로, 저장소를 어디에 clone하든 심링크가 위치 차이를 흡수합니다.
 
-## SETTINGS
+## SETTINGS(Clone)
 
-1. 이 저장소를 fork한 뒤 원하는 곳에 clone합니다.
-2. Claude Code를 설치하고 로그인합니다.
-3. Claude에게 **"SETTING_GUIDE.md 읽고 실행"** 이라고 요청합니다.
+1. Claude Code를 설치하고 로그인합니다.
+2. Claude에게 아래 한 줄을 그대로 전달합니다.
 
-claude-sync 세팅은 Claude가 [SETTING_GUIDE.md](SETTING_GUIDE.md)를 따라 처리합니다.
+```
+https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
+```
 
-> [SETTING_GUIDE.md](SETTING_GUIDE.md)는 `ln`·`mv`·`mkdir`·`find`·`git` 명령으로 이루어져 있습니다. 기존 settings.json의 `permissions.deny`에 이 명령들(또는 `Bash(*)`, `Write(//Users/…/.claude/**)` 같은 넓은 규칙)이 걸려 있으면 **3단계가 중간에 멈춥니다.**
+이후는 Claude가 [SETTING_GUIDE.md](SETTING_GUIDE.md)를 따라 처리합니다. 저장소를 둘 위치와 기존 설정을 옮겨도 되는지만 답해 주면 됩니다.
+
+- 연결 상태는 `ls -l ~/.claude`로 확인합니다. `->` 뒤가 저장소 경로면 연결된 것입니다.
+- 본인 저장소로 관리하려면 `git remote set-url origin <자기 저장소 주소>`로 원격만 바꿉니다.
+- **기존 설정은 지우지 않습니다.** 실제 파일은 `~/claude-backup/`으로 옮긴 뒤 링크합니다. 다른 도구가 관리하던 심링크는 덮어쓰기 전에 원래 경로를 알려주고 승인을 받습니다.
+- 절차는 `git`·`ln`·`mv`·`mkdir`·`ls`·`find` 명령을 씁니다. 기존 `settings.json`의 `permissions.deny`에 걸려 있으면 중간에 멈춥니다.
 
 ## GLOBAL CLAUDE `~/.claude/`
 
