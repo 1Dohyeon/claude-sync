@@ -13,7 +13,7 @@ tools: Read, Grep, Glob
 ## 영역 밖 (다루지 않는다)
 
 - 코드 구조·의존·구현 방법 → [code-analyst](./code-analyst.md)의 몫
-- 이미 작성된 코드의 버그 → [리뷰어들](../skills/review-panel/SKILL.md)의 몫
+- 이미 작성된 코드의 버그 → [logic 리뷰어](./logic-reviewer.md)의 몫
 
 위에 속하는 것이 눈에 띄면 **부차적 메모로 한 줄만** 남기고 분석으로 세우지 않는다.
 

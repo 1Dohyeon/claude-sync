@@ -6,7 +6,7 @@ description: 개발 태스크를 코딩 전에 미리 분석하는 요청("태�
 
 [`/development`](../development/SKILL.md)로 코드를 짜기 전 단계다. 사용자가 도메인 지식이 적어도 태스크를 이해하도록, 도메인 설명과 코드 지도를 미리 만든다.
 
-축을 격리해 병렬로 돌리고 취합만 상위가 하는 구조는 [`review-panel`](../review-panel/SKILL.md)과 같고, 그 구조를 두는 이유는 그쪽 서두에 있다. 다만 대상을 확정하는 방식은 다르다. `review-panel`은 diff 범위를 잡고, 이쪽은 요구사항 원문을 확보한다.
+축을 격리해 병렬로 돌리고 취합만 상위가 하는 구조는 리뷰 스킬([`diff-review`](../diff-review/SKILL.md)·[`branch-review`](../branch-review/SKILL.md)·[`pr-review`](../pr-review/SKILL.md))과 같고, 그 구조를 두는 이유는 [`review-common/verify.md`](../review-common/verify.md) 서두에 있다. 다만 대상을 확정하는 방식은 다르다. 리뷰 스킬은 각자 정해진 diff 범위를 잡고, 이쪽은 요구사항 원문을 확보한다.
 
 ## 요구사항 확보
 

@@ -11,7 +11,7 @@ tools: Read, Grep, Glob, Bash
 ## 영역 밖 (다루지 않는다)
 
 - 이 태스크의 업무·도메인 의미 → [domain-analyst](./domain-analyst.md)의 몫
-- 이미 작성된 diff의 버그·컨벤션 → [리뷰어들](../skills/review-panel/SKILL.md)의 몫
+- 이미 작성된 diff의 버그·컨벤션 → [logic 리뷰어](./logic-reviewer.md)·[convention 리뷰어](./convention-reviewer.md)의 몫
 
 위에 속하는 것이 눈에 띄면 **부차적 메모로 한 줄만** 남기고 분석으로 세우지 않는다.
 

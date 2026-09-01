@@ -1,6 +1,6 @@
 # claude-sync
 
-`~/.claude/`는 실제 폴더로 두고, 관리 대상 항목만 그 안으로 **심링크**합니다. Claude Code는 항상 `~/.claude/` 아래 고정 경로에서 읽으므로, 저장소를 어디에 clone하든(기기마다 달라도) 심링크가 그 위치 차이를 흡수합니다.
+`~/.claude/`는 실제 폴더로 두고, 관리 대상 항목만 그 안으로 **심링크**합니다. Claude Code는 항상 `~/.claude/` 아래 고정 경로에서 읽으므로, 저장소를 어디에 clone하든 심링크가 위치 차이를 흡수합니다.
 
 ## SETTINGS
 
@@ -59,7 +59,9 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 | --------------------------------- | ------------------------------------------------- |
 | 코드 작성·수정                    | [`/development`](skills/development/SKILL.md)     |
 | 개발 태스크 사전 분석             | [`/analyze-task`](skills/analyze-task/SKILL.md)   |
-| 독립적인 코드 리뷰                | [`/review-panel`](skills/review-panel/SKILL.md)   |
+| 커밋 전 변경 리뷰                 | [`/diff-review`](skills/diff-review/SKILL.md)     |
+| 브랜치 전체 리뷰(PR 전)           | [`/branch-review`](skills/branch-review/SKILL.md) |
+| PR 리뷰                           | [`/pr-review`](skills/pr-review/SKILL.md)         |
 | git 작업(worktree·commit·push 등) | [`/git-workflow`](skills/git-workflow/SKILL.md)   |
 | 조사·리서치·자료 종합             | [`/research`](skills/research/SKILL.md)           |
 | 논문·긴 기술 문서 정독            | [`/paper-reading`](skills/paper-reading/SKILL.md) |
@@ -77,7 +79,7 @@ flowchart TD
     D --> E
     E --> F["검증<br/>테스트·린트·실행 후 worklog에 기록"]
     F --> G{"리뷰 요청?"}
-    G -->|"예"| H["review-panel"]
+    G -->|"예"| H["diff-review / branch-review / pr-review<br/>공통부는 review-common"]
     G -->|"아니오"| I["완료<br/>사용자 통과 확인"]
     H --> I
     I --> J["이어받기<br/>worklog에 남음"]
@@ -88,14 +90,16 @@ flowchart TD
 3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다.
 4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다.
 5. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 무엇을 어떻게 확인했고 결과가 어땠는지를 설계 문서에 남깁니다.
-6. **리뷰**: "(커밋 또는 pr 범위 지정) 리뷰해줘"라고 요청하면 "독립적인 코드 리뷰" 트리거로 [`/review-panel`](skills/review-panel/SKILL.md)이 호출됩니다.
-   - 6-1. **대상 확정**: 커밋 범위·PR 번호·커밋 전 변경·브랜치 전체 중 사용자가 지정한 범위를 씁니다. 지정이 없으면 추측하지 않고 되묻습니다. 확정한 diff는 파일로 한 번 떠서, 네 축이 같은 스냅샷을 보게 합니다.
-   - 6-2. **병렬 리뷰**: 아키텍처, 코드 레벨, 테스트, 컨벤션 네 축을, 각각 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다.
-   - 6-3. **취합**: 네 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 머지 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
+6. **리뷰**: 범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
+   - 6-1. **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨과 컨벤션 두 축만 보고, 나머지 둘은 아키텍처·테스트·요구사항까지 다섯 축을 봅니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
+   - 6-1-1. **부록**: 화면에 닿는 변경이면 `qa-reviewer`를 함께 띄워 브라우저에서 확인할 목록을 만듭니다. 지적이 아니므로 검증과 등급을 거치지 않고 리포트 맨 뒤에 붙습니다.
+   - 6-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다.
+   - 6-3. **취합**: 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
+   - 대상 고정부터 취합·출력까지는 세 스킬이 [`review-common/verify.md`](skills/review-common/verify.md) 하나를 공유합니다. 각 스킬 문서에는 범위와 축만 적혀 있습니다.
 7. **완료**: 사용자가 검증 결과를 통과로 확인하면 완료로 처리합니다. 완료 판정은 스스로 내리지 않습니다.
 8. **이어받기**: `worklog/`의 설계 문서와 진행 기록은 세션이 끝나도 남아, 다음 세션에서 그대로 이어받을 수 있습니다.
 
-3번(도메인·코드)과 6번(리뷰 4축)은 아래 구조를 공유합니다. 격리된 서브에이전트가 병렬로 보고, 상위 모델은 취합만 합니다.
+3번(도메인·코드)과 6번(리뷰 축)은 아래 구조를 공유합니다. 격리된 서브에이전트가 병렬로 보고, 상위 모델은 취합만 합니다.
 
 ```mermaid
 flowchart LR

@@ -9,10 +9,13 @@
 | ------------------------------------------- | ------------------------------------------------- |
 | 코드 작성·수정(개발 작업)                   | [`/development`](skills/development/SKILL.md)     |
 | 개발 태스크 사전 분석("태스크 분석해줘" 등) | [`/analyze-task`](skills/analyze-task/SKILL.md)   |
-| 독립적인 코드 리뷰 요청("리뷰해줘" 등)      | [`/review-panel`](skills/review-panel/SKILL.md)   |
+| 커밋 전 변경 리뷰 요청                      | [`/diff-review`](skills/diff-review/SKILL.md)     |
+| 브랜치 전체 리뷰 요청(PR 올리기 전)         | [`/branch-review`](skills/branch-review/SKILL.md) |
+| PR 리뷰 요청(번호·링크로 지정)              | [`/pr-review`](skills/pr-review/SKILL.md)         |
 | git 관련 작업(worktree, commit, push, ...)  | [`/git-workflow`](skills/git-workflow/SKILL.md)   |
 | 조사·리서치·자료 종합·브레인스토밍          | [`/research`](skills/research/SKILL.md)           |
 | 논문·긴 기술 문서 정독·정리                 | [`/paper-reading`](skills/paper-reading/SKILL.md) |
 
 - 어느 트리거인지 판단이 서지 않으면 스킬을 고르기 전에 사용자에게 종류를 확인한다.
+- 트리거는 맞으나 해당 skill의 적용 범위(입력 형태·전제)가 이번 요청과 맞지 않으면, 스킬 없이 진행하되 어느 전제가 맞지 않았는지 먼저 밝힌다.
 - 해당 skill이 없으면 그 규칙은 이 설정에 포함되지 않은 것이다. 만들어 내거나 우회하지 말고 사용자에게 알린다.
