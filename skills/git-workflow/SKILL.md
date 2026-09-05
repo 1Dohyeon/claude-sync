@@ -50,7 +50,25 @@ git -C <dir> checkout -- <lockfile>
 
 새 worktree는 원래 clean한 상태로 시작하므로, 여기서 생긴 lockfile 변경은 의도된 변경이 아니라 환경 노이즈다(예: 더 최신 패키지 매니저가 메타데이터를 다시 씀). 실제 의존성 버전이 바뀐 경우라면 그대로 되돌리되 보고에서 언급한다.
 
-6. 마지막으로 확인하고 보고한다.
+6. env 파일을 연결한다. `.env`는 gitignore 대상이라 새 worktree엔 없다. 메인 클론(`<main-dir>`)에 실제로 존재하는 `apps/*/.env`, `apps/*/.env.local`을 찾아 새 worktree의 같은 상대경로로 **복사**한다.
+
+```sh
+cd <main-dir> && find apps -maxdepth 2 \( -name '.env' -o -name '.env.local' \) | while read -r f; do
+  cp "<main-dir>/$f" "<dir>/$f"
+done
+```
+
+복사가 실패하면(권한 등) 메인 클론 파일을 가리키는 심링크로 대신한다.
+
+```sh
+ln -sf "<main-dir>/$f" "<dir>/$f"
+```
+
+Windows에서 심링크를 쓰려면 개발자 모드가 켜져 있어야 한다. 꺼져 있으면 에러 없이 복사본이 생겨 겉보기엔 성공한 것처럼 보이므로, 심링크 경로로 갔다면 `ls -l <dir>/$f`로 `->` 화살표가 뜨는지 반드시 확인한다.
+
+이 단계는 값을 그 시점에 한 번 복제하는 것이라, 이후 메인 클론이나 다른 worktree에서 값을 바꾸면 이 worktree엔 반영되지 않는다. 바뀐 걸 알게 되면 그때 다시 복사한다.
+
+7. 마지막으로 확인하고 보고한다.
 
 ```sh
 git -C <dir> status -sb
