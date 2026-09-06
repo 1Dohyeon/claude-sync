@@ -50,6 +50,11 @@
       "Bash(git merge:*)"
     ]
   },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
   "hooks": {
     "SessionStart": [
       {
