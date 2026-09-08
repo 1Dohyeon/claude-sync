@@ -9,7 +9,7 @@ node -e '
 const fs = require("fs");
 
 // 계획 섹션(문제 ~ 확인 방법)과 진행 섹션(작업 목록 ~ 완료)을 한 파일에 담는다.
-const PLAN = ["지금 무엇이 문제인가", "어떻게 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "확인 방법"];
+const PLAN = ["문제 or 작업 배경", "어떻게 무엇을 바꾸는가", "어떤 효과가 있는가", "함께 손대는 곳", "확인 방법"];
 const PROGRESS = ["작업 목록", "진행", "검증", "완료"];
 const ALLOWED = PLAN.concat(PROGRESS);
 const LIST = ALLOWED.map(h => "## " + h);
