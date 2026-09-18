@@ -4,6 +4,10 @@ CLAUDE.local.md
 #.claude temp
 worklog
 
+# ===== 자동 동기화 =====
+# Claude 계정에서 내려받는 기본 skill. ~/.claude/skills 심링크를 타고 들어옴
+skills/synced/
+
 # ===== 백업 파일 =====
 *.bak
 
