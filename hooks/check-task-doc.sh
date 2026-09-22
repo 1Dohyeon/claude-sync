@@ -22,9 +22,12 @@ try { file = JSON.parse(raw).tool_input.file_path; } catch { process.exit(0); }
 if (typeof file !== "string" || !file.endsWith(".md")) process.exit(0);
 
 // 대상은 진행 중인 task 문서뿐이다. 완결된 기록(done·stalled)과 overview·INDEX는 검사하지 않는다.
+// *.api-spec.md도 뺀다. 계획이 아니라 API 계약을 적는 문서라 절 구성이 엔드포인트를 따라가고,
+// 템플릿의 계획 섹션 스키마와는 성격이 다르다.
 if (!/\/worklog\/[^/]+\/tasks\//.test(file)) process.exit(0);
 if (/\/(done|stalled)\//.test(file)) process.exit(0);
 if (/\/(overview|INDEX)\.md$/.test(file)) process.exit(0);
+if (/\.api-spec\.md$/.test(file)) process.exit(0);
 
 let text;
 try { text = fs.readFileSync(file, "utf8"); } catch { process.exit(0); }
