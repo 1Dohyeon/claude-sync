@@ -1,5 +1,5 @@
 ---
-description: PR을 올리기 전에 브랜치 전체를 최종 점검할 때 사용한다("브랜치 리뷰해줘", "PR 올리기 전에 봐줘"). 베이스에서 갈라진 뒤 이 브랜치에 쌓인 커밋 전부가 범위이며, 아키텍처·코드 레벨·테스트·컨벤션·요구사항 다섯 축을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
+description: PR을 올리기 전에 브랜치 전체를 최종 점검할 때 사용한다("브랜치 리뷰해줘", "PR 올리기 전에 봐줘"). 베이스에서 갈라진 뒤 이 브랜치에 쌓인 커밋 전부가 범위이며, 아키텍처·코드 레벨·영향 범위·테스트·컨벤션·요구사항 여섯 축을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
 ---
 
 # 브랜치 전체 리뷰
@@ -44,10 +44,11 @@ git status --porcelain
 
 ## 축
 
-다섯 축을 모두 부른다.
+여섯 축을 모두 부른다.
 
 - [`architecture-reviewer`](../../agents/architecture-reviewer.md)
 - [`logic-reviewer`](../../agents/logic-reviewer.md)
+- [`impact-reviewer`](../../agents/impact-reviewer.md)
 - [`testing-reviewer`](../../agents/testing-reviewer.md)
 - [`convention-reviewer`](../../agents/convention-reviewer.md)
 - [`requirement-reviewer`](../../agents/requirement-reviewer.md)

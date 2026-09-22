@@ -1,5 +1,5 @@
 ---
-description: 올라온 PR을 리뷰할 때 사용한다("3번 PR 리뷰해줘", PR 링크). 남이 쓴 코드를 승인할지 판단하는 자리이며, 그 PR의 변경 전체를 범위로 아키텍처·코드 레벨·테스트·컨벤션·요구사항 다섯 축을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
+description: 올라온 PR을 리뷰할 때 사용한다("3번 PR 리뷰해줘", PR 링크). 남이 쓴 코드를 승인할지 판단하는 자리이며, 그 PR의 변경 전체를 범위로 아키텍처·코드 레벨·영향 범위·테스트·컨벤션·요구사항 여섯 축을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
 ---
 
 # PR 리뷰
@@ -28,15 +28,17 @@ gh pr view <번호> --json headRefName,state
 - 현재 체크아웃된 브랜치가 `headRefName`과 같으면 그대로 진행한다.
 - 다르면 사용자에게 알리고 고르게 한다: `gh pr checkout <번호>`를 실행할지, 아니면 diff만으로 진행할지. 임의로 체크아웃하지 않는다.
 - diff만으로 진행하면 아키텍처·컨벤션 축의 정확도가 떨어지므로 그 사실을 리포트에 적는다.
+- **`impact-reviewer`는 diff만으로는 부르지 않는다.** 이 축은 저장소를 Grep해서 참조 지점을 찾는 것이 일의 전부인데, 디스크가 PR 브랜치가 아니면 지운 심볼이 아직 살아 있고 바꾼 이름도 예전 것이라 찾아낸 참조가 전부 헛것이 된다. 체크아웃하지 않기로 했으면 이 축을 빼고, 뺐다는 사실을 리포트 머리에 적는다.
 
 단일 명령으로 유지한다. `&&`·`;`·`|`로 엮으면 allowlist의 접두 규칙에 걸리지 않아 매번 승인 프롬프트가 뜬다.
 
 ## 축
 
-다섯 축을 모두 부른다.
+여섯 축을 모두 부른다.
 
 - [`architecture-reviewer`](../../agents/architecture-reviewer.md)
 - [`logic-reviewer`](../../agents/logic-reviewer.md)
+- [`impact-reviewer`](../../agents/impact-reviewer.md)
 - [`testing-reviewer`](../../agents/testing-reviewer.md)
 - [`convention-reviewer`](../../agents/convention-reviewer.md)
 - [`requirement-reviewer`](../../agents/requirement-reviewer.md)
