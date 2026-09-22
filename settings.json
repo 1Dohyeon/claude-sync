@@ -17,6 +17,7 @@
       "Bash(find:*)",
       "Bash(rg:*)",
       "Bash(grep:*)",
+      "Bash(node ~/.claude/skills/analyze-task/cochange.js:*)",
       "Bash(pnpm lint:*)",
       "Bash(pnpm check-types:*)",
       "Bash(pnpm test:*)",
