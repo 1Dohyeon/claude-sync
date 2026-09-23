@@ -1,5 +1,5 @@
 ---
-description: 올라온 PR을 리뷰할 때 사용한다("3번 PR 리뷰해줘", PR 링크). 남이 쓴 코드를 승인할지 판단하는 자리이며, 그 PR의 변경 전체를 범위로 아키텍처·코드 레벨·영향 범위·테스트·컨벤션·요구사항 여섯 축을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
+description: 올라온 PR을 리뷰할 때 사용한다("3번 PR 리뷰해줘", PR 링크). 남이 쓴 코드를 승인할지 판단하는 자리이며, 그 PR의 변경 전체를 범위로, 작업 규모와 유형에 따라 아키텍처·코드 레벨·영향 범위·테스트·컨벤션·요구사항 가운데 필요한 축(standard 이상이면 여섯 축 전부)을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
 ---
 
 # PR 리뷰
@@ -34,7 +34,7 @@ gh pr view <번호> --json headRefName,state
 
 ## 축
 
-여섯 축을 모두 부른다.
+부를 축은 [`review-common/verify.md`](../review-common/verify.md)의 "규모 판단"이 규모와 유형으로 정한다. standard 이상이면 아래 여섯 축을 모두 부른다. 남의 PR은 task 문서가 없는 경우가 많아, 그때는 diff 실측으로 규모를 정한다.
 
 - [`architecture-reviewer`](../../agents/architecture-reviewer.md)
 - [`logic-reviewer`](../../agents/logic-reviewer.md)

@@ -93,11 +93,11 @@ flowchart TD
 
 1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. SessionStart 훅은 `worklog/<repo>/overview.md`와 현재 브랜치의 task 문서를 주입하므로, 이전에 진행하던 설계 문서가 있으면 그대로 이어받습니다.
 2. **요청**: "○○ 기능을 추가해줘"
-3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다. 병렬 분석으로 가는 태스크이면 먼저 과거 유사 태스크도 살펴볼지 묻고, 예라고 답하면 내 worklog 문서와 저장소의 PR·커밋에서 비슷한 선례를 찾아 서브에이전트에 함께 넘깁니다. 이 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뛰고 분석은 그대로 진행합니다.
-4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다.
+3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다. 요구사항만 보고 작업 규모를 먼저 추정해서, standard 이상일 때만 서브에이전트로 나눠 분석합니다. 병렬 분석으로 가는 태스크이면 먼저 과거 유사 태스크도 살펴볼지 묻고, 예라고 답하면 내 worklog 문서와 저장소의 PR·커밋에서 비슷한 선례를 찾아 서브에이전트에 함께 넘깁니다. 이 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뛰고 분석은 그대로 진행합니다.
+4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다. 설계할 때는 작업 유형(새 기능, 동작 변경, 버그 수정, 리팩터링)과 규모(trivial, small, standard, large)를 먼저 밝힙니다. 공통 규칙은 [`SKILL.md`](skills/development/SKILL.md)에 있고, 새 기능이면 [`new-feature.md`](skills/development/new-feature.md), 기존 기능을 고치는 세 유형이면 [`change-existing.md`](skills/development/change-existing.md)의 규칙을 더해 따릅니다. 규모는 사전 분석과 리뷰에서 서브에이전트를 얼마나 띄울지 정하는 기준이 됩니다.
 5. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 무엇을 어떻게 확인했고 결과가 어땠는지를 설계 문서에 남깁니다.
 6. **리뷰**: 범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
-   - 6-1. **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨·영향 범위·컨벤션 세 축만 보고, 나머지 둘은 아키텍처·테스트·요구사항까지 여섯 축을 봅니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
+   - 6-1. **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨·영향 범위·컨벤션 세 축만 보고, 나머지 둘은 작업 규모와 유형에 따라 축을 고릅니다. standard 이상이면 아키텍처·테스트·요구사항까지 여섯 축을 모두 보고, small이면 코드 레벨·영향 범위·컨벤션에 유형에 맞는 축 하나를 더하며, trivial이면 어느 스킬이든 서브에이전트 없이 상위 모델이 직접 봅니다. 규모는 task 문서에 적힌 값과 diff를 잰 값 가운데 큰 쪽을 씁니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
    - 6-1-1. **부록**: 화면에 닿는 변경이면 `qa-reviewer`를 함께 띄워 브라우저에서 확인할 목록을 만듭니다. 지적이 아니므로 검증과 등급을 거치지 않고 리포트 맨 뒤에 붙습니다.
    - 6-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다. 축마다 모델을 따로 지정합니다. 함수 안의 실행 경로를 따라가며 판단해야 하는 코드 레벨 축과, 정답이 정해져 있지 않은 설계 판단을 내리는 아키텍처 축은 Opus로 두고, 문서·설정·인접 코드·Grep 결과와 대조하면 끝나는 나머지 축은 Sonnet으로 내립니다.
    - 6-3. **취합**: 축이 하나씩 도착하는 동안 중간 보고를 하지 않고 전부 모일 때까지 기다립니다. 도착할 때마다 한 턴씩 쓰면 그만큼 끝이 밀립니다. 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
@@ -114,12 +114,12 @@ flowchart LR
     D --> CV["convention-reviewer<br/>Sonnet"]
     D -.-> QA["qa-reviewer<br/>Sonnet · 화면에 닿는 파일이 있을 때만"]
 
-    BP["/branch-review · /pr-review<br/>브랜치 커밋 전체 · PR 변경 전체"] --> AR["architecture-reviewer<br/>Opus"]
+    BP["/branch-review · /pr-review<br/>브랜치 커밋 전체 · PR 변경 전체"] -.-> AR["architecture-reviewer<br/>Opus · standard 이상 또는 리팩터링"]
     BP --> LG
-    BP --> TS["testing-reviewer<br/>Sonnet"]
+    BP -.-> TS["testing-reviewer<br/>Sonnet · standard 이상 또는 버그 수정"]
     BP --> CV
     BP -.-> IM
-    BP -.-> RQ["requirement-reviewer<br/>Sonnet · 요구사항 원문이 있을 때만"]
+    BP -.-> RQ["requirement-reviewer<br/>Sonnet · standard 이상 또는 새 기능·동작 변경, 요구사항 원문이 있을 때만"]
     BP -.-> QA
 
     AR --> M["상위 모델 취합<br/>중복 병합, 등급순, 새 지적 없음"]
@@ -131,7 +131,7 @@ flowchart LR
     QA -.-> M
 ```
 
-`/branch-review`와 `/pr-review`는 보는 범위만 다르고 축 구성이 같아서 한 노드로 묶었습니다. 점선으로 들어가는 화살표는 조건이 맞을 때만 호출된다는 뜻입니다. `impact-reviewer`로 들어가는 화살표가 `/pr-review` 쪽에서만 점선인 이유는, 남의 PR을 체크아웃하지 않고 diff만으로 볼 때는 이 축을 부르지 않기 때문입니다. `qa-reviewer`에서 나가는 화살표도 점선인데, 이 결과는 지적이 아니라서 검증과 등급을 거치지 않고 리포트 맨 뒤에 그대로 붙기 때문입니다.
+`/branch-review`와 `/pr-review`는 보는 범위만 다르고 축 구성이 같아서 한 노드로 묶었습니다. 점선으로 들어가는 화살표는 조건이 맞을 때만 호출된다는 뜻입니다. 아키텍처·테스트·요구사항 축은 규모가 standard 이상이면 항상 부르고, small이면 작업 유형에 맞는 하나만 부릅니다. 규모가 trivial이면 도표의 어느 에이전트도 부르지 않고 상위 모델이 직접 봅니다. `impact-reviewer`로 들어가는 화살표가 `/pr-review` 쪽에서만 점선인 이유는, 남의 PR을 체크아웃하지 않고 diff만으로 볼 때는 이 축을 부르지 않기 때문입니다. `qa-reviewer`에서 나가는 화살표도 점선인데, 이 결과는 지적이 아니라서 검증과 등급을 거치지 않고 리포트 맨 뒤에 그대로 붙기 때문입니다.
 
 노드에 붙은 모델 이름은 그 축을 어느 모델로 띄우는지를 뜻하며, [`agents/`](agents/)의 각 정의 앞머리에 적혀 있습니다.
 

@@ -34,7 +34,7 @@ git reset
 
 ## 축
 
-세 축만 부른다.
+세 축만 부른다. 규모가 trivial이면 [`review-common/verify.md`](../review-common/verify.md)의 "규모 판단"대로 서브에이전트를 부르지 않고 상위가 직접 본다.
 
 - [`logic-reviewer`](../../agents/logic-reviewer.md)
 - [`impact-reviewer`](../../agents/impact-reviewer.md)
