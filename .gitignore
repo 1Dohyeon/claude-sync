@@ -13,3 +13,6 @@ skills/synced/
 
 # ===== os 관련 =====
 .DS_Store
+
+# ===== python =====
+__pycache__/

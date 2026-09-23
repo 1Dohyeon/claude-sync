@@ -93,13 +93,13 @@ flowchart TD
 
 1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. SessionStart 훅은 `worklog/<repo>/overview.md`와 현재 브랜치의 task 문서를 주입하므로, 이전에 진행하던 설계 문서가 있으면 그대로 이어받습니다.
 2. **요청**: "○○ 기능을 추가해줘"
-3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다.
+3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다. 병렬 분석으로 가는 태스크이면 먼저 과거 유사 태스크도 살펴볼지 묻고, 예라고 답하면 내 worklog 문서와 저장소의 PR·커밋에서 비슷한 선례를 찾아 서브에이전트에 함께 넘깁니다. 이 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뛰고 분석은 그대로 진행합니다.
 4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다.
 5. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 무엇을 어떻게 확인했고 결과가 어땠는지를 설계 문서에 남깁니다.
 6. **리뷰**: 범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
    - 6-1. **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨·영향 범위·컨벤션 세 축만 보고, 나머지 둘은 아키텍처·테스트·요구사항까지 여섯 축을 봅니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
    - 6-1-1. **부록**: 화면에 닿는 변경이면 `qa-reviewer`를 함께 띄워 브라우저에서 확인할 목록을 만듭니다. 지적이 아니므로 검증과 등급을 거치지 않고 리포트 맨 뒤에 붙습니다.
-   - 6-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다. 축마다 모델을 따로 지정합니다. 함수 안의 실행 경로를 따라가며 판단해야 하는 코드 레벨 축만 Opus로 두고, 문서·설정·인접 코드·Grep 결과와 대조하면 끝나는 나머지 축은 Sonnet으로 내립니다.
+   - 6-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다. 축마다 모델을 따로 지정합니다. 함수 안의 실행 경로를 따라가며 판단해야 하는 코드 레벨 축과, 정답이 정해져 있지 않은 설계 판단을 내리는 아키텍처 축은 Opus로 두고, 문서·설정·인접 코드·Grep 결과와 대조하면 끝나는 나머지 축은 Sonnet으로 내립니다.
    - 6-3. **취합**: 축이 하나씩 도착하는 동안 중간 보고를 하지 않고 전부 모일 때까지 기다립니다. 도착할 때마다 한 턴씩 쓰면 그만큼 끝이 밀립니다. 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
    - 대상 고정부터 취합·출력까지는 세 스킬이 [`review-common/verify.md`](skills/review-common/verify.md) 하나를 공유합니다. 각 스킬 문서에는 범위와 축만 적혀 있습니다.
 7. **완료**: 사용자가 검증 결과를 통과로 확인하면 완료로 처리합니다. 완료 판정은 스스로 내리지 않습니다.
@@ -114,7 +114,7 @@ flowchart LR
     D --> CV["convention-reviewer<br/>Sonnet"]
     D -.-> QA["qa-reviewer<br/>Sonnet · 화면에 닿는 파일이 있을 때만"]
 
-    BP["/branch-review · /pr-review<br/>브랜치 커밋 전체 · PR 변경 전체"] --> AR["architecture-reviewer<br/>Sonnet"]
+    BP["/branch-review · /pr-review<br/>브랜치 커밋 전체 · PR 변경 전체"] --> AR["architecture-reviewer<br/>Opus"]
     BP --> LG
     BP --> TS["testing-reviewer<br/>Sonnet"]
     BP --> CV
@@ -162,6 +162,8 @@ flowchart LR
 | testing-reviewer | 332초 | Sonnet |
 | convention-reviewer | 288초 | Sonnet |
 | requirement-reviewer | 272초 | Sonnet |
-| architecture-reviewer | 264초 | Sonnet |
+| architecture-reviewer | 264초 | Opus |
 
 코드 레벨 축이 유독 느렸던 원인은 호출부를 열어 확인하는 왕복이었고, 그 일이 곧 영향 범위 축의 본업입니다. 그래서 축을 나눈 것은 품질 공백을 메우는 동시에 가장 느린 축의 짐을 덜어내는 일이기도 합니다. 반대로 나머지 축을 Sonnet으로 내린 것은 전체 시간보다 토큰 비용에 듣는 조치입니다.
+
+아키텍처 축은 Opus로 둡니다. 모듈 경계나 확장 비용처럼 정답이 정해져 있지 않은 판단을 맡는 축이기 때문입니다. 전체 시간은 가장 느린 코드 레벨 축이 정하므로, 이 선택으로 늘어나는 것은 주로 토큰 비용입니다.
