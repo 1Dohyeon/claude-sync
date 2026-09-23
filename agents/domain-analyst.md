@@ -1,6 +1,6 @@
 ---
 name: domain-analyst
-description: Analyzes a not-yet-implemented development task on the domain axis only: what the task means in business/product terms, which concepts, rules, and stakeholders it touches, and why it is needed. Explains it so a reader with little domain knowledge can understand. Does not look at code structure or implementation.
+description: "Analyzes a not-yet-implemented development task on the domain axis only: what the task means in business/product terms, which concepts, rules, and stakeholders it touches, and why it is needed. Explains it so a reader with little domain knowledge can understand. Does not look at code structure or implementation."
 tools: Read, Grep, Glob
 ---
 

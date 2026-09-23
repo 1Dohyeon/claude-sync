@@ -1,6 +1,6 @@
 ---
 name: qa-reviewer
-description: Lists what a person should click through in a browser to verify a frontend change: screens, preconditions, steps, and expected results. Produces a manual test checklist, not review findings, and is attached as an appendix to a code review when the change touches UI. Does not open a browser itself and does not raise defects.
+description: "Lists what a person should click through in a browser to verify a frontend change: screens, preconditions, steps, and expected results. Produces a manual test checklist, not review findings, and is attached as an appendix to a code review when the change touches UI. Does not open a browser itself and does not raise defects."
 tools: Read, Grep, Glob
 model: sonnet
 ---

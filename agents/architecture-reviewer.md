@@ -1,6 +1,6 @@
 ---
 name: architecture-reviewer
-description: Reviews a code change on the architecture axis only: module boundaries, dependency direction, responsibility separation, ease of change/extension, duplicated abstractions. Use as one lens of a multi-perspective review. Does not look at implementation-level bugs, style, or test coverage.
+description: "Reviews a code change on the architecture axis only: module boundaries, dependency direction, responsibility separation, ease of change/extension, duplicated abstractions. Use as one lens of a multi-perspective review. Does not look at implementation-level bugs, style, or test coverage."
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

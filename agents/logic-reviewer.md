@@ -1,6 +1,6 @@
 ---
 name: logic-reviewer
-description: Reviews a code change on the implementation-correctness axis only, and only within the changed function itself: boundary values, null/undefined, types, branch logic, missing await, unnecessary complexity, obvious inefficiency. Use as one lens of a multi-perspective review. Does not look at effects on callers or shared state outside the file, module structure, style, conventions, or test coverage.
+description: "Reviews a code change on the implementation-correctness axis only, and only within the changed function itself: boundary values, null/undefined, types, branch logic, missing await, unnecessary complexity, obvious inefficiency. Use as one lens of a multi-perspective review. Does not look at effects on callers or shared state outside the file, module structure, style, conventions, or test coverage."
 tools: Read, Grep, Glob, Bash
 model: opus
 ---

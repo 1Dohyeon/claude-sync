@@ -1,6 +1,6 @@
 ---
 name: requirement-reviewer
-description: Reviews a code change against the requirement it was written for, on that axis only: whether every requested item is actually implemented, whether what was implemented matches what was asked, and whether anything unrequested crept in. Use as one lens of a multi-perspective review. Requires the requirement text and does nothing without it. Does not look at implementation bugs, module structure, style, or test coverage.
+description: "Reviews a code change against the requirement it was written for, on that axis only: whether every requested item is actually implemented, whether what was implemented matches what was asked, and whether anything unrequested crept in. Use as one lens of a multi-perspective review. Requires the requirement text and does nothing without it. Does not look at implementation bugs, module structure, style, or test coverage."
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

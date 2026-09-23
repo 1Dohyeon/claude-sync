@@ -1,6 +1,6 @@
 ---
 name: impact-reviewer
-description: Reviews a code change on the blast-radius axis only: whether the change breaks existing callers through altered signatures, return values, or error contracts, whether removed or renamed symbols still have references, and whether shared state, external API shapes, event payloads, or DB schemas are affected. Use as one lens of a multi-perspective review. Does not look at bugs inside a single function, module structure, style, or test coverage.
+description: "Reviews a code change on the blast-radius axis only: whether the change breaks existing callers through altered signatures, return values, or error contracts, whether removed or renamed symbols still have references, and whether shared state, external API shapes, event payloads, or DB schemas are affected. Use as one lens of a multi-perspective review. Does not look at bugs inside a single function, module structure, style, or test coverage."
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

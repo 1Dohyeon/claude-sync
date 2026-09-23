@@ -1,6 +1,6 @@
 ---
 name: testing-reviewer
-description: Reviews a code change on the test axis only: whether the change has corresponding tests, coverage of failure and boundary cases, and whether the tests actually assert something meaningful. Use as one lens of a multi-perspective review. Does not judge production-code structure, correctness, or style.
+description: "Reviews a code change on the test axis only: whether the change has corresponding tests, coverage of failure and boundary cases, and whether the tests actually assert something meaningful. Use as one lens of a multi-perspective review. Does not judge production-code structure, correctness, or style."
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

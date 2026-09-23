@@ -1,6 +1,6 @@
 ---
 name: code-analyst
-description: Analyzes a not-yet-implemented development task on the code axis only: which files and symbols it will touch, the existing structure and patterns around them, the likely change points, the blast radius, and open questions to resolve before coding. This is pre-implementation mapping, not a review of written code.
+description: "Analyzes a not-yet-implemented development task on the code axis only: which files and symbols it will touch, the existing structure and patterns around them, the likely change points, the blast radius, and open questions to resolve before coding. This is pre-implementation mapping, not a review of written code."
 tools: Read, Grep, Glob, Bash
 ---
 
