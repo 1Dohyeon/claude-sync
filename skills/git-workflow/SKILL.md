@@ -29,6 +29,11 @@ git branch -r
 
 작업 브랜치는 새 worktree로 만들거나, 아래 "메인 클론에서 브랜치 만들기"대로 메인 클론에서 만든다. 어느 쪽으로 할지는 사용자가 고른다. worktree로 정했으면 아래 순서로 만든다. `<base>`는 위 "베이스 브랜치 고르기"로 정한 베이스다. `planning-dev`에서 작업 브랜치와 베이스를 이미 확정했으면 그 값을 쓴다. 계획 문서의 `requirements.md` 브랜치 줄에 있다.
 
+0. worktree를 둘 위치 `<dir>`을 `AskUserQuestion`으로 묻는다. 원격 브랜치를 만들기 전에 묻는다. 묻지 않고 정하지 않는다.
+   - 선택지마다 실제로 만들어질 전체 경로를 보여 준다.
+   - 저장소의 `CLAUDE.md`·`README.md`·`.claude/`나 세션 시작 안내(SessionStart 훅)가 worktree 위치를 지정해 두었으면, 그 위치를 첫 선택지로 두고 추천으로 표시한다.
+   - 메인 작업 폴더와 형제 위치를 선택지로 함께 둔다. 하네스 지정 위치가 없으면 이것을 추천으로 표시한다.
+
 1. 베이스 브랜치에서 새 브랜치를 원격에 먼저 만든다(로컬엔 아직 없는 빈 브랜치):
 
 ```sh
@@ -42,11 +47,6 @@ git push origin origin/<base>:refs/heads/<branch>
 git fetch origin
 git worktree add -b <branch> <dir> origin/<branch>
 ```
-
-`<dir>`은 아래 순서로 정한다.
-
-- 저장소의 `CLAUDE.md`·`README.md`·`.claude/`나 세션 시작 안내(SessionStart 훅)가 worktree 위치를 지정해 두었으면 그 위치에 만든다.
-- 그런 규칙이 따로 없으면 메인 작업 폴더와 형제 위치에 만든다.
 
 `--track`은 붙이지 않는다. 시작점이 `origin/<branch>`라 upstream은 어차피 자동으로 잡히고, git 2.18 미만에서는 `unknown option 'track'`으로 실패한다.
 
