@@ -177,7 +177,7 @@ ln -sfn "$SYNC/settings.local.json" "$HOME/.claude/settings.local.json"
 ls -l "$HOME/.claude"
 ```
 
-「연결 대상」의 11개 항목이 모두 `->` 화살표로 보여야 한다. 2단계에서 건너뛰기로 한 항목이 있으면 그 개수만큼 빠진다. `backups/` `cache/` `sessions/` 같은 런타임 항목과 `worklog` 심링크가 함께 찍히는 것은 정상이며, 세는 대상이 아니다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
+「연결 대상」의 11개 항목이 모두 `->` 화살표로 보여야 한다. 2단계에서 건너뛰기로 한 항목이 있으면 그 개수만큼 빠진다. `backups/` `cache/` `sessions/` 같은 런타임 항목이 함께 찍히는 것은 정상이며, 세는 대상이 아니다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
 
 ```sh
 find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print

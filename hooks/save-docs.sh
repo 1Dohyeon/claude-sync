@@ -8,7 +8,7 @@
 # 훅 계약상 stdin으로 JSON이 올 수 있으나 여기선 쓰지 않는다(있으면 소진만).
 { command -p cat 2>/dev/null || cat; } >/dev/null 2>&1 || :
 
-worklog_dir="$HOME/.claude/worklog"
+worklog_dir="$HOME/worklog"
 repo="$1"                       # 선택: 특정 repo만. 없으면 전체.
 scope_label="${repo:-전체}"
 

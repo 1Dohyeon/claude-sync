@@ -41,9 +41,9 @@
       "Bash(gh pr lock:*)",
       "Bash(gh pr unlock:*)",
       "Bash(gh pr checkout:*)",
-      "Edit(~/.claude/worklog/**)",
-      "Write(~/.claude/worklog/**)",
-      "Read(~/.claude/worklog/**)"
+      "Edit(~/worklog/**)",
+      "Write(~/worklog/**)",
+      "Read(~/worklog/**)"
     ],
     "ask": ["Bash(gh pr merge:*)", "Bash(git merge:*)"],
     "deny": ["Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)"]

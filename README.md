@@ -25,7 +25,6 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 ├── agents/ commands/ hooks/ rules/ skills/ templates/        # → claude-sync로 심링크
 ├── CLAUDE.md  settings.json                                  # → claude-sync로 심링크
 ├── CLAUDE.local.md  settings.local.json                      # → claude-sync로 심링크 (gitignore 대상)
-├── worklog/                                                  # → 작업 기록 (claude-sync와 별개 위치)
 └── sessions/ projects/ plugins/ history.jsonl ...            # Claude Code 런타임, git이 모름
 ```
 
@@ -33,7 +32,7 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 공유되는 것은 "그 자리에 파일이 있다"는 구조뿐이고, 내용은 기기마다 다릅니다.
 편집 지점이 저장소 폴더 하나로 통일되는 것이 이 방식의 이점입니다.
 
-`worklog/`는 계획 문서를 둘 수 있는 곳 가운데 하나입니다(`worklog/planning/`). claude-sync와는 별개 위치이며, worklog에 남길지와 이를 git 저장소로 둘지는 모두 선택입니다.
+`~/worklog/`는 계획 문서를 둘 수 있는 곳 가운데 하나입니다(`~/worklog/planning/`). `~/.claude/`와 claude-sync 밖의 별개 위치이며, worklog에 남길지와 이를 git 저장소로 둘지는 모두 선택입니다.
 
 > `worklog/`를 git 저장소로 관리하면 어느 기기에서든 똑같은 기록을 이어서 쓸 수 있습니다.
 

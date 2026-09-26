@@ -4,7 +4,7 @@
 #
 #   python3 tasksim.py <repo> <쿼리 텍스트...>
 #
-# ~/.claude/worklog/planning/{owner}/<repo>/ 와 planning/done/{owner}/<repo>/ 아래에서
+# ~/worklog/planning/{owner}/<repo>/ 와 planning/done/{owner}/<repo>/ 아래에서
 # requirements.md나 tasks.md가 있는 폴더 하나를 문서 하나로 본다.
 # requirements.md가 있으면 requirements.md + design.md를, 없으면 tasks.md를 비교한다.
 # 여기서는 문서를 모으기만 하고, 순위 계산은 tasksim_core.py가 맡는다.
@@ -22,7 +22,7 @@ if len(args) < 2:
 repo, *query_parts = args
 query = " ".join(query_parts)
 
-worklog_dir = Path.home() / ".claude" / "worklog"
+worklog_dir = Path.home() / "worklog"
 planning_dir = worklog_dir / "planning"
 
 
