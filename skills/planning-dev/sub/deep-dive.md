@@ -13,7 +13,7 @@ python3 ~/.claude/skills/planning-dev/hooks/tasksim.py <repo> <요구사항 원�
 python3 ~/.claude/skills/planning-dev/hooks/prsim.py <저장소 경로> <요구사항 원문 요약>
 ```
 
-- `tasksim.py`는 내 worklog의 계획 문서(`worklog/planning/`의 진행 중·완료 폴더)를 보고, `prsim.py`는 저장소의 merge된 PR을 본다(`gh`를 못 쓰거나 PR이 없으면 커밋). 동료가 한 일이나 worklog를 쓰기 전의 일은 `prsim.py`에서만 잡힌다.
+- `tasksim.py`는 내 worklog의 계획 문서(`worklog/plans/`의 진행 중·완료 폴더)를 보고, `prsim.py`는 저장소의 merge된 PR을 본다(`gh`를 못 쓰거나 PR이 없으면 커밋). 동료가 한 일이나 worklog를 쓰기 전의 일은 `prsim.py`에서만 잡힌다.
 - `<repo>`는 지금 작업 중인 저장소 이름이다. 계획 문서 경로의 `{repo}` 자리에 쓰는 이름과 같다.
 - `<저장소 경로>`는 지금 작업 중인 저장소의 경로다. 저장소 안에서 돌리면 `.`이다.
 - `<요구사항 원문 요약>`은 원문 전체가 아니라 핵심 주제어 몇 개로 줄인 것이다. 원문을 그대로 넣으면 신호가 흐려진다.

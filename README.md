@@ -32,7 +32,7 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 공유되는 것은 "그 자리에 파일이 있다"는 구조뿐이고, 내용은 기기마다 다릅니다.
 편집 지점이 저장소 폴더 하나로 통일되는 것이 이 방식의 이점입니다.
 
-`~/worklog/`는 계획 문서를 둘 수 있는 곳 가운데 하나입니다(`~/worklog/planning/`). `~/.claude/`와 claude-sync 밖의 별개 위치이며, worklog에 남길지와 이를 git 저장소로 둘지는 모두 선택입니다.
+`~/worklog/`는 계획 문서를 둘 수 있는 곳 가운데 하나입니다(`~/worklog/plans/`). `~/.claude/`와 claude-sync 밖의 별개 위치이며, worklog에 남길지와 이를 git 저장소로 둘지는 모두 선택입니다.
 
 > `worklog/`를 git 저장소로 관리하면 어느 기기에서든 똑같은 기록을 이어서 쓸 수 있습니다.
 
@@ -88,13 +88,13 @@ flowchart TD
     G -->|"예"| H["diff-review / branch-review / pr-review<br/>공통부는 review-common"]
     G -->|"아니오"| I["완료<br/>끝났는지 사용자에게 확인"]
     H --> I
-    I --> J["worklog에 둔 문서는<br/>planning/done/으로 이동"]
+    I --> J["worklog에 둔 문서는<br/>plans/done/으로 이동"]
 ```
 
 1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. 계획 문서는 세션 시작 때 주입하지 않고, 필요할 때 [`/planning-dev`](skills/planning-dev/SKILL.md)의 "계획 문서 찾기" 순서로 찾아 읽습니다.
 2. **요청**: "○○ 요청사항 분석해줘"
 3. **분석**: `CLAUDE.md`의 표에서 "요청사항 분석·설계" 트리거가 매칭되어 [`/planning-dev`](skills/planning-dev/SKILL.md)가 호출되고, [`analyze-task.md`](skills/planning-dev/sub/analyze-task.md)대로 지금 세션이 요구사항과 코드를 직접 읽어 목적, 유형(새 기능, 동작 변경, 버그 수정, 리팩터링), 규모(trivial, small, standard, large), 할 일을 보고합니다. 사용자가 깊게 분석해 달라고 하거나 계획 문서를 보강할 때만 [`deep-dive.md`](skills/planning-dev/sub/deep-dive.md)로 과거 유사 태스크를 찾고 도메인과 코드를 서브에이전트로 나눠 봅니다. 과거 유사 태스크 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뜁니다.
-4. **계획 문서**: 분석 뒤 계획 문서를 어디에 둘지 묻습니다. worklog(`worklog/planning/{owner}/{repo}/{branch}/`), 저장소 하네스가 지정한 위치, 세션 임시 폴더 가운데 고르며, 세션 임시 폴더는 다음 세션에서 이어받을 수 없습니다. 이때 작업 브랜치와 베이스(`develop`, `release/*`, `main` 가운데 선택)를 확정해 `requirements.md` 머리에 적습니다. 문서는 `requirements.md`(무엇을 왜, 사용자도 읽음), `design.md`(어떻게), `tasks.md`(어떤 순서로, 상태와 체크박스) 세 개이고, 세 문서를 모두 쓴 뒤 한 번에 확인받습니다. `design.md`와 `tasks.md`는 [`tdd.md`](skills/development/tdd.md)를 읽고 테스트 전략과 TDD 순서의 태스크로 짭니다.
+4. **계획 문서**: 분석 뒤 계획 문서를 어디에 둘지 묻습니다. worklog(`worklog/plans/{owner}/{repo}/{branch}/`), 저장소 하네스가 지정한 위치, 세션 임시 폴더 가운데 고르며, 세션 임시 폴더는 다음 세션에서 이어받을 수 없습니다. 이때 작업 브랜치와 베이스(`develop`, `release/*`, `main` 가운데 선택)를 확정해 `requirements.md` 머리에 적습니다. 문서는 `requirements.md`(무엇을 왜, 사용자도 읽음), `design.md`(어떻게), `tasks.md`(어떤 순서로, 상태와 체크박스) 세 개이고, 세 문서를 모두 쓴 뒤 한 번에 확인받습니다. `design.md`와 `tasks.md`는 [`tdd.md`](skills/development/tdd.md)를 읽고 테스트 전략과 TDD 순서의 태스크로 짭니다.
 5. **구현**: "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. 저장소의 개발 규칙(`CLAUDE.md`·`README.md`에서 연결됐거나 `.claude/` 아래에 있는 것)을 우선하고, 없으면 찾느라 시간을 쓰지 않고 글로벌 규칙으로 작업합니다. 테스트는 [`tdd.md`](skills/development/tdd.md)대로 먼저 쓰고 RED와 GREEN을 확인합니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따릅니다. 구현 전에는 계획 문서에 적힌 브랜치와 베이스로 작업 브랜치를 제안하고, 새 worktree로 만들지 메인 클론에서 만들지 묻습니다. 만드는 절차는 [`/git-workflow`](skills/git-workflow/SKILL.md)에 있습니다.
 6. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 계획 문서가 있으면 `tasks.md`의 체크박스를 갱신하고 확인 결과를 남깁니다.
 7. **리뷰**: 범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
@@ -103,7 +103,7 @@ flowchart TD
    - 7-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다. 축마다 모델을 따로 지정합니다. 함수 안의 실행 경로를 따라가며 판단해야 하는 코드 레벨 축과, 정답이 정해져 있지 않은 설계 판단을 내리는 아키텍처 축은 Opus로 두고, 문서·설정·인접 코드·Grep 결과와 대조하면 끝나는 나머지 축은 Sonnet으로 내립니다.
    - 7-3. **취합**: 축이 하나씩 도착하는 동안 중간 보고를 하지 않고 전부 모일 때까지 기다립니다. 도착할 때마다 한 턴씩 쓰면 그만큼 끝이 밀립니다. 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
    - 대상 고정부터 취합·출력까지는 세 스킬이 [`review-common/verify.md`](skills/review-common/verify.md) 하나를 공유합니다. 각 스킬 문서에는 범위와 축만 적혀 있습니다.
-8. **완료**: 태스크가 모두 체크돼도 스스로 끝났다고 판단하지 않고 사용자에게 묻습니다. 사용자가 확인하면 `tasks.md`의 상태를 완료로 바꾸고, worklog에 둔 문서는 `worklog/planning/done/{owner}/{repo}/{branch}/YYYYMMDDHHmm/`로 옮깁니다.
+8. **완료**: 태스크가 모두 체크돼도 스스로 끝났다고 판단하지 않고 사용자에게 묻습니다. 사용자가 확인하면 `tasks.md`의 상태를 완료로 바꾸고, worklog에 둔 문서는 `worklog/plans/done/{owner}/{repo}/{branch}/YYYYMMDDHHmm/`로 옮깁니다.
 9. **이어받기**: worklog(`~/worklog/`)나 하네스가 지정한 위치의 계획 문서는 세션이 끝나도 남습니다. 다음 세션의 구현과 리뷰는 이번 대화에서 알려 준 위치, worklog 진행 중 위치, 하네스 지정 위치, worklog 완료 위치 순으로 찾으며, 완료 위치에서만 찾으면 이번 작업의 문서가 맞는지 먼저 묻습니다.
 
 `deep-dive.md`의 서브에이전트 분석과 7번(리뷰 축)은 같은 구조를 공유합니다. 격리된 서브에이전트가 병렬로 보고, 상위 모델은 취합만 합니다. 아래는 7번을 스킬별로 펼친 것으로, 어느 스킬이 어느 에이전트를 어느 모델로 부르는지를 나타냅니다.
