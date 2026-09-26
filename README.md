@@ -91,7 +91,7 @@ flowchart TD
     I --> J["worklog에 둔 문서는<br/>planning/done/으로 이동"]
 ```
 
-1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. 계획 문서는 세션 시작 때 주입하지 않고, 이어서 할 때 [`/planning-dev`](skills/planning-dev/SKILL.md)가 그 위치에서 직접 읽습니다.
+1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. 계획 문서는 세션 시작 때 주입하지 않고, 필요할 때 [`/planning-dev`](skills/planning-dev/SKILL.md)의 "계획 문서 찾기" 순서로 찾아 읽습니다.
 2. **요청**: "○○ 요청사항 분석해줘"
 3. **분석**: `CLAUDE.md`의 표에서 "요청사항 분석·설계" 트리거가 매칭되어 [`/planning-dev`](skills/planning-dev/SKILL.md)가 호출되고, [`analyze-task.md`](skills/planning-dev/analyze-task.md)대로 지금 세션이 요구사항과 코드를 직접 읽어 목적, 유형(새 기능, 동작 변경, 버그 수정, 리팩터링), 규모(trivial, small, standard, large), 할 일을 보고합니다. 사용자가 깊게 분석해 달라고 하거나 계획 문서를 보강할 때만 [`deep-dive.md`](skills/planning-dev/deep-dive.md)로 과거 유사 태스크를 찾고 도메인과 코드를 서브에이전트로 나눠 봅니다. 과거 유사 태스크 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뜁니다.
 4. **계획 문서**: 분석 뒤 계획 문서를 어디에 둘지 묻습니다. worklog(`worklog/planning/{owner}/{repo}/{branch}/`), 저장소 하네스가 지정한 위치, 세션 임시 폴더 가운데 고르며, 세션 임시 폴더는 다음 세션에서 이어받을 수 없습니다. 문서는 `requirements.md`(무엇을 왜, 사용자도 읽음), `design.md`(어떻게), `tasks.md`(어떤 순서로, 상태와 체크박스) 세 개이고, 세 문서를 모두 쓴 뒤 한 번에 확인받습니다. `design.md`와 `tasks.md`는 [`tdd.md`](skills/development/tdd.md)를 읽고 테스트 전략과 TDD 순서의 태스크로 짭니다.
@@ -104,7 +104,7 @@ flowchart TD
    - 7-3. **취합**: 축이 하나씩 도착하는 동안 중간 보고를 하지 않고 전부 모일 때까지 기다립니다. 도착할 때마다 한 턴씩 쓰면 그만큼 끝이 밀립니다. 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
    - 대상 고정부터 취합·출력까지는 세 스킬이 [`review-common/verify.md`](skills/review-common/verify.md) 하나를 공유합니다. 각 스킬 문서에는 범위와 축만 적혀 있습니다.
 8. **완료**: 태스크가 모두 체크돼도 스스로 끝났다고 판단하지 않고 사용자에게 묻습니다. 사용자가 확인하면 `tasks.md`의 상태를 완료로 바꾸고, worklog에 둔 문서는 `worklog/planning/done/{owner}/{repo}/{branch}/YYYYMMDDHHmm/`로 옮깁니다.
-9. **이어받기**: worklog나 하네스가 지정한 위치의 계획 문서는 세션이 끝나도 남아, 다음 세션에서 이어서 쓸 수 있습니다.
+9. **이어받기**: worklog(`~/worklog/`)나 하네스가 지정한 위치의 계획 문서는 세션이 끝나도 남습니다. 다음 세션의 구현과 리뷰는 이번 대화에서 알려 준 위치, worklog 진행 중 위치, 하네스 지정 위치, worklog 완료 위치 순으로 찾으며, 완료 위치에서만 찾으면 이번 작업의 문서가 맞는지 먼저 묻습니다.
 
 `deep-dive.md`의 서브에이전트 분석과 7번(리뷰 축)은 같은 구조를 공유합니다. 격리된 서브에이전트가 병렬로 보고, 상위 모델은 취합만 합니다. 아래는 7번을 스킬별로 펼친 것으로, 어느 스킬이 어느 에이전트를 어느 모델로 부르는지를 나타냅니다.
 
