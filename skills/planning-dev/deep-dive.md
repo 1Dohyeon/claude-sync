@@ -13,12 +13,12 @@ python3 ~/.claude/skills/planning-dev/tasksim.py <repo> <요구사항 원문 요
 python3 ~/.claude/skills/planning-dev/prsim.py <저장소 경로> <요구사항 원문 요약>
 ```
 
-- `tasksim.py`는 내 worklog의 옛 task 문서(`worklog/<repo>/tasks/`)를 보고, `prsim.py`는 저장소의 merge된 PR을 본다(`gh`를 못 쓰거나 PR이 없으면 커밋). 동료가 한 일이나 worklog를 쓰기 전의 일은 `prsim.py`에서만 잡힌다.
-- `<repo>`는 지금 작업 중인 저장소 이름이다. worklog 폴더명(`worklog/<repo>/`)과 같다.
+- `tasksim.py`는 내 worklog의 옛 task 문서(`worklog/<repo>/tasks/`)와 계획 문서(`worklog/planning/`의 진행 중·완료 폴더)를 보고, `prsim.py`는 저장소의 merge된 PR을 본다(`gh`를 못 쓰거나 PR이 없으면 커밋). 동료가 한 일이나 worklog를 쓰기 전의 일은 `prsim.py`에서만 잡힌다.
+- `<repo>`는 지금 작업 중인 저장소 이름이다. 옛 구조의 폴더명(`worklog/<repo>/`)과 계획 문서 경로의 `{repo}` 자리에 쓰는 이름이다.
 - `<저장소 경로>`는 지금 작업 중인 저장소의 경로다. 저장소 안에서 돌리면 `.`이다.
 - `<요구사항 원문 요약>`은 원문 전체가 아니라 핵심 주제어 몇 개로 줄인 것이다. 원문을 그대로 넣으면 신호가 흐려진다.
 - 라이브러리가 없거나 git 저장소가 아니어서 건너뛴다는 안내가 나오면 그대로 다음 단계로 간다. 실패로 취급하지 않는다.
-- 유사도가 낮은 결과(0에 가까움)까지 끌어오지 않는다. 눈에 띄게 높은 것만 열어 본다. task 문서는 `Read`로, PR은 `gh pr view <번호>`로, 커밋은 `git show --stat <해시>`로 연다. 열어 보니 무관하면 버리고, 관련 있으면 무엇을 했는지 한두 줄로 남긴다.
+- 유사도가 낮은 결과(0에 가까움)까지 끌어오지 않는다. 눈에 띄게 높은 것만 열어 본다. 옛 task 문서는 그 파일을, 계획 문서(`planning/`으로 시작하는 결과)는 그 폴더의 `requirements.md`를 `Read`로 열고, PR은 `gh pr view <번호>`로, 커밋은 `git show --stat <해시>`로 연다. 열어 보니 무관하면 버리고, 관련 있으면 무엇을 했는지 한두 줄로 남긴다.
 - 찾은 게 있으면 분석에 "참고: 과거 유사 태스크"로 반영한다. 아래 서브에이전트를 부르면 호출 프롬프트에 함께 싣고, PR·커밋이면 변경 파일 목록도 싣는다. code-analyst가 그 목록을 `cochange.js` 입력으로 쓸 수 있다. 없으면 언급하지 않는다.
 - 이건 `cochange.js`(code-analyst가 쓰는, git 커밋 기반 파일 동반 관계)와 다른 도구다. 이건 텍스트 유사도로 업무 단위 선례를 찾는다.
 

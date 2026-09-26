@@ -4,7 +4,10 @@
 #
 #   python3 tasksim.py <repo> <쿼리 텍스트...>
 #
-# repo는 ~/.claude/worklog/<repo>/tasks/ 아래를 대상으로 한다.
+# 두 구조를 함께 본다.
+#   - 옛 task 문서: ~/.claude/worklog/<repo>/tasks/ 아래의 파일 하나가 문서 하나
+#   - 계획 문서: ~/.claude/worklog/planning/{owner}/<repo>/ 와 planning/done/{owner}/<repo>/ 아래에서
+#     requirements.md가 있는 폴더 하나가 문서 하나(requirements.md + design.md)
 # 여기서는 문서를 모으기만 하고, 순위 계산은 tasksim_core.py가 맡는다.
 # git 커밋·PR은 보지 않는다(비슷한 PR·커밋은 prsim.py, 파일 동반 관계는 cochange.js의 몫).
 
@@ -20,9 +23,9 @@ if len(args) < 2:
 repo, *query_parts = args
 query = " ".join(query_parts)
 
-tasks_dir = Path.home() / ".claude" / "worklog" / repo / "tasks"
-if not tasks_dir.is_dir():
-    fail(f"worklog에 {repo} 저장소가 없다 — 유사 태스크 검색을 건너뛴다.")
+worklog_dir = Path.home() / ".claude" / "worklog"
+tasks_dir = worklog_dir / repo / "tasks"
+planning_dir = worklog_dir / "planning"
 
 
 def is_primary(path: Path) -> bool:
@@ -31,13 +34,44 @@ def is_primary(path: Path) -> bool:
     return path.stem.count(".") == 0  # .work. / .api-spec. / .notion. 같은 변형 문서 제외
 
 
-paths = sorted(p for p in tasks_dir.rglob("*.md") if is_primary(p))
-if not paths:
-    fail(f"{repo}에 비교할 task 문서가 없다 — 유사 태스크 검색을 건너뛴다.")
+def plan_repo_dirs() -> list[Path]:
+    dirs = []
+    for base in (planning_dir, planning_dir / "done"):
+        if not base.is_dir():
+            continue
+        for owner in sorted(base.iterdir()):
+            if base == planning_dir and owner.name == "done":
+                continue
+            if (owner / repo).is_dir():
+                dirs.append(owner / repo)
+    return dirs
 
-docs = [p.read_text(encoding="utf-8") for p in paths]
-names = [str(p.relative_to(tasks_dir)) for p in paths]
 
-print(f"{repo} · 문서 {len(paths)}개 · 쿼리 \"{query}\"")
+repo_dirs = plan_repo_dirs()
+if not tasks_dir.is_dir() and not repo_dirs:
+    fail(f"worklog에 {repo} 저장소가 없다 — 유사 태스크 검색을 건너뛴다.")
+
+docs: list[str] = []
+names: list[str] = []
+
+if tasks_dir.is_dir():
+    for p in sorted(p for p in tasks_dir.rglob("*.md") if is_primary(p)):
+        docs.append(p.read_text(encoding="utf-8"))
+        names.append(str(p.relative_to(tasks_dir)))
+
+for repo_dir in repo_dirs:
+    for req in sorted(repo_dir.rglob("requirements.md")):
+        folder = req.parent
+        text = req.read_text(encoding="utf-8")
+        design = folder / "design.md"
+        if design.is_file():
+            text += "\n" + design.read_text(encoding="utf-8")
+        docs.append(text)
+        names.append(str(folder.relative_to(worklog_dir)))
+
+if not docs:
+    fail(f"{repo}에 비교할 문서가 없다 — 유사 태스크 검색을 건너뛴다.")
+
+print(f"{repo} · 문서 {len(docs)}개 · 쿼리 \"{query}\"")
 for i, sim in rank(docs, query):
     print(f"  {sim:.3f}  {names[i]}")
