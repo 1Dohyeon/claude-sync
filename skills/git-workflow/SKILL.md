@@ -32,11 +32,11 @@ git -C <dir> status -sb
 
 `## <branch>...origin/<branch>`로 나와야 한다. 그렇지 않으면 아래로 고친다.
 
-| status 출력 | 상태 | 조치 |
-|---|---|---|
-| `## <branch>...origin/<branch>` | 정상 | 다음 단계로 |
-| `## <branch>...origin/develop` | 베이스 브랜치를 추적 | `git -C <dir> branch --set-upstream-to=origin/<branch>` |
-| `## <branch>` | upstream 없음 (`branch.autoSetupMerge=false`) | 위와 동일 |
+| status 출력                     | 상태                                          | 조치                                                    |
+| ------------------------------- | --------------------------------------------- | ------------------------------------------------------- |
+| `## <branch>...origin/<branch>` | 정상                                          | 다음 단계로                                             |
+| `## <branch>...origin/develop`  | 베이스 브랜치를 추적                          | `git -C <dir> branch --set-upstream-to=origin/<branch>` |
+| `## <branch>`                   | upstream 없음 (`branch.autoSetupMerge=false`) | 위와 동일                                               |
 
 고친 뒤 `status -sb`로 다시 확인한다.
 
@@ -84,11 +84,11 @@ git -C <dir> status -sb
 
 지울 것과 두는 것을 혼동하지 않는다.
 
-| | 실체 | 이 절차에서 |
-|---|---|---|
-| ① 로컬 브랜치 `<branch>` | `.git/refs/heads/<branch>` | **지운다** (`git branch -D`) |
-| ② 원격 추적 ref `origin/<branch>` | `.git/refs/remotes/origin/<branch>` | 두고, 건드리지 않는다 |
-| ③ GitHub의 원격 브랜치 | GitHub 서버 | 두고, 건드리지 않는다 |
+|                                   | 실체                                | 이 절차에서                  |
+| --------------------------------- | ----------------------------------- | ---------------------------- |
+| ① 로컬 브랜치 `<branch>`          | `.git/refs/heads/<branch>`          | **지운다** (`git branch -D`) |
+| ② 원격 추적 ref `origin/<branch>` | `.git/refs/remotes/origin/<branch>` | 두고, 건드리지 않는다        |
+| ③ GitHub의 원격 브랜치            | GitHub 서버                         | 두고, 건드리지 않는다        |
 
 ②③은 `git branch -D`로 지워지지 않는다. ③ 삭제(`git push origin --delete`, `git push origin :<branch>`)는 푸시가 끼는 동작이라 "푸시 · PR · 머지" 규칙에 걸리므로 하지 않는다.
 
@@ -102,13 +102,13 @@ worktree 제거만으로는 ①이 남는다. worktree 제거는 작업 디렉�
 git -C <dir> status -sb
 ```
 
-| status 출력 | 판정 |
-|---|---|
-| `## <branch>...origin/<branch>` + clean | 통과. 원격과 동일하다 |
-| `[ahead N]` | 미푸시 커밋이 있다 → 푸시 승인이 필요하므로 중단·보고 |
-| 변경·스테이징된 파일 | 중단·보고 |
-| `[behind N]`만 | 통과. 원격이 앞서 있을 뿐 잃을 것은 없다 |
-| `origin/<branch>: gone` | 원격 사본이 없다 → 아래 "원격이 이미 삭제된 경우"로 간다 |
+| status 출력                             | 판정                                                     |
+| --------------------------------------- | -------------------------------------------------------- |
+| `## <branch>...origin/<branch>` + clean | 통과. 원격과 동일하다                                    |
+| `[ahead N]`                             | 미푸시 커밋이 있다 → 푸시 승인이 필요하므로 중단·보고    |
+| 변경·스테이징된 파일                    | 중단·보고                                                |
+| `[behind N]`만                          | 통과. 원격이 앞서 있을 뿐 잃을 것은 없다                 |
+| `origin/<branch>: gone`                 | 원격 사본이 없다 → 아래 "원격이 이미 삭제된 경우"로 간다 |
 
 ```sh
 git -C <dir> stash list
@@ -162,9 +162,9 @@ worktree 목록과 로컬 브랜치 목록에서 `<branch>`가 사라지고, `or
 
 선임이 원격 브랜치를 지운 뒤라 ②③이 없다. 원격 사본이 없으니 1단계의 근거가 사라지므로, **develop에 반영됐는지를 대신 확인**하고 나서 지운다.
 
-| 확인 | 명령 | 판정 |
-|---|---|---|
-| 조상 여부 | `git branch --merged origin/develop` | 목록에 있으면 반영됨 |
+| 확인       | 명령                                 | 판정                   |
+| ---------- | ------------------------------------ | ---------------------- |
+| 조상 여부  | `git branch --merged origin/develop` | 목록에 있으면 반영됨   |
 | patch 단위 | `git cherry origin/develop <branch>` | 모든 줄이 `-`면 반영됨 |
 
 `--merged`만 믿지 않는다. 머지 전에 리베이스(force-push)하는 저장소에서는 로컬 tip이 develop의 조상이 아니라 거의 아무것도 걸리지 않는다. `git cherry`의 `-`는 patch-id 동일본이 upstream에 있다는 뜻이라 리베이스를 통과한다.
