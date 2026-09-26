@@ -34,7 +34,7 @@ model: sonnet
 변경 지점을 추렸으면, 그 파일들이 과거에 무엇과 함께 바뀌었는지 히스토리로 확인한다. 코드를 읽어서는 보이지 않고 이력에만 남는 관계가 있다.
 
 ```sh
-node ~/.claude/skills/planning-dev/cochange.js <파일경로> [파일경로...]
+node ~/.claude/skills/planning-dev/hooks/cochange.js <파일경로> [파일경로...]
 ```
 
 - **동반율**은 "대상을 고칠 때 그 파일도 고칠 확률"이다. 영향 범위의 근거로 삼는 것은 이 값이다.

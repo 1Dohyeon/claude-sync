@@ -10,7 +10,7 @@ description: 코드를 작성·수정하는 개발 작업을 할 때 사용한�
 
 - 저장소마다 개발 성격이 다르므로 저장소의 개발 규칙을 이 문서보다 우선한다.
 - 저장소 규칙은 그 저장소의 `CLAUDE.md`·`README.md`에서 연결돼 있거나 `.claude/` 아래에 있는 것만 본다. 거기서 찾지 못하면 찾느라 시간을 쓰지 않고 이 문서의 규칙으로만 작업한다.
-- 계획 문서([`planning-dev`](../planning-dev/SKILL.md))가 있으면 그 계획을 따른다. 찾는 순서는 [`planning-dev`의 "계획 문서 찾기"](../planning-dev/SKILL.md#계획-문서-찾기)에 있다. 규모가 standard 이상인데 계획이 없으면 planning-dev를 먼저 거치자고 제안한다. 유형과 규모의 정의는 [`planning-dev/analyze-task.md`](../planning-dev/analyze-task.md)에 있다.
+- 계획 문서([`planning-dev`](../planning-dev/SKILL.md))가 있으면 그 계획을 따른다. 찾는 순서는 [`planning-dev`의 "계획 문서 찾기"](../planning-dev/SKILL.md#계획-문서-찾기)에 있다. 규모가 standard 이상인데 계획이 없으면 planning-dev를 먼저 거치자고 제안한다. 유형과 규모의 정의는 [`planning-dev/sub/analyze-task.md`](../planning-dev/sub/analyze-task.md)에 있다.
 
 ## 단순함 우선
 

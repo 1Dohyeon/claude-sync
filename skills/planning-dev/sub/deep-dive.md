@@ -9,8 +9,8 @@
 예면 두 검색을 돌린다. 순위는 따로 나오며 섞지 않는다.
 
 ```sh
-python3 ~/.claude/skills/planning-dev/tasksim.py <repo> <요구사항 원문 요약>
-python3 ~/.claude/skills/planning-dev/prsim.py <저장소 경로> <요구사항 원문 요약>
+python3 ~/.claude/skills/planning-dev/hooks/tasksim.py <repo> <요구사항 원문 요약>
+python3 ~/.claude/skills/planning-dev/hooks/prsim.py <저장소 경로> <요구사항 원문 요약>
 ```
 
 - `tasksim.py`는 내 worklog의 계획 문서(`worklog/planning/`의 진행 중·완료 폴더)를 보고, `prsim.py`는 저장소의 merge된 PR을 본다(`gh`를 못 쓰거나 PR이 없으면 커밋). 동료가 한 일이나 worklog를 쓰기 전의 일은 `prsim.py`에서만 잡힌다.
@@ -26,8 +26,8 @@ python3 ~/.claude/skills/planning-dev/prsim.py <저장소 경로> <요구사항 
 
 도메인과 코드를 격리해서 따로 보고 싶을 때 쓴다. **한 응답에서** 서브에이전트 2개를 동시에 호출한다. 순차로 부르지 않는다.
 
-- [`domain-analyst`](../../agents/domain-analyst.md)
-- [`code-analyst`](../../agents/code-analyst.md)
+- [`domain-analyst`](../../../agents/domain-analyst.md)
+- [`code-analyst`](../../../agents/code-analyst.md)
 
 각 호출 프롬프트에 **확보한 요구사항 원문 텍스트를 그대로 실어서** 넘긴다. 링크나 파일 경로만 넘기지 않는다. 두 에이전트의 도구는 `Read`·`Grep`·`Glob`(그리고 `code-analyst`는 `Bash`)뿐이라 웹이나 Notion을 열 수 없어서, 위치만 받으면 원문 없이 분석하게 된다.
 

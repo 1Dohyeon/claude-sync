@@ -100,7 +100,7 @@ gh pr view <번호> --json title,body
 
 ## 규모 판단
 
-이번 리뷰의 규모와 유형을 먼저 정하고, 그에 따라 부를 축을 정한다. 규모와 유형의 정의는 [`planning-dev/analyze-task.md`](../planning-dev/analyze-task.md)의 "유형과 규모"에 있다.
+이번 리뷰의 규모와 유형을 먼저 정하고, 그에 따라 부를 축을 정한다. 규모와 유형의 정의는 [`planning-dev/sub/analyze-task.md`](../planning-dev/sub/analyze-task.md)의 "유형과 규모"에 있다.
 
 ### 규모 정하기
 
