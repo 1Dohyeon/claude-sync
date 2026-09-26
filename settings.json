@@ -44,12 +44,14 @@
       "Write(~/.claude/worklog/**)",
       "Read(~/.claude/worklog/**)"
     ],
+    "ask": [
+      "Bash(gh pr merge:*)",
+      "Bash(git merge:*)"
+    ],
     "deny": [
       "Bash(cat:*)",
       "Bash(head:*)",
-      "Bash(tail:*)",
-      "Bash(gh pr merge:*)",
-      "Bash(git merge:*)"
+      "Bash(tail:*)"
     ]
   },
   "attribution": {

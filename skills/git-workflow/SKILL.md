@@ -204,4 +204,5 @@ git log origin/develop --oneline --grep=<제목 일부>
 
 ## 푸시 · PR · 머지
 
-- 머지(`git merge`, `gh pr merge`)는 하지 않는다. PR 생성·수정은 필요하면 한다.
+- 머지(`git merge`, `gh pr merge`)는 사용자가 요청할 때만 한다. 실행 전 확인은 [`settings.json`](../../settings.json)의 `permissions.ask`가 받으므로, auto mode여도 확인 창이 뜬다.
+- PR 생성·수정은 필요하면 한다.
