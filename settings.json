@@ -60,17 +60,6 @@
     "sessionUrl": false
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/load-overview.sh\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "SessionEnd": [
       {
         "hooks": [
@@ -91,19 +80,6 @@
             "command": "sh \"$HOME/.claude/hooks/notion-readonly.sh\"",
             "timeout": 10,
             "statusMessage": "Notion read-only 검사"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/check-task-doc.sh\"",
-            "timeout": 10,
-            "statusMessage": "task 문서 규칙 검사"
           }
         ]
       }
