@@ -58,3 +58,15 @@ description: 개발 요청사항을 분석하고 설계할 때 사용한다("요
 - worklog에 만든 문서면 폴더를 `~/.claude/worklog/planning/done/{owner}/{repo}/{branch}/YYYYMMDDHHmm/`로 옮긴다. `YYYYMMDDHHmm`은 사용자가 끝났다고 확인한 시각(로컬 시간)이다. 같은 브랜치 이름으로 여러 번 끝낸 작업은 이 시각 폴더로 나뉜다.
 - 하네스가 지정한 위치의 문서는 그 하네스의 완료 규칙을 따른다. 규칙이 없으면 상태만 바꾼다.
 - 세션 임시 폴더의 문서는 상태만 바꾸고 옮기지 않는다.
+
+## 계획 문서 찾기
+
+이미 만든 계획 문서를 찾을 때 이 순서를 따른다. 구현([`development`](../development/SKILL.md))과 리뷰([`review-common/verify.md`](../review-common/verify.md))도 이 순서로 찾는다. 앞에서 찾으면 멈춘다.
+
+1. 사용자가 이번 대화에서 위치를 알려 줬거나, 이번 대화에서 만든 문서(세션 임시 폴더 포함)
+2. `~/.claude/worklog/planning/{owner}/{repo}/{branch}/`
+3. 저장소의 `CLAUDE.md`·`README.md`·`.claude/`가 계획 문서 위치를 지정해 두었으면, 그 하네스가 정한 방식으로 이번 브랜치의 문서를 찾는다. 이 세 곳만 읽고 그 밖은 뒤지지 않는다.
+4. `~/.claude/worklog/planning/done/{owner}/{repo}/{branch}/` 아래에서 가장 최근 시각 폴더. 같은 브랜치 이름을 다시 쓰는 경우가 있으므로, 쓰기 전에 경로와 완료 시각을 보여 주고 이번 작업의 문서가 맞는지 묻는다. 아니라고 하면 없는 것으로 본다.
+
+- `{owner}`·`{repo}`·`{branch}`를 얻는 방법은 2단계와 같다. 호출하는 쪽이 `{branch}`를 따로 정하면(`pr-review`의 `headRefName`) 그 값을 쓴다.
+- 네 곳에 모두 없으면 계획 문서가 없는 것이다. 그다음 처리는 호출하는 쪽의 규칙을 따른다.

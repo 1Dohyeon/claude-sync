@@ -26,14 +26,14 @@
 
 계획 문서의 위치와 역할은 [`planning-dev`](../planning-dev/SKILL.md)에 있다.
 
-- 먼저 `~/.claude/worklog/planning/{owner}/{repo}/{branch}/requirements.md`를 Read한다. `{owner}`·`{repo}`는 `git remote get-url origin`에서, `{branch}`는 `git rev-parse --abbrev-ref HEAD`에서 얻는다. 매번 새로 계산한다(이전 세션 값을 재사용하지 않는다).
-- 없으면 이번 대화에서 계획 문서를 다른 위치(하네스가 지정한 위치 등)에 만들었는지 본다. 스스로 뒤지지 않는다.
+- [`planning-dev`의 "계획 문서 찾기"](../planning-dev/SKILL.md#계획-문서-찾기) 순서로 찾고, 찾은 폴더의 `requirements.md`를 Read한다.
+- 그 순서의 4번(완료 위치)에서 하는 확인 질문은 위의 "사용자에게 먼저 묻지 않고"의 예외다. 찾은 문서가 이번 작업의 것인지는 사용자만 알 수 있다.
 - 요구사항은 `requirements.md`의 번호 붙은 요구사항이고, 요구사항마다 적힌 확인 기준이 그대로 판정 기준이 된다. 배경은 맥락으로만 넘긴다.
 - `design.md`·`tasks.md`는 구현 계획이므로 요구사항으로 넘기지 않는다.
 
-**`pr-review`에서는 경로가 다르다.** 남의 브랜치이므로 현재 체크아웃된 브랜치가 아니라 PR의 헤드 브랜치로 찾는다. checkout 확인 때 이미 얻은 `headRefName`을 `{branch}` 자리에 그대로 쓴다.
+**`pr-review`에서는 `{branch}`가 다르다.** 남의 브랜치이므로 현재 체크아웃된 브랜치가 아니라 PR의 헤드 브랜치로 찾는다. checkout 확인 때 이미 얻은 `headRefName`을 `{branch}`로 넘긴다.
 
-- 그 경로에 문서가 없으면 스스로 뒤지지 말고 사용자에게 위치를 묻는다. 사용자가 "없다"고 하면 PR 설명으로 내려간다.
+- 그 순서로 찾아도 문서가 없으면 스스로 뒤지지 말고 사용자에게 위치를 묻는다. 사용자가 "없다"고 하면 PR 설명으로 내려간다.
 - 이 문서는 **사용자가 작성한 것이지 PR 작성자가 받은 요구가 아닐 수 있다.** 그래서 아래 "출처를 밝힌다"가 특히 중요하다.
 
 ### PR 설명을 쓸 때 (`pr-review` 전용)
