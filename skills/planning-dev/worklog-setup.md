@@ -1,6 +1,6 @@
 # worklog 최초 연결
 
-`~/.claude/worklog`가 아직 없을 때만 읽는다. 연결된 뒤의 사용 규칙은 [`worklog.md`](./worklog.md).
+`~/.claude/worklog`가 아직 없을 때만 읽는다. 연결된 뒤의 사용 규칙은 [`SKILL.md`](./SKILL.md).
 
 ## 1. 위치 결정
 

@@ -40,7 +40,7 @@ git reset
 - [`impact-reviewer`](../../agents/impact-reviewer.md)
 - [`convention-reviewer`](../../agents/convention-reviewer.md)
 
-**부르기 전에 요구사항을 먼저 확보한다.** worklog의 현재 브랜치 task 문서에서 계획 섹션을 꺼내 요구사항 본문으로 두 에이전트에 실어 넘긴다. 문서가 없으면 부르지 말고 사용자에게 요구사항을 먼저 묻는다. 확보 절차는 [`review-common/verify.md`](../review-common/verify.md)의 요구사항 확보에 있다.
+**부르기 전에 요구사항을 먼저 확보한다.** 현재 브랜치의 계획 문서 `requirements.md`에서 요구사항을 꺼내 두 에이전트에 실어 넘긴다. 문서가 없으면 PR 설명·커밋 메시지·이번 대화에서 모으고, 그래도 없을 때만 사용자에게 묻는다. 확보 절차는 [`review-common/verify.md`](../review-common/verify.md)의 요구사항 확보에 있다.
 
 여기서 요구사항은 지적을 만드는 근거가 아니라 **오탐을 거르는 근거**다. 공통부 검증의 "요구사항에 명시된 동작은 버린다"가 그것으로 작동한다.
 
@@ -52,4 +52,4 @@ git reset
 
 ## 이어서
 
-[`review-common/verify.md`](../review-common/verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다. 요구사항은 사용자에게 먼저 묻지 않고 worklog의 현재 브랜치 task 문서부터 본다.
+[`review-common/verify.md`](../review-common/verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다. 요구사항은 사용자에게 먼저 묻지 않고 현재 브랜치의 계획 문서부터 본다.

@@ -59,4 +59,4 @@ git status --porcelain
 
 ## 이어서
 
-[`review-common/verify.md`](../review-common/verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다. 요구사항은 사용자에게 먼저 묻지 않고 worklog의 이 브랜치 task 문서부터 본다. 그 문서의 `## 확인 방법`이 이번 리뷰의 판정 기준이 된다.
+[`review-common/verify.md`](../review-common/verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다. 요구사항은 사용자에게 먼저 묻지 않고 이 브랜치의 계획 문서 `requirements.md`부터 본다. 요구사항마다 적힌 확인 기준이 이번 리뷰의 판정 기준이 된다.
