@@ -5,16 +5,16 @@
 아래 트리거에 매칭되면 작업을 시작하기 전에 연결된 skill을 호출한다.
 자동 호출을 기다리지 않고 명시적으로 부른다. 자동 호출은 `description` 매칭에 달려 있어 확실하지 않다.
 
-| 요청 유형 (트리거)                          | 호출 대상                                         |
-| ------------------------------------------- | ------------------------------------------------- |
-| 코드 작성·수정(개발 작업)                   | [`/development`](skills/development/SKILL.md)     |
-| 개발 태스크 사전 분석("태스크 분석해줘" 등) | [`/analyze-task`](skills/analyze-task/SKILL.md)   |
-| 커밋 전 변경 리뷰 요청                      | [`/diff-review`](skills/diff-review/SKILL.md)     |
-| 브랜치 전체 리뷰 요청(PR 올리기 전)         | [`/branch-review`](skills/branch-review/SKILL.md) |
-| PR 리뷰 요청(번호·링크로 지정)              | [`/pr-review`](skills/pr-review/SKILL.md)         |
-| git 관련 작업(worktree, commit, push, ...)  | [`/git-workflow`](skills/git-workflow/SKILL.md)   |
-| 조사·리서치·자료 종합·브레인스토밍          | [`/research`](skills/research/SKILL.md)           |
-| 논문·긴 기술 문서 정독·정리                 | [`/paper-reading`](skills/paper-reading/SKILL.md) |
+| 요청 유형 (트리거)                         | 호출 대상                                         |
+| ------------------------------------------ | ------------------------------------------------- |
+| 코드 작성·수정(개발 작업)                  | [`/development`](skills/development/SKILL.md)     |
+| 요청사항 분석·설계("태스크 분석해줘" 등)   | [`/planning-dev`](skills/planning-dev/SKILL.md)   |
+| 커밋 전 변경 리뷰 요청                     | [`/diff-review`](skills/diff-review/SKILL.md)     |
+| 브랜치 전체 리뷰 요청(PR 올리기 전)        | [`/branch-review`](skills/branch-review/SKILL.md) |
+| PR 리뷰 요청(번호·링크로 지정)             | [`/pr-review`](skills/pr-review/SKILL.md)         |
+| git 관련 작업(worktree, commit, push, ...) | [`/git-workflow`](skills/git-workflow/SKILL.md)   |
+| 조사·리서치·자료 종합·브레인스토밍         | [`/research`](skills/research/SKILL.md)           |
+| 논문·긴 기술 문서 정독·정리                | [`/paper-reading`](skills/paper-reading/SKILL.md) |
 
 - 어느 트리거인지 판단이 서지 않으면 스킬을 고르기 전에 사용자에게 종류를 확인한다.
 - 트리거는 맞으나 해당 skill의 적용 범위(입력 형태·전제)가 이번 요청과 맞지 않으면, 스킬 없이 진행하되 어느 전제가 맞지 않았는지 먼저 밝힌다.

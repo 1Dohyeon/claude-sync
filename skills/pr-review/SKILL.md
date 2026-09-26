@@ -34,7 +34,7 @@ gh pr view <번호> --json headRefName,state
 
 ## 축
 
-부를 축은 [`review-common/verify.md`](../review-common/verify.md)의 "규모 판단"이 규모와 유형으로 정한다. standard 이상이면 아래 여섯 축을 모두 부른다. 남의 PR은 task 문서가 없는 경우가 많아, 그때는 diff 실측으로 규모를 정한다.
+부를 축은 [`review-common/verify.md`](../review-common/verify.md)의 "규모 판단"이 규모와 유형으로 정한다. standard 이상이면 아래 여섯 축을 모두 부른다. 남의 PR은 계획 문서가 없는 경우가 많아, 그때는 diff 실측으로 규모를 정한다.
 
 - [`architecture-reviewer`](../../agents/architecture-reviewer.md)
 - [`logic-reviewer`](../../agents/logic-reviewer.md)
@@ -43,7 +43,7 @@ gh pr view <번호> --json headRefName,state
 - [`convention-reviewer`](../../agents/convention-reviewer.md)
 - [`requirement-reviewer`](../../agents/requirement-reviewer.md)
 
-`requirement-reviewer`에게 넘길 요구사항은 사용자가 붙여넣은 텍스트, 사용자가 만든 task 문서, PR 설명 순으로 찾는다. 셋 다 없으면 이 축은 부르지 않는다. 남의 PR이라 요구사항을 짐작해서 채우면 근거 없는 지적만 나온다.
+`requirement-reviewer`에게 넘길 요구사항은 사용자가 붙여넣은 텍스트, 사용자가 만든 계획 문서(`requirements.md`), PR 설명 순으로 찾는다. 셋 다 없으면 이 축은 부르지 않는다. 남의 PR이라 요구사항을 짐작해서 채우면 근거 없는 지적만 나온다.
 
 화면에 닿는 파일이 있으면 [`qa-reviewer`](../../agents/qa-reviewer.md)를 부록으로 함께 부른다. 남이 쓴 코드를 직접 눌러 볼 절차가 된다.
 
@@ -51,7 +51,7 @@ gh pr view <번호> --json headRefName,state
 
 [`review-common/verify.md`](../review-common/verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다.
 
-요구사항 출처가 남의 PR에서는 세 갈래다. 사용자가 요청과 함께 붙여넣었으면 그것이 1순위다. 사용자가 이 PR을 위해 worklog에 task 문서를 만들어 두었으면(남의 작업이어도 만들 수 있다) 그것이 2순위이고, 경로는 현재 브랜치가 아니라 PR의 `headRefName`으로 찾는다. 둘 다 없으면 PR 설명과 거기서 이어지는 이슈·링크를 쓴다.
+요구사항 출처가 남의 PR에서는 세 갈래다. 사용자가 요청과 함께 붙여넣었으면 그것이 1순위다. 사용자가 이 PR을 위해 계획 문서를 만들어 두었으면(남의 작업이어도 만들 수 있다) 그 `requirements.md`가 2순위이고, 경로의 `{branch}`는 현재 브랜치가 아니라 PR의 `headRefName`으로 찾는다. 둘 다 없으면 PR 설명과 거기서 이어지는 이슈·링크를 쓴다.
 
 규모 판단의 파일 수는 아래로 센다.
 

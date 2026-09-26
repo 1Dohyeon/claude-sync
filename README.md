@@ -25,7 +25,6 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 ├── agents/ commands/ hooks/ rules/ skills/ templates/        # → claude-sync로 심링크
 ├── CLAUDE.md  settings.json                                  # → claude-sync로 심링크
 ├── CLAUDE.local.md  settings.local.json                      # → claude-sync로 심링크 (gitignore 대상)
-├── worklog/                                                  # → 작업 기록 (claude-sync와 별개 위치)
 └── sessions/ projects/ plugins/ history.jsonl ...            # Claude Code 런타임, git이 모름
 ```
 
@@ -33,7 +32,7 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 공유되는 것은 "그 자리에 파일이 있다"는 구조뿐이고, 내용은 기기마다 다릅니다.
 편집 지점이 저장소 폴더 하나로 통일되는 것이 이 방식의 이점입니다.
 
-`worklog/`는 작업 기록을 두는 곳입니다. claude-sync와는 별개 위치이며, 기록을 남기는 것 자체는 필수지만 이를 git 저장소로 둘지는 선택입니다.
+`~/worklog/`는 계획 문서를 둘 수 있는 곳 가운데 하나입니다(`~/worklog/planning/`). `~/.claude/`와 claude-sync 밖의 별개 위치이며, worklog에 남길지와 이를 git 저장소로 둘지는 모두 선택입니다.
 
 > `worklog/`를 git 저장소로 관리하면 어느 기기에서든 똑같은 기록을 이어서 쓸 수 있습니다.
 
@@ -61,10 +60,10 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 
 그 외에 작업 종류가 갈리는 경우(개발이면 개발, 리서치면 리서치 등)에는 [`skills/`](skills/)를 활용하도록 `CLAUDE.md`에서 라우팅합니다.
 
-| 요청 유형                         | 호출되는 skill                                     |
+| 요청 유형                         | 호출되는 skill                                    |
 | --------------------------------- | ------------------------------------------------- |
 | 코드 작성·수정                    | [`/development`](skills/development/SKILL.md)     |
-| 개발 태스크 사전 분석             | [`/analyze-task`](skills/analyze-task/SKILL.md)   |
+| 요청사항 분석·설계                | [`/planning-dev`](skills/planning-dev/SKILL.md)   |
 | 커밋 전 변경 리뷰                 | [`/diff-review`](skills/diff-review/SKILL.md)     |
 | 브랜치 전체 리뷰(PR 전)           | [`/branch-review`](skills/branch-review/SKILL.md) |
 | PR 리뷰                           | [`/pr-review`](skills/pr-review/SKILL.md)         |
@@ -78,34 +77,36 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 
 ```mermaid
 flowchart TD
-    A["세션 시작<br/>rules 자동 주입, 훅이 worklog 주입"] --> B["요청"]
+    A["세션 시작<br/>rules 자동 주입"] --> B["요청"]
     B --> C{"CLAUDE.md 라우팅"}
-    C -->|"개발 태스크 사전 분석"| D["analyze-task"]
-    C -->|"코드 작성·수정"| E["development<br/>workflow 5단계, git-workflow"]
+    C -->|"요청사항 분석·설계"| D["planning-dev<br/>분석 → 문서 위치 선택 → 세 문서"]
+    C -->|"코드 작성·수정"| E["development<br/>저장소 규칙 우선, TDD"]
+    D -.->|"요청하거나 보강할 때"| DD["deep-dive<br/>과거 유사 태스크, 서브에이전트 분석"]
     D --> E
-    E --> F["검증<br/>테스트·린트·실행 후 worklog에 기록"]
+    E --> F["검증<br/>테스트·린트·실행, tasks.md 갱신"]
     F --> G{"리뷰 요청?"}
     G -->|"예"| H["diff-review / branch-review / pr-review<br/>공통부는 review-common"]
-    G -->|"아니오"| I["완료<br/>사용자 통과 확인"]
+    G -->|"아니오"| I["완료<br/>끝났는지 사용자에게 확인"]
     H --> I
-    I --> J["이어받기<br/>worklog에 남음"]
+    I --> J["worklog에 둔 문서는<br/>planning/done/으로 이동"]
 ```
 
-1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. SessionStart 훅은 `worklog/<repo>/overview.md`와 현재 브랜치의 task 문서를 주입하므로, 이전에 진행하던 설계 문서가 있으면 그대로 이어받습니다.
-2. **요청**: "○○ 기능을 추가해줘"
-3. **사전 분석**: `CLAUDE.md`의 표에서 "개발 태스크 사전 분석" 트리거가 매칭되어 [`/analyze-task`](skills/analyze-task/SKILL.md)가 호출됩니다. 도메인 관점과 코드 레벨을 격리된 서브에이전트가 나눠 분석하고, 그 결과가 이후 설계의 근거가 됩니다. 요구사항만 보고 작업 규모를 먼저 추정해서, standard 이상일 때만 서브에이전트로 나눠 분석합니다. 병렬 분석으로 가는 태스크이면 먼저 과거 유사 태스크도 살펴볼지 묻고, 예라고 답하면 내 worklog 문서와 저장소의 PR·커밋에서 비슷한 선례를 찾아 서브에이전트에 함께 넘깁니다. 이 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뛰고 분석은 그대로 진행합니다.
-4. **구현**: 이어서 "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따르고, 브랜치를 만드는 작업이면 [`/git-workflow`](skills/git-workflow/SKILL.md)로 worktree를 만든 뒤 `worklog/`에 설계 문서를 작성해 진행 상황을 기록합니다. 설계할 때는 작업 유형(새 기능, 동작 변경, 버그 수정, 리팩터링)과 규모(trivial, small, standard, large)를 먼저 밝힙니다. 공통 규칙은 [`SKILL.md`](skills/development/SKILL.md)에 있고, 새 기능이면 [`new-feature.md`](skills/development/new-feature.md), 기존 기능을 고치는 세 유형이면 [`change-existing.md`](skills/development/change-existing.md)의 규칙을 더해 따릅니다. 규모는 사전 분석과 리뷰에서 서브에이전트를 얼마나 띄울지 정하는 기준이 됩니다.
-5. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 무엇을 어떻게 확인했고 결과가 어땠는지를 설계 문서에 남깁니다.
-6. **리뷰**: 범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
-   - 6-1. **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨·영향 범위·컨벤션 세 축만 보고, 나머지 둘은 작업 규모와 유형에 따라 축을 고릅니다. standard 이상이면 아키텍처·테스트·요구사항까지 여섯 축을 모두 보고, small이면 코드 레벨·영향 범위·컨벤션에 유형에 맞는 축 하나를 더하며, trivial이면 어느 스킬이든 서브에이전트 없이 상위 모델이 직접 봅니다. 규모는 task 문서에 적힌 값과 diff를 잰 값 가운데 큰 쪽을 씁니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
-   - 6-1-1. **부록**: 화면에 닿는 변경이면 `qa-reviewer`를 함께 띄워 브라우저에서 확인할 목록을 만듭니다. 지적이 아니므로 검증과 등급을 거치지 않고 리포트 맨 뒤에 붙습니다.
-   - 6-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다. 축마다 모델을 따로 지정합니다. 함수 안의 실행 경로를 따라가며 판단해야 하는 코드 레벨 축과, 정답이 정해져 있지 않은 설계 판단을 내리는 아키텍처 축은 Opus로 두고, 문서·설정·인접 코드·Grep 결과와 대조하면 끝나는 나머지 축은 Sonnet으로 내립니다.
-   - 6-3. **취합**: 축이 하나씩 도착하는 동안 중간 보고를 하지 않고 전부 모일 때까지 기다립니다. 도착할 때마다 한 턴씩 쓰면 그만큼 끝이 밀립니다. 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
+1. **세션 시작**: [`rules/`](rules/)는 세션이 시작될 때 자동으로 컨텍스트에 주입됩니다. 계획 문서는 세션 시작 때 주입하지 않고, 필요할 때 [`/planning-dev`](skills/planning-dev/SKILL.md)의 "계획 문서 찾기" 순서로 찾아 읽습니다.
+2. **요청**: "○○ 요청사항 분석해줘"
+3. **분석**: `CLAUDE.md`의 표에서 "요청사항 분석·설계" 트리거가 매칭되어 [`/planning-dev`](skills/planning-dev/SKILL.md)가 호출되고, [`analyze-task.md`](skills/planning-dev/sub/analyze-task.md)대로 지금 세션이 요구사항과 코드를 직접 읽어 목적, 유형(새 기능, 동작 변경, 버그 수정, 리팩터링), 규모(trivial, small, standard, large), 할 일을 보고합니다. 사용자가 깊게 분석해 달라고 하거나 계획 문서를 보강할 때만 [`deep-dive.md`](skills/planning-dev/sub/deep-dive.md)로 과거 유사 태스크를 찾고 도메인과 코드를 서브에이전트로 나눠 봅니다. 과거 유사 태스크 검색에는 `kiwipiepy`·`scikit-learn`이 필요하며, 없으면 검색만 건너뜁니다.
+4. **계획 문서**: 분석 뒤 계획 문서를 어디에 둘지 묻습니다. worklog(`worklog/planning/{owner}/{repo}/{branch}/`), 저장소 하네스가 지정한 위치, 세션 임시 폴더 가운데 고르며, 세션 임시 폴더는 다음 세션에서 이어받을 수 없습니다. 이때 작업 브랜치와 베이스(`develop`, `release/*`, `main` 가운데 선택)를 확정해 `requirements.md` 머리에 적습니다. 문서는 `requirements.md`(무엇을 왜, 사용자도 읽음), `design.md`(어떻게), `tasks.md`(어떤 순서로, 상태와 체크박스) 세 개이고, 세 문서를 모두 쓴 뒤 한 번에 확인받습니다. `design.md`와 `tasks.md`는 [`tdd.md`](skills/development/tdd.md)를 읽고 테스트 전략과 TDD 순서의 태스크로 짭니다.
+5. **구현**: "코드 작성·수정" 트리거로 [`/development`](skills/development/SKILL.md)가 호출됩니다. 저장소의 개발 규칙(`CLAUDE.md`·`README.md`에서 연결됐거나 `.claude/` 아래에 있는 것)을 우선하고, 없으면 찾느라 시간을 쓰지 않고 글로벌 규칙으로 작업합니다. 테스트는 [`tdd.md`](skills/development/tdd.md)대로 먼저 쓰고 RED와 GREEN을 확인합니다. [`rules/workflow.md`](rules/workflow.md)의 5단계(설계 → 보고 → 진행 → 검증 → 완료)를 따릅니다. 구현 전에는 계획 문서에 적힌 브랜치와 베이스로 작업 브랜치를 제안하고, 새 worktree로 만들지 메인 클론에서 만들지 묻습니다. 만드는 절차는 [`/git-workflow`](skills/git-workflow/SKILL.md)에 있습니다.
+6. **검증**: 테스트, 린트, 실제 실행이 가능하면 생략하지 않고 돌립니다. 계획 문서가 있으면 `tasks.md`의 체크박스를 갱신하고 확인 결과를 남깁니다.
+7. **리뷰**: 범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
+   - 7-1. **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨·영향 범위·컨벤션 세 축만 보고, 나머지 둘은 작업 규모와 유형에 따라 축을 고릅니다. standard 이상이면 아키텍처·테스트·요구사항까지 여섯 축을 모두 보고, small이면 코드 레벨·영향 범위·컨벤션에 유형에 맞는 축 하나를 더하며, trivial이면 어느 스킬이든 서브에이전트 없이 상위 모델이 직접 봅니다. 규모는 `requirements.md` 머리에 적힌 값과 diff를 잰 값 가운데 큰 쪽을 씁니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
+   - 7-1-1. **부록**: 화면에 닿는 변경이면 `qa-reviewer`를 함께 띄워 브라우저에서 확인할 목록을 만듭니다. 지적이 아니므로 검증과 등급을 거치지 않고 리포트 맨 뒤에 붙습니다.
+   - 7-2. **병렬 리뷰**: 각 축이 자기 영역만 보도록 격리된 서브에이전트가 병렬로 봅니다. 축마다 모델을 따로 지정합니다. 함수 안의 실행 경로를 따라가며 판단해야 하는 코드 레벨 축과, 정답이 정해져 있지 않은 설계 판단을 내리는 아키텍처 축은 Opus로 두고, 문서·설정·인접 코드·Grep 결과와 대조하면 끝나는 나머지 축은 Sonnet으로 내립니다.
+   - 7-3. **취합**: 축이 하나씩 도착하는 동안 중간 보고를 하지 않고 전부 모일 때까지 기다립니다. 도착할 때마다 한 턴씩 쓰면 그만큼 끝이 밀립니다. 결과가 다 오면 상위 모델이 중복을 합치고 등급 순으로 하나의 리포트에 정리합니다. 등급은 에이전트가 붙이지 않고, 각 축이 낸 사실을 상위가 하나의 기준으로 환산합니다. 이 단계에서 새 지적은 만들지 않고, 상반된 결론은 억지로 해소하지 않고 나란히 둡니다.
    - 대상 고정부터 취합·출력까지는 세 스킬이 [`review-common/verify.md`](skills/review-common/verify.md) 하나를 공유합니다. 각 스킬 문서에는 범위와 축만 적혀 있습니다.
-7. **완료**: 사용자가 검증 결과를 통과로 확인하면 완료로 처리합니다. 완료 판정은 스스로 내리지 않습니다.
-8. **이어받기**: `worklog/`의 설계 문서와 진행 기록은 세션이 끝나도 남아, 다음 세션에서 그대로 이어받을 수 있습니다.
+8. **완료**: 태스크가 모두 체크돼도 스스로 끝났다고 판단하지 않고 사용자에게 묻습니다. 사용자가 확인하면 `tasks.md`의 상태를 완료로 바꾸고, worklog에 둔 문서는 `worklog/planning/done/{owner}/{repo}/{branch}/YYYYMMDDHHmm/`로 옮깁니다.
+9. **이어받기**: worklog(`~/worklog/`)나 하네스가 지정한 위치의 계획 문서는 세션이 끝나도 남습니다. 다음 세션의 구현과 리뷰는 이번 대화에서 알려 준 위치, worklog 진행 중 위치, 하네스 지정 위치, worklog 완료 위치 순으로 찾으며, 완료 위치에서만 찾으면 이번 작업의 문서가 맞는지 먼저 묻습니다.
 
-3번(도메인·코드)과 6번(리뷰 축)은 같은 구조를 공유합니다. 격리된 서브에이전트가 병렬로 보고, 상위 모델은 취합만 합니다. 아래는 6번을 스킬별로 펼친 것으로, 어느 스킬이 어느 에이전트를 어느 모델로 부르는지를 나타냅니다.
+`deep-dive.md`의 서브에이전트 분석과 7번(리뷰 축)은 같은 구조를 공유합니다. 격리된 서브에이전트가 병렬로 보고, 상위 모델은 취합만 합니다. 아래는 7번을 스킬별로 펼친 것으로, 어느 스킬이 어느 에이전트를 어느 모델로 부르는지를 나타냅니다.
 
 ```mermaid
 flowchart LR
@@ -139,14 +140,14 @@ flowchart LR
 
 두 축은 맞닿아 있어서 한 문장으로 가릅니다. **함수 하나를 열어 판정되면 코드 레벨 축이고, 바깥을 찾아봐야 판정되면 영향 범위 축입니다.**
 
-| 보는 것 | 축 |
-| --- | --- |
-| 경계값, off-by-one, 널·옵셔널, 타입, 분기 로직 | logic |
-| 함수 안에서 닫히는 예외 처리, `await` 누락 | logic |
+| 보는 것                                             | 축     |
+| --------------------------------------------------- | ------ |
+| 경계값, off-by-one, 널·옵셔널, 타입, 분기 로직      | logic  |
+| 함수 안에서 닫히는 예외 처리, `await` 누락          | logic  |
 | 시그니처·반환·예외 계약이 바뀌어 기존 호출부가 깨짐 | impact |
-| 지우거나 이름을 바꾼 심볼의 잔존 참조 | impact |
-| 전역·캐시·설정 같은 공유 상태 오염 | impact |
-| API 응답 형식, 이벤트 페이로드, DB 스키마 변경 | impact |
+| 지우거나 이름을 바꾼 심볼의 잔존 참조               | impact |
+| 전역·캐시·설정 같은 공유 상태 오염                  | impact |
+| API 응답 형식, 이벤트 페이로드, DB 스키마 변경      | impact |
 
 아키텍처 축에도 비슷해 보이는 `확장 비용` 항목이 있지만 뜻이 다릅니다. 그쪽은 "같은 요구가 또 오면 몇 군데를 고쳐야 하는가"라는 앞으로의 비용이고, 영향 범위 축은 **지금 이 변경으로 이미 깨진 곳**을 봅니다.
 
@@ -156,13 +157,13 @@ flowchart LR
 
 과거 세션 기록에서 축별 소요 시간을 재어 정했습니다. 병렬로 띄워도 전체가 끝나는 시점은 가장 느린 축이 정하므로, 축을 더 늘리는 것보다 편차를 줄이는 것이 전체 시간에 듣습니다.
 
-| 축 | 분리 전 중앙값 | 조치 |
-| --- | --- | --- |
-| logic-reviewer | 449초 | 호출부 추적을 impact로 이관, Opus 유지 |
-| testing-reviewer | 332초 | Sonnet |
-| convention-reviewer | 288초 | Sonnet |
-| requirement-reviewer | 272초 | Sonnet |
-| architecture-reviewer | 264초 | Opus |
+| 축                    | 분리 전 중앙값 | 조치                                   |
+| --------------------- | -------------- | -------------------------------------- |
+| logic-reviewer        | 449초          | 호출부 추적을 impact로 이관, Opus 유지 |
+| testing-reviewer      | 332초          | Sonnet                                 |
+| convention-reviewer   | 288초          | Sonnet                                 |
+| requirement-reviewer  | 272초          | Sonnet                                 |
+| architecture-reviewer | 264초          | Opus                                   |
 
 코드 레벨 축이 유독 느렸던 원인은 호출부를 열어 확인하는 왕복이었고, 그 일이 곧 영향 범위 축의 본업입니다. 그래서 축을 나눈 것은 품질 공백을 메우는 동시에 가장 느린 축의 짐을 덜어내는 일이기도 합니다. 반대로 나머지 축을 Sonnet으로 내린 것은 전체 시간보다 토큰 비용에 듣는 조치입니다.
 

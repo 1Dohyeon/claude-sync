@@ -8,11 +8,11 @@ Claude가 읽고 그대로 실행하는 세팅 절차. 사용자가 저장소 �
 
 ## 연결 대상
 
-| `~/.claude/` | 대상 |
-|---|---|
-| `agents/` `commands/` `hooks/` `output-styles/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리 |
-| `CLAUDE.md` `settings.json` | 저장소의 동명 파일 |
-| `CLAUDE.local.md` `settings.local.json` | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
+| `~/.claude/`                                                                    | 대상                                           |
+| ------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `agents/` `commands/` `hooks/` `output-styles/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리                         |
+| `CLAUDE.md` `settings.json`                                                     | 저장소의 동명 파일                             |
+| `CLAUDE.local.md` `settings.local.json`                                         | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
 
 건드리지 않음: `sessions/` `projects/` `plugins/` `history.jsonl` `.credentials.json`
 
@@ -82,12 +82,12 @@ clone 직후에는 clone한 폴더의 `SETTING_GUIDE.md`를 로컬 파일로 다
 ls -l "$HOME/.claude"
 ```
 
-| 상태 | 조치 |
-|---|---|
-| 없음 | 바로 링크 |
-| `$SYNC`를 가리키는 심링크 | 바로 링크 (결과가 실행 전과 같다) |
+| 상태                      | 조치                                                             |
+| ------------------------- | ---------------------------------------------------------------- |
+| 없음                      | 바로 링크                                                        |
+| `$SYNC`를 가리키는 심링크 | 바로 링크 (결과가 실행 전과 같다)                                |
 | 다른 곳을 가리키는 심링크 | 원래 타깃을 보고하고 승인받은 뒤 링크. 거절하면 그 항목만 건너뜀 |
-| 실제 파일·디렉터리 | `mv`로 백업 후 링크 |
+| 실제 파일·디렉터리        | `mv`로 백업 후 링크                                              |
 
 두 심링크 갈래는 `ls -l` 출력의 `->` 뒤 경로로 가른다. 다른 곳을 가리키는 심링크는 GNU stow나 chezmoi 같은 다른 dotfiles 도구가 관리 중일 수 있다. `ln -sfn`은 그런 링크를 말없이 덮어쓰므로, 덮어쓰기 전에 원래 타깃 경로를 반드시 보고한다. 승인받지 못한 항목만 건너뛰고 나머지는 그대로 진행한다.
 
@@ -177,7 +177,7 @@ ln -sfn "$SYNC/settings.local.json" "$HOME/.claude/settings.local.json"
 ls -l "$HOME/.claude"
 ```
 
-「연결 대상」의 11개 항목이 모두 `->` 화살표로 보여야 한다. 2단계에서 건너뛰기로 한 항목이 있으면 그 개수만큼 빠진다. `backups/` `cache/` `sessions/` 같은 런타임 항목과 `worklog` 심링크가 함께 찍히는 것은 정상이며, 세는 대상이 아니다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
+「연결 대상」의 11개 항목이 모두 `->` 화살표로 보여야 한다. 2단계에서 건너뛰기로 한 항목이 있으면 그 개수만큼 빠진다. `backups/` `cache/` `sessions/` 같은 런타임 항목이 함께 찍히는 것은 정상이며, 세는 대상이 아니다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
 
 ```sh
 find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print

@@ -17,8 +17,9 @@
       "Bash(find:*)",
       "Bash(rg:*)",
       "Bash(grep:*)",
-      "Bash(node ~/.claude/skills/analyze-task/cochange.js:*)",
-      "Bash(python ~/.claude/skills/analyze-task/tasksim.py:*)",
+      "Bash(node ~/.claude/skills/planning-dev/hooks/cochange.js:*)",
+      "Bash(python3 ~/.claude/skills/planning-dev/hooks/tasksim.py:*)",
+      "Bash(python3 ~/.claude/skills/planning-dev/hooks/prsim.py:*)",
       "Bash(pnpm lint:*)",
       "Bash(pnpm check-types:*)",
       "Bash(pnpm test:*)",
@@ -40,19 +41,12 @@
       "Bash(gh pr lock:*)",
       "Bash(gh pr unlock:*)",
       "Bash(gh pr checkout:*)",
-      "Edit(~/.claude/worklog/**)",
-      "Write(~/.claude/worklog/**)",
-      "Read(~/.claude/worklog/**)"
+      "Edit(~/worklog/**)",
+      "Write(~/worklog/**)",
+      "Read(~/worklog/**)"
     ],
-    "ask": [
-      "Bash(gh pr merge:*)",
-      "Bash(git merge:*)"
-    ],
-    "deny": [
-      "Bash(cat:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)"
-    ]
+    "ask": ["Bash(gh pr merge:*)", "Bash(git merge:*)"],
+    "deny": ["Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)"]
   },
   "attribution": {
     "commit": "",
@@ -60,17 +54,6 @@
     "sessionUrl": false
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/load-overview.sh\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
     "SessionEnd": [
       {
         "hooks": [
@@ -91,19 +74,6 @@
             "command": "sh \"$HOME/.claude/hooks/notion-readonly.sh\"",
             "timeout": 10,
             "statusMessage": "Notion read-only 검사"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/check-task-doc.sh\"",
-            "timeout": 10,
-            "statusMessage": "task 문서 규칙 검사"
           }
         ]
       }
