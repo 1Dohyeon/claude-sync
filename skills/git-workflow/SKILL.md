@@ -36,12 +36,17 @@ git fetch origin
 git push origin origin/<base>:refs/heads/<branch>
 ```
 
-2. 메인 작업 폴더와 형제 위치에, 방금 만든 원격 브랜치를 추적하는 worktree를 만든다:
+2. 방금 만든 원격 브랜치를 추적하는 worktree를 `<dir>`에 만든다:
 
 ```sh
 git fetch origin
 git worktree add -b <branch> <dir> origin/<branch>
 ```
+
+`<dir>`은 아래 순서로 정한다.
+
+- 저장소의 `CLAUDE.md`·`README.md`·`.claude/`나 세션 시작 안내(SessionStart 훅)가 worktree 위치를 지정해 두었으면 그 위치에 만든다.
+- 그런 규칙이 따로 없으면 메인 작업 폴더와 형제 위치에 만든다.
 
 `--track`은 붙이지 않는다. 시작점이 `origin/<branch>`라 upstream은 어차피 자동으로 잡히고, git 2.18 미만에서는 `unknown option 'track'`으로 실패한다.
 
