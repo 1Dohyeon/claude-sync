@@ -7,5 +7,3 @@
 # 스크립트(hooks/save-docs.sh, skills/planning-dev/hooks/tasksim.py)는 이 파일을 읽지 못해 값을 바꿔도 ~/plans 를 쓴다.
 PLANS_PATH=~/plans
 ```
-
-위치를 고르는 순위와 찾는 순서는 [`planning-dev/sub/plan-docs.md`](../skills/planning-dev/sub/plan-docs.md)에 있다.
