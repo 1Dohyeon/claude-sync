@@ -31,6 +31,16 @@ fi
 # 현재 상태 그대로 스테이징
 git_plans add -A >/dev/null 2>&1 || :
 
+# 추적 파일의 절반 넘게 지워졌으면 체크아웃 실패 등으로 작업 트리가 빈 것으로 보고 멈춘다.
+# 옮긴 파일은 -M으로 이름 변경이 되어 삭제로 세지 않는다.
+tracked=$(git_plans ls-tree -r --name-only HEAD 2>/dev/null | wc -l)
+deleted=$(git_plans diff --cached -M --diff-filter=D --name-only 2>/dev/null | wc -l)
+if [ "$tracked" -gt 0 ] && [ $((deleted * 2)) -gt "$tracked" ]; then
+    git_plans reset -q >/dev/null 2>&1 || :
+    echo "snapshot: 추적 파일 $tracked개 중 $deleted개 삭제 — 비정상으로 보고 커밋 안 함"
+    exit 0
+fi
+
 stamp=$(date '+%Y-%m-%d %H:%M')     # 이 기기의 로컬 시각(KST 등)
 msg="chore: auto-save $stamp"
 
