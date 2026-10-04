@@ -42,7 +42,6 @@
       "Bash(gh pr unlock:*)",
       "Bash(gh pr checkout:*)",
       "Edit(~/plans/**)",
-      "Write(~/plans/**)",
       "Read(~/plans/**)"
     ],
     "ask": ["Bash(gh pr merge:*)", "Bash(git merge:*)"],
