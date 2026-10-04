@@ -6,4 +6,8 @@
 # 계획 문서의 2순위 위치(plans 폴더 자체)다. 문서는 $PLANS_PATH/{owner}/{repo}/{branch}/ 에 둔다. 기본값은 ~/plans 다.
 # 스크립트(hooks/save-docs.sh, skills/planning-dev/hooks/tasksim.py)는 이 파일을 읽지 못해 값을 바꿔도 ~/plans 를 쓴다.
 PLANS_PATH=~/plans
+
+# worklog 스킬이 작업 일기를 두는 곳이다. 문서는 $WORKLOG_PATH/{YYYY}/{MM}/ 에 둔다. 기본값은 ~/worklog 다.
+# 스크립트(hooks/worklog.sh)는 이 파일을 읽지 못해 값을 바꿔도 ~/worklog 를 쓴다.
+WORKLOG_PATH=~/worklog
 ```

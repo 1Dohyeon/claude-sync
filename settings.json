@@ -63,6 +63,15 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/worklog.sh\"",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "PreToolUse": [
