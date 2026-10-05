@@ -41,7 +41,7 @@ fi
 
 mkdir -p "$worklog_dir"
 
-# 일기를 다 쓴 뒤 worklog가 git 저장소면 이어서 커밋/푸시한다. 푸시는 인증을 기다리지 않고 실패하게 둔다.
+# 일기를 다 쓴 뒤 save-docs.sh로 worklog 저장소만 커밋/푸시한다. 다른 세션의 저장과 겹치지 않게 하는 락이 그쪽에 있다.
 # Git Bash는 /로 시작하는 인자를 Windows 경로로 바꿔 "/worklog <경로>"를 깨뜨리므로 그 인자만 변환에서 뺀다.
 WORKLOG_HOOK=1 nohup sh -c '
     MSYS2_ARG_CONV_EXCL=/worklog claude -p "/worklog $1" \
@@ -50,11 +50,8 @@ WORKLOG_HOOK=1 nohup sh -c '
         --permission-prompts none \
         --add-dir "$HOME/.claude/projects" "$2" \
         --allowedTools "Read Grep Glob Edit(~/worklog/**) Bash(date:*)"
-    [ -e "$2/.git" ] || exit 0
-    git -C "$2" add -A
-    git -C "$2" commit -qm "chore: worklog $(date "+%Y-%m-%d %H:%M")" || exit 0
-    GIT_TERMINAL_PROMPT=0 git -C "$2" push -q
-' worklog "$transcript" "$worklog_dir" >/dev/null 2>&1 &
+    GIT_TERMINAL_PROMPT=0 sh "$3" worklog < /dev/null
+' worklog "$transcript" "$worklog_dir" "$(dirname "$0")/save-docs.sh" >/dev/null 2>&1 &
 
 echo "worklog: 백그라운드로 작성 시작"
 exit 0

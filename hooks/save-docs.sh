@@ -2,6 +2,7 @@
 # plans/(계획 문서)와 worklog/(작업 일기)가 git 저장소면 각각의 "현재 상태"를 스냅샷 커밋/푸시한다.
 #   - SessionEnd 훅으로 자동 실행
 #   - /save-docs 커맨드로 수동 실행
+#   - 인자로 plans 또는 worklog를 주면 그 저장소만 저장한다(worklog.sh가 일기를 쓴 뒤 worklog만 저장할 때).
 # 목적: 문서 유실 방지 + 크로스머신 이어작업.
 # 원칙(반드시 지킴): 변경 없으면 통과 / 오프라인·충돌·에러여도 세션을 절대 막지 않음.
 
@@ -83,6 +84,41 @@ push_repo() {
     return 0
 }
 
-save_repo "$HOME/plans" plans
-save_repo "$HOME/worklog" worklog
+# 여러 세션이 한꺼번에 끝나면 이 스크립트가 같은 저장소에서 겹쳐 돌아 index.lock 충돌이 나므로,
+# 저장소마다 mkdir 락으로 한 번에 하나만 save_repo에 들어가게 한다(mkdir는 Windows Git Bash·macOS 모두 원자적).
+# 락을 쥔 채 죽은 프로세스(앱 종료 등)가 있을 수 있어 2분이 넘은 락은 버린다.
+# $1: 저장소 폴더, $2: 출력 접두어
+save_repo_locked() {
+    git_dir=$(git -C "$1" rev-parse --absolute-git-dir 2>/dev/null)
+    if [ -z "$git_dir" ]; then
+        save_repo "$1" "$2"
+        return 0
+    fi
+
+    lock="$git_dir/save-docs.lock"
+    tries=0
+    until mkdir "$lock" 2>/dev/null; do
+        tries=$((tries + 1))
+        if [ "$tries" -gt 20 ]; then
+            echo "$2: 다른 저장 작업이 끝나지 않음 - 통과(다음 실행 때 반영)"
+            return 0
+        fi
+        if [ -n "$(find "$lock" -maxdepth 0 -mmin +2 2>/dev/null)" ]; then
+            rmdir "$lock" 2>/dev/null
+        else
+            sleep 1
+        fi
+    done
+
+    save_repo "$1" "$2"
+    rmdir "$lock" 2>/dev/null
+    return 0
+}
+
+case ${1:-all} in
+    all|plans) save_repo_locked "$HOME/plans" plans ;;
+esac
+case ${1:-all} in
+    all|worklog) save_repo_locked "$HOME/worklog" worklog ;;
+esac
 exit 0
