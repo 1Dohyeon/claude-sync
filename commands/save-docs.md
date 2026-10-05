@@ -1,9 +1,9 @@
 ---
-description: plans 저장소 스냅샷 커밋/푸시
+description: plans·worklog 저장소 스냅샷 커밋/푸시
 allowed-tools: Bash(sh:*)
 ---
 
-plans 저장소의 현재 상태를 스냅샷 커밋/푸시합니다(세션종료 훅이 미발동했을 때 수동 트리거).
+plans·worklog 저장소의 현재 상태를 스냅샷 커밋/푸시합니다(세션종료 훅이 미발동했을 때 수동 트리거).
 
 !`sh ~/.claude/hooks/save-docs.sh`
 
