@@ -67,21 +67,33 @@ push_repo() {
     dir=$1
     name=$2
 
-    # push는 실패해도 무시(오프라인/non-fast-forward). 세션 종료가 매달리지 않게 15초 후 kill.
-    # macOS 기본 환경에는 timeout(1)이 없어 백그라운드 + kill 패턴을 쓴다.
-    git -C "$dir" push >/dev/null 2>&1 &
-    push_pid=$!
-    ( sleep 15; kill "$push_pid" 2>/dev/null ) >/dev/null 2>&1 &
-    killer_pid=$!
+    # 다른 기기가 먼저 푸시했으면 push가 거부되므로 원격 커밋 위로 rebase한다.
+    # rebase가 충돌하면 되돌리고 로컬 커밋만 남긴다(push는 이어서 거부된다).
+    if run_limited git -C "$dir" fetch; then
+        git -C "$dir" rebase '@{u}' >/dev/null 2>&1 || git -C "$dir" rebase --abort >/dev/null 2>&1
+    fi
 
-    if wait "$push_pid" 2>/dev/null; then
+    # push는 실패해도 무시(오프라인/non-fast-forward).
+    if run_limited git -C "$dir" push; then
         echo "$name: push 완료"
     else
         echo "$name: push 실패/시간초과(오프라인·충돌) — 로컬 커밋만, 다음에 수동 pull/push"
     fi
-
-    kill "$killer_pid" 2>/dev/null
     return 0
+}
+
+# 네트워크 명령이 세션 종료를 매달지 않게 15초 후 kill한다. 인자로 받은 명령의 성공 여부를 돌려준다.
+# macOS 기본 환경에는 timeout(1)이 없어 백그라운드 + kill 패턴을 쓴다.
+run_limited() {
+    "$@" >/dev/null 2>&1 &
+    cmd_pid=$!
+    ( sleep 15; kill "$cmd_pid" 2>/dev/null ) >/dev/null 2>&1 &
+    killer_pid=$!
+
+    wait "$cmd_pid" 2>/dev/null
+    status=$?
+    kill "$killer_pid" 2>/dev/null
+    return $status
 }
 
 # 여러 세션이 한꺼번에 끝나면 이 스크립트가 같은 저장소에서 겹쳐 돌아 index.lock 충돌이 나므로,
