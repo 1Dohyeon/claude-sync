@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, Timer } from 'claude-code'
 
 import type { AgentCard } from '../types'
-import { applyStep, cardLines, expandHome, finishCard, markAsk, newCard, recordOf, recordPath, settleCall } from './view'
+import { applyStep, cardLines, expandHome, finishCard, markAsk, newCard, recordOf, recordPath, settleCall, shouldAutoOpen } from './view'
 
 const PANE = 'subagents-status'
 const cards = atom({ plugin: 'subagents-status', key: 'cards' } as const, [])
@@ -10,6 +10,7 @@ const cards = atom({ plugin: 'subagents-status', key: 'cards' } as const, [])
 const getCards = async ($: EngineInterface): Promise<AgentCard[]> => (await read($, cards)) ?? []
 
 const openPane = ($: EngineInterface) => $.ui.open({ id: PANE, title: 'Subagents', columns: 48 })
+const isPanePlaced = async ($: EngineInterface) => (await $.ui.panes()).some(p => p.id === PANE && p.isPlaced)
 
 // 실행 중인 카드가 있는 동안만 1초마다 다시 그려 경과 시간이 흐르게 한다.
 let ticker: Timer | null = null
@@ -46,6 +47,23 @@ export const register: Register = (on, options) => {
   // tool.check의 agentId는 v2.1.290부터라, 그보다 먼저 도는 tool.call에서 호출 id로 서브에이전트를 기억해 둔다.
   const callAgent = new Map<string, string>()
   const asked = new Set<string>()
+  // 사용자가 닫은 패널은 새 서브에이전트가 시작될 때까지 다시 자동으로 열지 않는다.
+  let isDismissed = false
+
+  // 사용자의 프롬프트에서 연 패널은 사용자가 연 것으로 쳐서 폭과 상관없이 배치된다(110칸부터 옆, 그 아래는 프롬프트 위).
+  on('prompt.submit', async ($, e, next) => {
+    try {
+      if (shouldAutoOpen({ isPlaced: await isPanePlaced($), isDismissed })) await openPane($)
+    } catch {
+      // 패널을 못 열어도 프롬프트는 그대로 보낸다
+    }
+    return next(e)
+  })
+
+  on('ui.close', async ($, e, next) => {
+    if (e.id === PANE && e.origin.kind === 'person') isDismissed = true
+    return next(e)
+  })
 
   // 승인 대기와 거부는 호출이 끝나야 정해지므로, 서브에이전트 호출을 감싸 결과를 카드에 반영한다.
   on('tool.call', async ($, e, next) => {
@@ -88,10 +106,12 @@ export const register: Register = (on, options) => {
   })
 
   on('command.run', { command: PANE }, async $ => {
-    if ((await $.ui.panes()).some(p => p.id === PANE)) {
+    if (await isPanePlaced($)) {
       await $.ui.close({ id: PANE })
+      isDismissed = true
       return { text: '서브에이전트 패널을 닫았습니다.' }
     }
+    isDismissed = false
     const opened = await openPane($)
     return { text: opened.isPlaced ? '서브에이전트 패널을 열었습니다.' : `패널을 아직 그리지 못했습니다: ${opened.reason}` }
   })
@@ -107,7 +127,8 @@ export const register: Register = (on, options) => {
         const prev = list ?? []
         return [...prev, newCard({ id, index: prev.length + 1, type: e.name ?? e.subagentType, model: started.model, description: e.description, at })]
       })
-      // 이미 열려 있으면 그대로이고, 좁은 터미널에서는 배치를 기다린다.
+      // 이미 열려 있으면 그대로이고, 좁은 터미널에서는 배치를 기다리다 다음 프롬프트에서 다시 연다.
+      isDismissed = false
       await openPane($).catch(() => undefined)
       await syncTicker($)
       $.ui.invalidate('ui.render')

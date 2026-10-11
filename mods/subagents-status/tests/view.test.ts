@@ -10,6 +10,7 @@ import {
   newCard,
   prettyModel,
   settleCall,
+  shouldAutoOpen,
   recordOf,
   recordPath,
 } from '../hooks/view'
@@ -81,6 +82,12 @@ describe('subagents-status view', () => {
     expect(cardLines(used, 2_000)[2]).toBe('ctx 12k · out 1k · 2 st')
     expect(cardLines({ ...used, denied: 1 }, 2_000)[2]).toBe('ctx 12k · out 1k · 2 st · 거부 1')
     expect(cardLines({ ...SPAWNED, denied: 1 }, 2_000)[2]).toBe('starting… · 거부 1')
+  })
+
+  test('폭과 상관없이, 그려져 있지 않고 사용자가 닫지 않았을 때만 자동으로 연다', async () => {
+    expect(shouldAutoOpen({ isPlaced: false, isDismissed: false })).toBe(true)
+    expect(shouldAutoOpen({ isPlaced: true, isDismissed: false })).toBe(false)
+    expect(shouldAutoOpen({ isPlaced: false, isDismissed: true })).toBe(false)
   })
 
   test('설명이 없으면 제목에 종류를 쓴다', async () => {

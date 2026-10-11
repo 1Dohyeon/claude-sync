@@ -70,6 +70,9 @@ export const cardLines = (c: AgentCard, now: number): string[] => {
   ]
 }
 
+// 열렸지만 좁아서 그려지지 않고 기다리는 패널도 다시 열어야 보이므로, 열림이 아니라 그려짐으로 판정한다.
+export const shouldAutoOpen = (x: { isPlaced: boolean; isDismissed: boolean }): boolean => !x.isPlaced && !x.isDismissed
+
 // fs는 ~를 상대 경로로 읽으므로 설정값의 ~는 여기서 홈 디렉터리로 바꾼다.
 export const expandHome = (dir: string, home: string): string => (/^~(?=$|[\\/])/.test(dir) ? home + dir.slice(1) : dir)
 
