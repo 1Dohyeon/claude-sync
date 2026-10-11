@@ -16,6 +16,10 @@ export type AgentCard = {
   out: number
   steps: number
   lastStop: string | null
+  /** 권한 승인을 물었고 아직 결정되지 않은 도구 호출 수 */
+  waiting: number
+  /** 거부된 도구 호출 수 */
+  denied: number
 }
 
 /** 끝난 서브에이전트 하나, 세션 기록 파일의 한 줄 */

@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, Timer } from 'claude-code'
 
 import type { AgentCard } from '../types'
-import { applyStep, cardLines, expandHome, finishCard, newCard, recordOf, recordPath } from './view'
+import { applyStep, cardLines, expandHome, finishCard, markAsk, newCard, recordOf, recordPath, settleCall } from './view'
 
 const PANE = 'subagents-status'
 const cards = atom({ plugin: 'subagents-status', key: 'cards' } as const, [])
@@ -36,8 +36,43 @@ const recordCard = async ($: EngineInterface, recordDir: string, card: AgentCard
   }
 }
 
+const updateCard = async ($: EngineInterface, id: string, fn: (c: AgentCard) => AgentCard) => {
+  await update($, cards, list => (list ?? []).map(c => (c.id === id ? fn(c) : c)))
+  $.ui.invalidate('ui.render')
+}
+
 export const register: Register = (on, options) => {
   const recordDir = typeof options.recordDir === 'string' ? options.recordDir : ''
+  // tool.check의 agentId는 v2.1.290부터라, 그보다 먼저 도는 tool.call에서 호출 id로 서브에이전트를 기억해 둔다.
+  const callAgent = new Map<string, string>()
+  const asked = new Set<string>()
+
+  // 승인 대기와 거부는 호출이 끝나야 정해지므로, 서브에이전트 호출을 감싸 결과를 카드에 반영한다.
+  on('tool.call', async ($, e, next) => {
+    const id = e.agentId
+    if (!id) return next(e)
+    callAgent.set(e.tool_use_id, id)
+    let isDenied = false
+    try {
+      const ran = await next(e)
+      isDenied = ran.deny !== undefined
+      return ran
+    } finally {
+      const wasAsked = asked.delete(e.tool_use_id)
+      callAgent.delete(e.tool_use_id)
+      if (wasAsked || isDenied) await updateCard($, id, c => settleCall(c, { wasAsked, isDenied })).catch(() => undefined)
+    }
+  })
+
+  on('tool.check', async ($, e, next) => {
+    const verdict = await next(e)
+    const id = e.agentId ?? (e.tool_use_id ? callAgent.get(e.tool_use_id) : undefined)
+    if (id && e.tool_use_id && verdict.decision === 'ask') {
+      asked.add(e.tool_use_id)
+      await updateCard($, id, markAsk).catch(() => undefined)
+    }
+    return verdict
+  })
 
   on('session.start', async ($, e, next) => {
     await $.command.register({ name: PANE, description: '서브에이전트 카드 패널을 열거나 닫는다' })
@@ -120,7 +155,16 @@ export const register: Register = (on, options) => {
       <Box flexDirection="column" width={width}>
         {list.map(c => {
           const [title, kind, usage, state] = cardLines(c, now)
-          const color = c.status === 'failed' ? 'error' : c.status === 'done' ? 'success' : c.status === 'stopped' ? 'inactive' : 'suggestion'
+          const color =
+            c.status === 'failed'
+              ? 'error'
+              : c.status === 'done'
+                ? 'success'
+                : c.status === 'stopped'
+                  ? 'inactive'
+                  : (c.waiting ?? 0) > 0
+                    ? 'warning'
+                    : 'suggestion'
           return (
             <Box
               key={`card-${c.id}`}

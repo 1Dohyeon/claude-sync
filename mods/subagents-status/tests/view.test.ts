@@ -6,8 +6,10 @@ import {
   expandHome,
   finishCard,
   formatTokens,
+  markAsk,
   newCard,
   prettyModel,
+  settleCall,
   recordOf,
   recordPath,
 } from '../hooks/view'
@@ -16,7 +18,7 @@ const SPAWNED = newCard({ id: 'ag1', index: 1, type: 'general-purpose', model: '
 
 describe('subagents-status view', () => {
   test('새 카드는 실행 중이고 토큰과 단계가 0이다', async () => {
-    expect([SPAWNED.status, SPAWNED.ctx, SPAWNED.out, SPAWNED.steps, SPAWNED.endedAt]).toEqual(['running', 0, 0, 0, null])
+    expect([SPAWNED.status, SPAWNED.ctx, SPAWNED.out, SPAWNED.steps, SPAWNED.endedAt, SPAWNED.waiting, SPAWNED.denied]).toEqual(['running', 0, 0, 0, null, 0, 0])
   })
 
   test('ctx는 마지막 요청의 입력 전체이고 out은 쌓인다', async () => {
@@ -57,6 +59,28 @@ describe('subagents-status view', () => {
     const lines = cardLines(SPAWNED, 66_000)
     expect(lines[2]).toBe('starting…')
     expect(lines[3]).toBe('◐ running 1:05')
+  })
+
+  test('승인을 물은 호출은 끝날 때 대기에서 빠지고, 거부된 호출은 거부 수에 더한다', async () => {
+    let c = markAsk(markAsk(SPAWNED))
+    expect([c.waiting, c.denied]).toEqual([2, 0])
+    c = settleCall(c, { wasAsked: true, isDenied: false })
+    c = settleCall(c, { wasAsked: true, isDenied: true })
+    c = settleCall(c, { wasAsked: false, isDenied: true })
+    expect([c.waiting, c.denied]).toEqual([0, 2])
+    expect(settleCall(SPAWNED, { wasAsked: true, isDenied: false }).waiting).toBe(0)
+  })
+
+  test('실행 중에 승인을 기다리면 상태 줄을 승인 대기로 바꾼다', async () => {
+    expect(cardLines(markAsk(SPAWNED), 66_000)[3]).toBe('⏸ 승인 대기 1:05')
+    expect(cardLines(finishCard(markAsk(SPAWNED), 'aborted', 5_000), 66_000)[3]).toBe('■ stopped 0:04')
+  })
+
+  test('거부가 있을 때만 셋째 줄 끝에 거부 수를 붙인다', async () => {
+    const used = { ...SPAWNED, ctx: 12_000, out: 1_000, steps: 2 }
+    expect(cardLines(used, 2_000)[2]).toBe('ctx 12k · out 1k · 2 st')
+    expect(cardLines({ ...used, denied: 1 }, 2_000)[2]).toBe('ctx 12k · out 1k · 2 st · 거부 1')
+    expect(cardLines({ ...SPAWNED, denied: 1 }, 2_000)[2]).toBe('starting… · 거부 1')
   })
 
   test('설명이 없으면 제목에 종류를 쓴다', async () => {
