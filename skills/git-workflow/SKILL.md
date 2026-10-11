@@ -194,7 +194,7 @@ rm -rf <dir>
 git -C <main-dir> worktree prune
 ```
 
-오류에 `Filename too long`이 있으면 경로가 긴 파일(`node_modules` 등) 때문에 폴더를 다 지우지 못한 것이다. git은 이때 이미 `.git` 파일과 등록 정보를 지웠을 수 있다. **다른 우회(`core.longpaths`, `\\?\` 경로, robocopy, 다른 삭제 명령 등)를 시도하지 않는다.** 아래 두 명령으로 연결만 끊고 다음 단계로 간다. 남은 폴더와 빈 부모 폴더는 지우지 않고, 남은 폴더 경로를 보고에 적는다.
+오류에 `Filename too long`이 있으면 경로가 긴 파일(`node_modules` 등) 때문에 폴더를 다 지우지 못한 것이다. git은 이때 이미 `.git` 파일과 등록 정보를 지웠을 수 있다. 아래 순서로 연결을 끊은 뒤 남은 폴더를 Git Bash의 `rm -rf`로 지운다. Git Bash의 `rm`은 긴 경로도 지운다. **허용하는 삭제 방법은 이 `rm -rf` 한 번뿐이다. 그 밖의 우회는 하지 않는다.**
 
 ```sh
 rm -f <dir>/.git
@@ -203,6 +203,18 @@ rm -f <dir>/.git
 ```sh
 git -C <main-dir> worktree prune
 ```
+
+```sh
+rm -rf <dir>
+```
+
+```sh
+ls -A <dir>
+```
+
+`ls`가 `No such file or directory`로 끝나야 다 지운 것이다. `rm -rf`가 실패하거나 폴더가 남으면 **다른 우회(`core.longpaths`, `\\?\` 경로, robocopy, 다른 삭제 명령 등)를 시도하지 않는다.** 오류 원문과 남은 폴더 경로를 보고에 적고 다음 단계로 간다. 빈 부모 폴더(`fix/`, `feature/` 등)는 다음 worktree가 다시 쓰므로 지우지 않는다.
+
+이 `rm -rf`는 1단계에서 로컬에만 있는 것이 없다고 확인한 폴더에만 쓴다. 1단계를 건너뛰었으면 쓰지 않는다.
 
 ### 3. 로컬 브랜치 삭제
 
