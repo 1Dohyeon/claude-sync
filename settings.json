@@ -49,6 +49,9 @@
     "ask": ["Bash(gh pr merge:*)", "Bash(git merge:*)"],
     "deny": ["Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)"]
   },
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/context-band"
+  },
   "attribution": {
     "commit": "",
     "pr": "",

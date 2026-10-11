@@ -8,11 +8,13 @@ Claude가 읽고 그대로 실행하는 세팅 절차. 사용자가 저장소 �
 
 ## 연결 대상
 
-| `~/.claude/`                                                                    | 대상                                           |
-| ------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `agents/` `commands/` `hooks/` `output-styles/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리                         |
-| `CLAUDE.md` `settings.json`                                                     | 저장소의 동명 파일                             |
-| `CLAUDE.local.md` `settings.local.json`                                         | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
+| `~/.claude/`                                                                            | 대상                                           |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `agents/` `commands/` `hooks/` `mods/` `output-styles/` `rules/` `skills/` `templates/` | 저장소의 동명 디렉터리                         |
+| `CLAUDE.md` `settings.json`                                                             | 저장소의 동명 파일                             |
+| `CLAUDE.local.md` `settings.local.json`                                                 | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
+
+`mods/`는 심링크만으로는 로드되지 않는다. `settings.json`의 `env.CLAUDE_CODE_PLUGIN_DIRS`가 `~/.claude/mods/<이름>`을 가리켜야 새 세션에서 로드된다.
 
 건드리지 않음: `sessions/` `projects/` `plugins/` `history.jsonl` `.credentials.json`
 
@@ -139,12 +141,13 @@ stat "$HOME/.claude/_symlink_test"
 rm -f "$HOME/.claude/_symlink_test"
 ```
 
-통과하면 개별 명령 11개 실행:
+통과하면 개별 명령 12개 실행:
 
 ```sh
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/commands" "$HOME/.claude/commands"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/hooks" "$HOME/.claude/hooks"
+MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/mods" "$HOME/.claude/mods"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/output-styles" "$HOME/.claude/output-styles"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/rules" "$HOME/.claude/rules"
 MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/skills" "$HOME/.claude/skills"
@@ -161,6 +164,7 @@ MSYS=winsymlinks:nativestrict ln -sfn "$SYNC/settings.local.json" "$HOME/.claude
 ln -sfn "$SYNC/agents" "$HOME/.claude/agents"
 ln -sfn "$SYNC/commands" "$HOME/.claude/commands"
 ln -sfn "$SYNC/hooks" "$HOME/.claude/hooks"
+ln -sfn "$SYNC/mods" "$HOME/.claude/mods"
 ln -sfn "$SYNC/output-styles" "$HOME/.claude/output-styles"
 ln -sfn "$SYNC/rules" "$HOME/.claude/rules"
 ln -sfn "$SYNC/skills" "$HOME/.claude/skills"
@@ -177,7 +181,7 @@ ln -sfn "$SYNC/settings.local.json" "$HOME/.claude/settings.local.json"
 ls -l "$HOME/.claude"
 ```
 
-「연결 대상」의 11개 항목이 모두 `->` 화살표로 보여야 한다. 2단계에서 건너뛰기로 한 항목이 있으면 그 개수만큼 빠진다. `backups/` `cache/` `sessions/` 같은 런타임 항목이 함께 찍히는 것은 정상이며, 세는 대상이 아니다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
+「연결 대상」의 12개 항목이 모두 `->` 화살표로 보여야 한다. 2단계에서 건너뛰기로 한 항목이 있으면 그 개수만큼 빠진다. `backups/` `cache/` `sessions/` 같은 런타임 항목이 함께 찍히는 것은 정상이며, 세는 대상이 아니다. Windows에서 화살표 없이 일반 파일/디렉터리면 4단계 권한 확인부터 재실행.
 
 ```sh
 find "$HOME/.claude" -maxdepth 1 -type l -exec test ! -e {} \; -print
