@@ -56,6 +56,21 @@ test('시작한 순서대로 카드를 쌓고, 끝난 카드는 done으로 바�
   }
 })
 
+test('[-]를 누르면 카드를 접어 요약 한 줄만 남기고, [+]를 누르면 다시 편다', OFF, async ($, on) => {
+  engine(on)
+  await $.agent.spawn(spawn('Explore', 'look around'))
+  const ui = await $.ui.mount({ ...pane, surface: 'terminal' })
+  expect(await ui.find({ text: '1: look around' })).toBeDefined()
+
+  await ui.press({ key: 'toggle' })
+  expect(await ui.find({ text: '1: look around' })).toBeUndefined()
+  expect(await ui.find({ text: '◐ 1' })).toBeDefined()
+
+  await ui.press({ key: 'toggle' })
+  expect(await ui.find({ text: '1: look around' })).toBeDefined()
+  await ui.unmount()
+})
+
 test('/clear 하면 카드를 비운다', OFF, async ($, on) => {
   engine(on)
   on('session.end', (_$, e) => ({ sessionId: e.sessionId }))

@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, Timer } from 'claude-code'
 
 import type { AgentCard } from '../types'
-import { applyStep, cardLines, expandHome, finishCard, markAsk, newCard, recordOf, recordPath, settleCall, shouldAutoOpen } from './view'
+import { applyStep, cardLines, expandHome, finishCard, markAsk, newCard, recordOf, recordPath, settleCall, shouldAutoOpen, summaryLine } from './view'
 
 const PANE = 'subagents-status'
 const cards = atom({ plugin: 'subagents-status', key: 'cards' } as const, [])
@@ -49,6 +49,8 @@ export const register: Register = (on, options) => {
   const asked = new Set<string>()
   // 사용자가 닫은 패널은 새 서브에이전트가 시작될 때까지 다시 자동으로 열지 않는다.
   let isDismissed = false
+  // 엔진의 패널에는 접기가 없어, 맨 윗줄의 [-]/[+] 버튼으로 카드를 접고 편다.
+  let isCollapsed = false
 
   // 사용자의 프롬프트에서 연 패널은 사용자가 연 것으로 쳐서 폭과 상관없이 배치된다(110칸부터 옆, 그 아래는 프롬프트 위).
   on('prompt.submit', async ($, e, next) => {
@@ -162,19 +164,20 @@ export const register: Register = (on, options) => {
   })
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
-    const { Box, Text } = $.ui.resolve(e)
+    const { Box, Button, Text } = $.ui.resolve(e)
     const [list, now] = await Promise.all([getCards($), $.clock.now()])
     const width = Math.max(24, e.props.bodyColumns)
-    if (list.length === 0) {
-      return (
-        <Box flexDirection="column" width={width}>
-          <Text dimColor>서브에이전트 없음</Text>
-        </Box>
-      )
+    const toggle = () => {
+      isCollapsed = !isCollapsed
+      $.ui.invalidate('ui.render')
     }
     return (
       <Box flexDirection="column" width={width}>
-        {list.map(c => {
+        <Box key="summary">
+          <Button key="toggle" label={isCollapsed ? '[+]' : '[-]'} plain onPress={toggle} />
+          <Text dimColor> {summaryLine(list)}</Text>
+        </Box>
+        {!isCollapsed && list.map(c => {
           const [title, kind, usage, state] = cardLines(c, now)
           const color =
             c.status === 'failed'

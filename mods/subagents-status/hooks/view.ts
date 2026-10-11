@@ -70,6 +70,15 @@ export const cardLines = (c: AgentCard, now: number): string[] => {
   ]
 }
 
+export const summaryLine = (cards: AgentCard[]): string => {
+  if (cards.length === 0) return '서브에이전트 없음'
+  return (Object.keys(GLYPH) as AgentStatus[])
+    .map(s => [s, cards.filter(c => c.status === s).length] as const)
+    .filter(([, n]) => n > 0)
+    .map(([s, n]) => `${GLYPH[s]} ${n}`)
+    .join(' · ')
+}
+
 // 열렸지만 좁아서 그려지지 않고 기다리는 패널도 다시 열어야 보이므로, 열림이 아니라 그려짐으로 판정한다.
 export const shouldAutoOpen = (x: { isPlaced: boolean; isDismissed: boolean }): boolean => !x.isPlaced && !x.isDismissed
 

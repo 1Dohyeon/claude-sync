@@ -11,6 +11,7 @@ import {
   prettyModel,
   settleCall,
   shouldAutoOpen,
+  summaryLine,
   recordOf,
   recordPath,
 } from '../hooks/view'
@@ -88,6 +89,13 @@ describe('subagents-status view', () => {
     expect(shouldAutoOpen({ isPlaced: false, isDismissed: false })).toBe(true)
     expect(shouldAutoOpen({ isPlaced: true, isDismissed: false })).toBe(false)
     expect(shouldAutoOpen({ isPlaced: false, isDismissed: true })).toBe(false)
+  })
+
+  test('접었을 때의 요약은 상태별 개수를 있는 것만 쓰고, 카드가 없으면 없다고 쓴다', async () => {
+    const done = finishCard(SPAWNED, 'answer', 5_000)
+    expect(summaryLine([SPAWNED, SPAWNED, done])).toBe('◐ 2 · ✓ 1')
+    expect(summaryLine([finishCard(SPAWNED, 'error', 5_000)])).toBe('✗ 1')
+    expect(summaryLine([])).toBe('서브에이전트 없음')
   })
 
   test('설명이 없으면 제목에 종류를 쓴다', async () => {
