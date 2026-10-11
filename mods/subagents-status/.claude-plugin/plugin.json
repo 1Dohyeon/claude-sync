@@ -1,0 +1,14 @@
+{
+  "name": "subagents-status",
+  "version": "0.1.0",
+  "description": "서브에이전트마다 카드를 쌓아 실행 상태·모델·토큰·소요 시간을 보여주고, 끝난 서브에이전트를 세션별 JSONL로 기록한다 (scasella/claude-flightdeck 참고)",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "recordDir": {
+      "title": "Record directory",
+      "description": "끝난 서브에이전트를 <dir>/<YYYY>/<MM>/<세션 id>.jsonl에 한 줄씩 남긴다. 맨 앞의 ~는 홈 디렉터리. 비우면 기록하지 않는다",
+      "type": "string",
+      "default": "~/worklog/agents"
+    }
+  }
+}

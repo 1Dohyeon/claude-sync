@@ -50,7 +50,7 @@
     "deny": ["Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)"]
   },
   "env": {
-    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/context-band"
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/context-band;~/.claude/mods/subagents-status"
   },
   "attribution": {
     "commit": "",
