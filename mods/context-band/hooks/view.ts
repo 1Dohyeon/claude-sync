@@ -37,6 +37,12 @@ export const formatTokens = (n: number): string => {
   return `${trim(n / 1_000_000)}m`
 }
 
+// 2k 이하 분류는 막대에서 거의 보이지 않아 색으로 구분되지 않으므로 범례에서도 뺀다.
+export const LEGEND_MIN_TOKENS = 2_000
+
+export const legendRows = (rows: ContextRow[]): ContextRow[] =>
+  rows.filter(r => r.tokens > LEGEND_MIN_TOKENS)
+
 export type Segment = { color: string; width: number }
 
 // 누적 경계를 반올림해 나누므로 칸 수의 합이 항상 width와 같다. 0칸인 분류는 막대에서 빠진다.

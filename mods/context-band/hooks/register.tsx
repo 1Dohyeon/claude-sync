@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import { formatTokens, headerOf, labelOf, layoutBar, toSnapshot } from './view'
+import { formatTokens, headerOf, labelOf, layoutBar, legendRows, toSnapshot } from './view'
 
 const snapshot = atom({ plugin: 'context-band', key: 'snapshot' } as const, null)
 
@@ -79,7 +79,7 @@ export const register: Register = on => {
         </Text>
         {bar}
         <Box key="legend" flexWrap="wrap">
-          {snap.rows.map(r => (
+          {legendRows(snap.rows).map(r => (
             <Box key={`legend-${r.name}`} marginRight={2}>
               <Text color={r.color}>■ </Text>
               <Text dimColor>

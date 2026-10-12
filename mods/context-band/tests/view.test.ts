@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { formatTokens, headerOf, labelOf, layoutBar } from '../hooks/view'
+import { formatTokens, headerOf, labelOf, layoutBar, legendRows } from '../hooks/view'
 import type { ContextSnapshot } from '../types'
 
 // /context 출력(122k / 1m)을 본뜬 값
@@ -32,6 +32,15 @@ describe('context-band view', () => {
   test('알려진 분류는 한국어로, 모르는 분류는 원문으로', async () => {
     expect(labelOf('Messages')).toBe('대화')
     expect(labelOf('Something new')).toBe('Something new')
+  })
+
+  test('범례는 2k 이하 분류를 뺀다', async () => {
+    const rows = [
+      { name: 'MCP server instructions', tokens: 2_000, color: 'a', kind: 'used' as const },
+      { name: 'Custom agents', tokens: 1_100, color: 'b', kind: 'used' as const },
+      { name: 'Memory files', tokens: 6_200, color: 'c', kind: 'used' as const },
+    ]
+    expect(legendRows(rows).map(r => r.name)).toEqual(['Memory files'])
   })
 
   test('막대 칸 수의 합은 폭과 같다', async () => {
