@@ -14,7 +14,7 @@ Claude가 읽고 그대로 실행하는 세팅 절차. 사용자가 저장소 �
 | `CLAUDE.md` `settings.json`                                                             | 저장소의 동명 파일                             |
 | `CLAUDE.local.md` `settings.local.json`                                                 | 저장소의 동명 파일 (gitignore, 3단계에서 생성) |
 
-`mods/`는 심링크만으로는 로드되지 않는다. `settings.json`의 `env.CLAUDE_CODE_PLUGIN_DIRS`가 `~/.claude/mods/<이름>`을 가리켜야 새 세션에서 로드된다.
+`mods/`는 심링크만으로는 로드되지 않는다. `settings.json`의 `env.CLAUDE_CODE_PLUGIN_DIRS`가 부모 폴더 `~/.claude/mods`를 가리켜야 새 세션에서 로드된다.
 
 건드리지 않음: `sessions/` `projects/` `plugins/` `history.jsonl` `.credentials.json`
 
