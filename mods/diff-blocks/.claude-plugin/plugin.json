@@ -1,0 +1,5 @@
+{
+  "name": "diff-blocks",
+  "version": "0.1.0",
+  "description": "답변 안의 ```diff 블럭을 엔진의 diff 렌더러(줄 번호, 추가·삭제 색)로 그린다"
+}
