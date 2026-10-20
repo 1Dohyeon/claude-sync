@@ -77,19 +77,6 @@
           }
         ]
       }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "mcp__.*[Nn]otion.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/notion-readonly.sh\"",
-            "timeout": 10,
-            "statusMessage": "Notion read-only 검사"
-          }
-        ]
-      }
     ]
   },
   "outputStyle": "fluent-korean",
