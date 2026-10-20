@@ -77,6 +77,19 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*[Nn]otion.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/notion-no-mention.sh\"",
+            "timeout": 10,
+            "statusMessage": "Notion 멘션 검사"
+          }
+        ]
+      }
     ]
   },
   "outputStyle": "fluent-korean",
