@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import { formatTokens, headerOf, labelOf, layoutBar, legendRows, toSnapshot } from './view'
+import { cardSide, formatTokens, headerOf, labelOf, layoutBar, toSnapshot } from './view'
 
 const snapshot = atom({ plugin: 'context-band', key: 'snapshot' } as const, null)
 
@@ -45,6 +45,22 @@ export const register: Register = on => {
 
     const { Box, Text } = $.ui.resolve(e)
 
+    // 범례 대신, 조각에 마우스를 올리면 그 조각 위 헤더 줄에 분류 이름과 토큰 수를 띄운다.
+    // 카드에 key를 달면 카드 자신이 hover 범위가 되어 뜨지 않으므로 key는 조각 Box에만 둔다.
+    // Box 테두리는 위아래 줄까지 더해 band 밖으로 잘리므로, 좌우 세로선 글자로 테두리를 대신한다.
+    const card = (name: string) => {
+      const row = snap.rows.find(r => r.name === name)
+      if (!row) return null
+      const side = cardSide(snap.rows, name) === 'right' ? { right: 0 } : { left: 0 }
+      return (
+        <Box position="absolute" top={-1} {...side} display="none" hover={{ display: 'flex' }}>
+          <Text color={row.color}>▕■ </Text>
+          <Text>{`${labelOf(name)} ${formatTokens(row.tokens)}`}</Text>
+          <Text color={row.color}>▏</Text>
+        </Box>
+      )
+    }
+
     // 터미널은 글자 한 개가 한 칸이라 █를 칸 수만큼 잇는다.
     // Desktop은 글꼴 폭이 칸과 달라 글자 막대가 넘쳐 접히므로, 배경색 Box를 토큰 비율로 나눈다.
     // flexGrow는 10000 이하만, 퍼센트 폭은 소수점 없이만 받아서 만분율 정수로 넣는다.
@@ -52,10 +68,11 @@ export const register: Register = on => {
     const bar =
       e.surface === 'terminal' ? (
         <Box key="bar">
-          {layoutBar(snap.rows, Math.max(10, e.props.bodyColumns)).map((s, i) => (
-            <Text key={`bar-${i}`} color={s.color}>
-              {'█'.repeat(s.width)}
-            </Text>
+          {layoutBar(snap.rows, Math.max(10, e.props.bodyColumns)).map(s => (
+            <Box key={`bar-${s.name}`}>
+              <Text color={s.color}>{'█'.repeat(s.width)}</Text>
+              {card(s.name)}
+            </Box>
           ))}
         </Box>
       ) : (
@@ -67,7 +84,9 @@ export const register: Register = on => {
               width={0}
               height={1}
               backgroundColor={r.color}
-            />
+            >
+              {card(r.name)}
+            </Box>
           ))}
         </Box>
       )
@@ -78,16 +97,6 @@ export const register: Register = on => {
           <Text bold>컨텍스트</Text> <Text dimColor>{headerOf(snap)}</Text>
         </Text>
         {bar}
-        <Box key="legend" flexWrap="wrap">
-          {legendRows(snap.rows).map(r => (
-            <Box key={`legend-${r.name}`} marginRight={2}>
-              <Text color={r.color}>■ </Text>
-              <Text dimColor>
-                {labelOf(r.name)} {formatTokens(r.tokens)}
-              </Text>
-            </Box>
-          ))}
-        </Box>
       </Box>
     )
   })

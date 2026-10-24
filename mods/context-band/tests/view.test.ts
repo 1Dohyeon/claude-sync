@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'claude-code/testing'
 
-import { formatTokens, headerOf, labelOf, layoutBar, legendRows } from '../hooks/view'
+import { cardSide, formatTokens, headerOf, labelOf, layoutBar } from '../hooks/view'
 import type { ContextSnapshot } from '../types'
 
 // /context 출력(122k / 1m)을 본뜬 값
@@ -34,13 +34,8 @@ describe('context-band view', () => {
     expect(labelOf('Something new')).toBe('Something new')
   })
 
-  test('범례는 2k 이하 분류를 뺀다', async () => {
-    const rows = [
-      { name: 'MCP server instructions', tokens: 2_000, color: 'a', kind: 'used' as const },
-      { name: 'Custom agents', tokens: 1_100, color: 'b', kind: 'used' as const },
-      { name: 'Memory files', tokens: 6_200, color: 'c', kind: 'used' as const },
-    ]
-    expect(legendRows(rows).map(r => r.name)).toEqual(['Memory files'])
+  test('가운데가 막대 절반을 넘는 분류만 카드를 오른쪽에 붙인다', async () => {
+    expect(SNAP.rows.map(r => cardSide(SNAP.rows, r.name))).toEqual(['left', 'left', 'right', 'right'])
   })
 
   test('막대 칸 수의 합은 폭과 같다', async () => {
@@ -48,5 +43,9 @@ describe('context-band view', () => {
       const total = layoutBar(SNAP.rows, width).reduce((acc, s) => acc + s.width, 0)
       expect(total).toBe(width)
     }
+  })
+
+  test('막대 조각은 분류 이름을 함께 가진다', async () => {
+    expect(layoutBar(SNAP.rows, 1000).map(s => s.name)).toEqual(SNAP.rows.map(r => r.name))
   })
 })

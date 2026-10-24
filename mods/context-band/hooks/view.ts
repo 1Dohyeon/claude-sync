@@ -37,13 +37,7 @@ export const formatTokens = (n: number): string => {
   return `${trim(n / 1_000_000)}m`
 }
 
-// 2k 이하 분류는 막대에서 거의 보이지 않아 색으로 구분되지 않으므로 범례에서도 뺀다.
-export const LEGEND_MIN_TOKENS = 2_000
-
-export const legendRows = (rows: ContextRow[]): ContextRow[] =>
-  rows.filter(r => r.tokens > LEGEND_MIN_TOKENS)
-
-export type Segment = { color: string; width: number }
+export type Segment = { name: string; color: string; width: number }
 
 // 누적 경계를 반올림해 나누므로 칸 수의 합이 항상 width와 같다. 0칸인 분류는 막대에서 빠진다.
 export const layoutBar = (rows: ContextRow[], width: number): Segment[] => {
@@ -55,12 +49,23 @@ export const layoutBar = (rows: ContextRow[], width: number): Segment[] => {
     const start = Math.round((cum / sum) * width)
     cum += r.tokens
     const end = Math.round((cum / sum) * width)
-    return { color: r.color, width: end - start }
+    return { name: r.name, color: r.color, width: end - start }
   })
   return segments.filter(s => s.width > 0)
 }
 
-export const headerOf = (s: ContextSnapshot): string => {
+// band 밖은 잘리므로, 조각 가운데가 막대 절반을 넘으면 카드를 조각 오른쪽 끝에 맞춰 안쪽으로 펼친다.
+export const cardSide = (rows: ContextRow[], name: string): 'left' | 'right' => {
+  const sum = rows.reduce((acc, r) => acc + r.tokens, 0)
+  let cum = 0
+  for (const r of rows) {
+    if (r.name === name) return cum + r.tokens / 2 > sum / 2 ? 'right' : 'left'
+    cum += r.tokens
+  }
+  return 'left'
+}
+
+export const headerOf =(s: ContextSnapshot): string => {
   const free = s.rows.find(r => r.kind === 'free')
   const parts = [`${formatTokens(s.totalTokens)} / ${formatTokens(s.maxTokens)} (${s.percentage}%)`]
   if (free) parts.push(`남은 공간 ${formatTokens(free.tokens)}`)
