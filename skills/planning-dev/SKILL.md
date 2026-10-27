@@ -20,9 +20,11 @@ description: 개발 요청사항을 분석하고 설계할 때 사용한다("요
 
 만들기로 했으면 [`sub/plan-docs.md`](./sub/plan-docs.md)의 "세 문서"대로 `requirements.md`·`design.md`·`tasks.md`를 쓴다. 세 문서를 모두 쓴 뒤 한 번에 확인받고, 확인을 받기 전에는 구현으로 넘어가지 않는다.
 
+기획서나 시안만으로 답이 서지 않는 질문은 같은 문서의 "결정 기록" 판정으로 임의로 진행할지, 착수 전에 물을지를 가른다. 임의로 진행한 결정은 `adr.md`와 `adr.dev.md`에 남긴다.
+
 ## 4. 구현
 
-계획이 정해지면 [`development`](../development/SKILL.md)로 넘어간다. 태스크를 끝낼 때마다 `tasks.md`의 체크박스를 갱신한다.
+계획이 정해지면 [`development`](../development/SKILL.md)로 넘어간다. 태스크를 끝낼 때마다 `tasks.md`의 체크박스를 갱신한다. 구현 중 임의로 진행한 결정이 생기면 그 자리에서 `adr.md`·`adr.dev.md`에 항목을 더한다.
 
 - 구현 전에 반드시 계획 문서 경로의 `{branch}`대로 작업 브랜치를 만들자고 제안한다. `requirements.md`의 브랜치와 베이스를 보여 주고, 어떻게 만들지 `AskUserQuestion`으로 묻는다. 선택지는 새 worktree로 만들기와 메인 클론에서 브랜치 만들기이고, 만드는 절차는 [`git-workflow`](../git-workflow/SKILL.md)에 있다. 이미 그 브랜치에 있으면 제안만 하고 그대로 진행한다.
 - 브랜치를 만든 뒤로는 그 브랜치에서 계산한 `{branch}`가 문서 경로와 같다.

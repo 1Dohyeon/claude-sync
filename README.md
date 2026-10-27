@@ -96,7 +96,7 @@ flowchart TD
 2. **요청**: "○○ 요청사항 분석해줘"
 3. **분석**: [`/planning-dev`](skills/planning-dev/SKILL.md)가 목적, 유형, 규모, 할 일을 보고합니다. 깊은 분석은 요청하거나 계획 문서를 보강할 때만 합니다.
 4. **계획 문서**: 문서를 둘 위치를 묻고, `requirements.md`·`design.md`·`tasks.md`를 모두 쓴 뒤 한 번에 확인받습니다.
-5. **구현**: [`/development`](skills/development/SKILL.md)가 저장소 규칙을 우선하며 TDD로 작업하고, 작업 브랜치는 [`/git-workflow`](skills/git-workflow/SKILL.md)대로 만듭니다.
+5. **구현**: [`/development`](skills/development/SKILL.md)가 저장소 규칙을 우선하며 TDD로 작업하고, 작업 브랜치는 [`/git-workflow`](skills/git-workflow/SKILL.md)대로 만듭니다. 답이 서지 않는 점은 판정으로 임의 진행과 착수 전 질문을 가르고, 임의로 진행한 결정은 `adr.md`·`adr.dev.md`에 남깁니다.
 6. **검증**: 테스트, 린트, 실제 실행으로 확인하고 `tasks.md`를 갱신합니다.
 7. **리뷰**: 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 축 구성과 그렇게 나눈 이유는 [`skills/review-common/README.md`](skills/review-common/README.md)에 있습니다.
 8. **완료**: 사용자가 끝났다고 확인하면 `tasks.md`를 완료로 바꾸고, `$PLANS_PATH`에 둔 문서는 `done/`으로 옮깁니다.
