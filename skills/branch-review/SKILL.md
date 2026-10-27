@@ -8,6 +8,8 @@ description: PR을 올리기 전에 브랜치 전체를 최종 점검할 때 사
 
 ## 범위
 
+같은 세션의 2라운드부터는 아래 1~4를 다시 하지 않고 [`review-common/verify.md`의 "재리뷰"](../review-common/verify.md#재리뷰)가 정한 범위를 쓴다. 5는 그대로 한다.
+
 아래 순서로 잡는다.
 
 1. 베이스를 정한다. 이 브랜치 계획 문서의 `requirements.md`에 적힌 베이스를 쓰고, 없으면 [`git-workflow`](../git-workflow/SKILL.md)의 "베이스 브랜치 고르기"로 정한다. 계획 문서는 [`planning-dev`의 "계획 문서 찾기"](../planning-dev/SKILL.md#계획-문서-찾기) 순서로 찾는다. 원격 ref(`origin/<base>`)를 쓰고 로컬 브랜치는 쓰지 않는다. worktree로 작업하는 동안 로컬 브랜치는 갱신되지 않아 뒤처지기 쉽고, 그러면 갈라진 지점이 과거로 밀려 남의 커밋까지 대상에 들어온다.

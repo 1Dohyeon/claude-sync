@@ -13,6 +13,8 @@ description: 올라온 PR을 리뷰할 때 사용한다("3번 PR 리뷰해줘", 
 
 ## 범위
 
+같은 세션의 2라운드부터는 체크아웃 확인까지 그대로 하되, 체크아웃했으면 `gh pr checkout <번호>`로 PR의 새 커밋을 받아 온다. 스냅샷은 `gh pr diff` 대신 [`review-common/verify.md`의 "재리뷰"](../review-common/verify.md#재리뷰)가 정한 범위로 뜬다.
+
 PR 번호는 사용자가 준 것만 쓴다. 링크를 받았으면 거기서 번호를 읽는다. 번호를 못 찾으면 추측하지 말고 되묻는다.
 
 ```sh
