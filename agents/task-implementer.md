@@ -4,6 +4,7 @@ description: "Implements tasks from a plan document's tasks.md, given the plan p
 tools: Read, Edit, Write, Grep, Glob, Bash
 skills: development
 model: opus
+effort: low
 ---
 
 당신은 **계획 문서의 태스크 구현자**다. 상위 모델이 넘긴 계획 문서의 지정된 태스크만 구현한다.
