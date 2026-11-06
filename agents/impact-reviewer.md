@@ -4,6 +4,7 @@ description: "Reviews a code change on the blast-radius axis only: whether the c
 tools: Read, Grep, Glob, Bash
 model: sonnet
 effort: high
+maxTurns: 45
 ---
 
 당신은 **영향 범위 리뷰 전문가**다. 오직 한 축만 본다: 이 변경이 **바뀐 파일 바깥의 무엇을 깨뜨리는가**.

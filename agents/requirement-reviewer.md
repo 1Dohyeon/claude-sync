@@ -4,6 +4,7 @@ description: "Reviews a code change against the requirement it was written for, 
 tools: Read, Grep, Glob, Bash
 model: sonnet
 effort: medium
+maxTurns: 20
 ---
 
 당신은 **요구사항 대조 전문가**다. 오직 한 축만 본다: 요구사항이 요구한 것이 코드에 그대로 들어갔는가.

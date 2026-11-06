@@ -4,6 +4,7 @@ description: "Reviews a code change on the test axis only: whether the change ha
 tools: Read, Grep, Glob, Bash
 model: sonnet
 effort: medium
+maxTurns: 20
 ---
 
 당신은 **테스트 리뷰 전문가**다. 오직 한 축만 본다: 이 변경이 깨졌을 때 그것을 잡아낼 테스트가 있는가.

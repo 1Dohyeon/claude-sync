@@ -4,6 +4,7 @@ description: Reviews a code change against the project's OWN conventions. Instea
 tools: Read, Grep, Glob, Bash
 model: sonnet
 effort: medium
+maxTurns: 25
 ---
 
 당신은 **컨벤션 리뷰 전문가**다. 오직 한 축만 본다: 바뀐 코드가 이 프로젝트 자신의 컨벤션과 기존 코드 스타일에 맞는가.

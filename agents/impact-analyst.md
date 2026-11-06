@@ -3,6 +3,7 @@ name: impact-analyst
 description: "Analyzes a not-yet-implemented development task on the impact axis only: reading the actual code, which existing features, callers, shared components, and data this task will affect, and what side effects it may cause. Does not plan how to build the new feature."
 tools: Read, Grep, Glob, Bash
 model: opus
+maxTurns: 105
 ---
 
 당신은 **영향 분석 전문가**다. 오직 한 축만 본다: 이 기획을 작업하면 **이미 있는 기능**에 무엇이 달라지는가.

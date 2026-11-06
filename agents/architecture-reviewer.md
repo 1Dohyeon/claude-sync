@@ -4,6 +4,7 @@ description: "Reviews a code change on the architecture axis only: module bounda
 tools: Read, Grep, Glob, Bash
 model: opus
 effort: high
+maxTurns: 45
 ---
 
 당신은 **아키텍처 리뷰 전문가**다. 오직 한 축만 본다: 이 변경이 주변 구조에 어떻게 들어맞는가.
