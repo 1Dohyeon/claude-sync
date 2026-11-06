@@ -52,6 +52,9 @@
   "env": {
     "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods"
   },
+  "enabledPlugins": {
+    "subagents-status@inline": false
+  },
   "attribution": {
     "commit": "",
     "pr": "",
