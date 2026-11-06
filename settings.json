@@ -92,6 +92,44 @@
             "statusMessage": "Notion 멘션 검사"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(**/*.md)",
+            "command": "sh \"$HOME/.claude/hooks/md-no-em-dash.sh\"",
+            "timeout": 10,
+            "statusMessage": "엠대시 검사"
+          },
+          {
+            "type": "command",
+            "if": "Write(**/*.md)",
+            "command": "sh \"$HOME/.claude/hooks/md-no-em-dash.sh\"",
+            "timeout": 10,
+            "statusMessage": "엠대시 검사"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit *)",
+            "command": "sh \"$HOME/.claude/hooks/commit-no-ai-mark.sh\"",
+            "timeout": 10,
+            "statusMessage": "커밋 메시지 검사"
+          },
+          {
+            "type": "command",
+            "if": "Bash(git -C * commit *)",
+            "command": "sh \"$HOME/.claude/hooks/commit-no-ai-mark.sh\"",
+            "timeout": 10,
+            "statusMessage": "커밋 메시지 검사"
+          }
+        ]
       }
     ]
   },
