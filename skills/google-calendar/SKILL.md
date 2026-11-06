@@ -1,5 +1,6 @@
 ---
-description: Google Calendar 일정을 만들거나 수정할 때 사용한다("일정 추가해줘", "휴가 등록해줘"). 일정 유형별 색상 규칙을 담고 있으며, 새 일정에는 유형에 맞는 colorId를 지정한다.
+description: Google Calendar 일정을 만들거나 수정할 때 사용한다. 일정 유형별 색상 규칙을 담고 있으며, 새 일정에는 유형에 맞는 colorId를 지정한다.
+when_to_use: '예: "일정 추가해줘", "휴가 등록해줘"'
 ---
 
 # Google Calendar 일정 관리
