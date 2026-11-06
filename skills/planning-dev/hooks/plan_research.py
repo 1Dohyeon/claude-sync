@@ -2,11 +2,9 @@
 # 요구사항 요약과 비슷한 과거 계획을 찾아, 관련 부분을 원문 그대로 발췌해 낸다.
 # 해석하지 않는다. 무엇을 적용할지는 이 결과를 받은 쪽이 정한다.
 #
-#   python3 plan_research.py --repo <repo> --summary "<요약>"
-#       [--search-cmd "<검색 명령>" --read-cmd "<읽기 명령>"] [--model <모델 ID>]
+#   python3 plan_research.py --repo <repo> --summary "<요약>" [--model <모델 ID>]
 #
-# 외부 검색 명령이 있으면 먼저 쓰고, 쓸 수 없으면 같은 폴더의 tasksim.py로 대신한다.
-# 외부 검색 명령의 출력 형식은 모른다고 보고, 계획 식별자는 모델이 검색 결과에서 뽑는다.
+# 검색은 같은 폴더의 tasksim.py로 한다. 세션을 연 앱이 검색 기능을 주면 이 스크립트를 쓰지 않는다.
 # Messages API 키는 이 저장소 최상위 .env(git 제외)의 ANTHROPIC_API_KEY만 쓴다. 셸 환경변수는 보지 않는다.
 # ~/.claude/skills는 이 저장소로 가는 심링크라서, 경로는 이 파일의 실제 위치에서 구한다.
 #
@@ -15,7 +13,6 @@
 import argparse
 import json
 import re
-import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -111,12 +108,6 @@ def object_schema(properties):
 
 QUERIES_SCHEMA = object_schema({"queries": {"type": "array", "items": {"type": "string"}}})
 
-IDS_SCHEMA = object_schema({
-    "usable": {"type": "boolean"},
-    "reason": {"type": "string"},
-    "ids": {"type": "array", "items": {"type": "string"}},
-})
-
 QUOTE_SCHEMA = object_schema({
     "source": {"type": "string"},
     "heading": {"type": "string"},
@@ -141,47 +132,11 @@ def make_queries(model, summary):
     prompt = (
         "아래 작업 요약과 비슷한 과거 계획 문서를 찾으려 한다. 검색 질의를 3~5개 만들어라.\n"
         "- 한국어와 영어, 핵심 용어와 풀어 쓴 표현을 섞는다.\n"
-        "- 질의 하나는 2~4단어로 짧게 둔다. 키워드 검색은 질의를 통째로 부분 일치시키므로 길면 걸리지 않는다.\n\n"
+        "- 질의 하나는 2~4단어로 짧게 둔다.\n\n"
         f"작업 요약:\n{summary}"
     )
     queries = [q.strip() for q in model.ask(prompt, QUERIES_SCHEMA)["queries"] if q.strip()]
     return queries[:5]
-
-
-def search_external(model, search_cmd, read_cmd, queries):
-    """(후보 목록, 실패 이유)를 돌려준다. 실패 이유가 있으면 tasksim으로 넘어간다."""
-    outputs = []
-    failures = []
-    for query in queries:
-        ok, output = run(shlex.split(search_cmd) + [query])
-        if ok:
-            outputs.append(f"### 질의: {query}\n{output}")
-        else:
-            failures.append(output.splitlines()[0] if output else "출력 없음")
-    if not outputs:
-        return None, "외부 검색 실패: " + "; ".join(sorted(set(failures)))
-
-    joined = "\n\n".join(outputs)
-    prompt = (
-        "아래는 과거 계획 검색 명령의 출력이다. 출력 형식은 정해져 있지 않다.\n"
-        "- 출력이 계획 목록이거나 일치하는 계획이 없다는 결과이면 usable을 true로, "
-        "검색을 쓸 수 없다는 안내나 오류이면 false로 한다. reason에 판단 근거를 한 줄로 쓴다.\n"
-        f"- ids에는 계획 하나를 읽는 명령(`{read_cmd}`)에 넘길 식별자를 출력에 적힌 그대로 옮긴다. "
-        f"여러 질의에서 나온 계획을 앞에 두고 최대 {MAX_CANDIDATES}개까지 적는다. 출력에 없는 값을 만들지 않는다.\n\n"
-        f"{joined}"
-    )
-    answer = model.ask(prompt, IDS_SCHEMA)
-    if not answer["usable"]:
-        return None, f"외부 검색을 쓸 수 없음: {answer['reason']}"
-
-    candidates = []
-    for plan_id in answer["ids"]:
-        if plan_id not in joined or len(candidates) >= MAX_CANDIDATES:
-            continue
-        ok, text = run(shlex.split(read_cmd) + [plan_id])
-        if ok and text:
-            candidates.append({"id": plan_id, "text": text})
-    return candidates, None
 
 
 def search_tasksim(repo, queries):
@@ -256,12 +211,8 @@ def main():
     parser = argparse.ArgumentParser(description="과거 계획에서 관련 부분을 원문 그대로 발췌한다.")
     parser.add_argument("--repo", required=True)
     parser.add_argument("--summary", required=True)
-    parser.add_argument("--search-cmd")
-    parser.add_argument("--read-cmd")
     parser.add_argument("--model", default=DEFAULT_MODEL)
     args = parser.parse_args()
-    if bool(args.search_cmd) != bool(args.read_cmd):
-        parser.error("--search-cmd와 --read-cmd는 함께 넘긴다")
 
     try:
         import anthropic
@@ -277,21 +228,10 @@ def main():
     try:
         queries = make_queries(model, args.summary)
 
-        candidates, failure = None, "외부 검색 명령 없음"
-        route = "external"
-        if args.search_cmd:
-            candidates, failure = search_external(model, args.search_cmd, args.read_cmd, queries)
+        candidates, failure = search_tasksim(args.repo, queries)
         if candidates is None:
-            route = "tasksim"
-            reasons = [failure]
-            candidates, tasksim_failure = search_tasksim(args.repo, queries)
-            if candidates is None:
-                reasons.append(tasksim_failure)
-                print(render("검색 실패", "; ".join(reasons), queries, [], 0, 0, model))
-                return 0
-            reason = failure
-        else:
-            reason = "외부 검색 결과를 씀"
+            print(render("검색 실패", failure, queries, [], 0, 0, model))
+            return 0
 
         plans, checked, dropped = [], 0, 0
         if candidates:
@@ -312,7 +252,7 @@ def main():
         print(str(error), file=sys.stderr)
         return EXIT_API
 
-    print(render(route, reason, queries, plans, checked, dropped, model))
+    print(render("tasksim", "tasksim.py로 찾음", queries, plans, checked, dropped, model))
     return 0
 
 
