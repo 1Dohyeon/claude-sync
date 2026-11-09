@@ -27,9 +27,6 @@
       "Bash(git -C * add *)",
       "Bash(git -C * commit *)",
       "Bash(git -C * push *)",
-      "Bash(git -c * add *)",
-      "Bash(git -c * commit *)",
-      "Bash(git -c * push *)",
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(rg:*)",
@@ -146,13 +143,6 @@
             "type": "command",
             "command": "sh \"$HOME/.claude/hooks/commit-no-ai-mark.sh\"",
             "if": "Bash(git -C * commit *)",
-            "timeout": 10,
-            "statusMessage": "커밋 메시지 검사"
-          },
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/commit-no-ai-mark.sh\"",
-            "if": "Bash(git -c * commit *)",
             "timeout": 10,
             "statusMessage": "커밋 메시지 검사"
           }
