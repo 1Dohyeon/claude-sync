@@ -59,18 +59,20 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 
 그 외에 작업 종류가 갈리는 경우(개발이면 개발, 리서치면 리서치 등)에는 [`skills/`](skills/)를 활용하도록 `CLAUDE.md`에서 라우팅합니다.
 
-| 요청 유형                         | 호출되는 skill                                    |
-| --------------------------------- | ------------------------------------------------- |
-| 코드 작성·수정                    | [`/development`](skills/development/SKILL.md)     |
-| 요청사항 분석·설계                | [`/planning-dev`](skills/planning-dev/SKILL.md)   |
-| 커밋 전 변경 리뷰                 | [`/diff-review`](skills/diff-review/SKILL.md)     |
-| 브랜치 전체 리뷰(PR 전)           | [`/branch-review`](skills/branch-review/SKILL.md) |
-| PR 리뷰                           | [`/pr-review`](skills/pr-review/SKILL.md)         |
-| git 작업(worktree·commit·push 등) | [`/git-workflow`](skills/git-workflow/SKILL.md)   |
-| 조사·리서치·자료 종합             | [`/research`](skills/research/SKILL.md)           |
-| 논문·긴 기술 문서 정독            | [`/paper-reading`](skills/paper-reading/SKILL.md) |
-| 세션 작업 일기                    | [`/worklog`](skills/worklog/SKILL.md)             |
+| 요청 유형                         | 호출되는 skill                                            |
+| --------------------------------- | --------------------------------------------------------- |
+| 코드 작성·수정                    | [`/development`](skills/development/SKILL.md)             |
+| 요청사항 분석·설계                | [`/planning-dev`](skills/planning-dev/SKILL.md)           |
+| 커밋 전 변경 리뷰                 | [`/diff-review`](skills/diff-review/SKILL.md)             |
+| 브랜치 전체 리뷰(PR 전)           | [`/branch-review`](skills/branch-review/SKILL.md)         |
+| PR 리뷰                           | [`/pr-review`](skills/pr-review/SKILL.md)                 |
+| git 작업(worktree·commit·push 등) | [`/git-workflow`](skills/git-workflow/SKILL.md)           |
+| 조사·리서치·자료 종합             | [`/research`](skills/research/SKILL.md)                   |
+| 논문·긴 기술 문서 정독            | [`/paper-reading`](skills/paper-reading/SKILL.md)         |
+| 세션 작업 일기                    | [`/worklog`](skills/worklog/SKILL.md)                     |
 | Windows 디스크 용량 확인·정리     | [`/windows-disk-scan`](skills/windows-disk-scan/SKILL.md) |
+| Claude 세션 기록 정리             | [`/chore-sessions`](skills/chore-sessions/SKILL.md)       |
+| 작업 규칙 위반 기록               | [`/ffc`](skills/ffc/SKILL.md)                             |
 
 ## 세션 흐름
 
