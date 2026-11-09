@@ -65,7 +65,9 @@
     ],
     "ask": [
       "Bash(gh pr merge:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Edit(~/.claude/projects/*/memory/**)",
+      "Write(~/.claude/projects/*/memory/**)"
     ]
   },
   "hooks": {
