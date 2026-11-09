@@ -10,4 +10,7 @@ PLANS_PATH=~/plans
 # worklog 스킬이 작업 일기를 두는 곳이다. 문서는 $WORKLOG_PATH/{YYYY}/{MM}/ 에 둔다. 기본값은 ~/worklog 다.
 # 스크립트(hooks/worklog.sh, hooks/save-docs.sh)는 이 파일을 읽지 못해 값을 바꿔도 ~/worklog 를 쓴다.
 WORKLOG_PATH=~/worklog
+
+# ffc 스킬이 규칙 위반 기록을 두는 곳이다. 문서는 $FFC_PATH/{YYYY}/{MM}/ 에 둔다. 기본값은 ~/ffc 다.
+FFC_PATH=~/ffc
 ```
