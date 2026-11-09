@@ -11,10 +11,10 @@ when_to_use: '예: "세션 정리해줘", "projects 폴더 비워줘", "chore-se
 
 `CLAUDE_CONFIG_DIR`이 설정돼 있으면 `~/.claude` 대신 그 폴더를 쓴다.
 
-| 항목 | macOS (`darwin`) | Windows (`win32`) |
-| --- | --- | --- |
-| 정리 대상 | `~/.claude/projects` | `%USERPROFILE%\.claude\projects` |
-| orca 데이터 | `~/Library/Application Support/orca` | `%APPDATA%\orca` |
+| 항목        | macOS (`darwin`)                     | Windows (`win32`)                |
+| ----------- | ------------------------------------ | -------------------------------- |
+| 정리 대상   | `~/.claude/projects`                 | `%USERPROFILE%\.claude\projects` |
+| orca 데이터 | `~/Library/Application Support/orca` | `%APPDATA%\orca`                 |
 
 Windows에서는 `powershell.exe -NoProfile -Command "..."`로 감싸고, 명령 안에 `$`를 쓰지 않는다.
 

@@ -18,14 +18,14 @@ when_to_use: '예: "C 드라이브 용량 줄이고 싶어", "최근에 뭐가 �
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File ~/.claude/skills/windows-disk-scan/scan.ps1 -Days 14
 ```
 
-| 인자 | 기본값 | 뜻 |
-| --- | --- | --- |
-| `-Root` | `C:\` | 훑을 드라이브나 폴더 |
-| `-Days` | 0(전체) | 최근 N일 안에 바뀐 파일만 |
-| `-MinMB` | 0 | 이 크기 이상인 파일만 |
-| `-Depth` | 3 | `folders` 모드에서 `-Root` 아래 몇 단계까지 묶어 합산할지 |
-| `-Mode` | `folders` | `folders`는 폴더별 합계, `files`는 큰 파일 목록 |
-| `-Top` | 30 | 보여줄 줄 수 |
+| 인자     | 기본값    | 뜻                                                        |
+| -------- | --------- | --------------------------------------------------------- |
+| `-Root`  | `C:\`     | 훑을 드라이브나 폴더                                      |
+| `-Days`  | 0(전체)   | 최근 N일 안에 바뀐 파일만                                 |
+| `-MinMB` | 0         | 이 크기 이상인 파일만                                     |
+| `-Depth` | 3         | `folders` 모드에서 `-Root` 아래 몇 단계까지 묶어 합산할지 |
+| `-Mode`  | `folders` | `folders`는 폴더별 합계, `files`는 큰 파일 목록           |
+| `-Top`   | 30        | 보여줄 줄 수                                              |
 
 ## 순서
 

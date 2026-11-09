@@ -24,6 +24,7 @@
    ```
 
    종료 코드가 3(API 키나 `anthropic` 패키지 없음)이면 그 사실을, 4(API 호출 실패)면 오류 문구를 그대로 사용자에게 알리고 3으로 넘어간다. 결과가 `검색 실패`이면 `tasksim.py`가 검색하지 못한 것이므로, 그 이유를 알리고 3을 건너뛰어 4로 넘어간다.
+
 3. **`tasksim.py` (메인)**: 키 없이 `tasksim.py <repo> <요구사항 원문 요약>`을 돌리고, 유사도가 눈에 띄게 높은 폴더만 `requirements.md`를, 없으면 `tasks.md`를 `Read`로 연다. 라이브러리가 없다는 등의 이유로 건너뛰면 4로 넘어간다.
 4. **`~/plans` 직접 검색 (메인)**: `~/plans/{owner}/{repo}/`와 `~/plans/done/{owner}/{repo}/`에서 요구사항의 핵심 단어를 `Grep`으로 찾고, 걸린 폴더의 `requirements.md`를, 없으면 `tasks.md`를 연다.
 
