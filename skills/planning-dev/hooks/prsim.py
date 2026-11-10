@@ -2,12 +2,17 @@
 # 요구사항 원문과 "비슷한 과거 PR·커밋"을 저장소 히스토리에서 찾는다.
 # 계획 문서에 없는 작업(동료가 한 일, 계획 문서를 쓰기 전의 일)까지 선례로 잡는 용도다.
 #
-#   python3 prsim.py <저장소 경로> <쿼리 텍스트...>
+#   uv run --script prsim.py <저장소 경로> <쿼리 텍스트...>
 #
 # gh로 merge된 PR을 읽을 수 있으면 PR 제목·본문·변경 파일을 비교한다.
 # gh가 없거나, 인증·원격 문제로 실패하거나, PR이 하나도 없으면 커밋 메시지·변경 파일로 대신한다.
 # 변경 파일 경로도 비교 대상에 넣는다. 메시지가 부실한 커밋도 경로가 겹치면 잡히게 하려는 것이다.
 # 여기서는 PR·커밋을 모으기만 하고, 순위 계산은 tasksim_core.py가 맡는다.
+
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["kiwipiepy", "scikit-learn"]
+# ///
 
 import json
 import subprocess
@@ -56,7 +61,7 @@ def collect_commits(root: str) -> list[tuple[str, str, str]]:
 
 args = sys.argv[1:]
 if len(args) < 2:
-    fail("사용법: python3 prsim.py <저장소 경로> <쿼리 텍스트...>")
+    fail("사용법: uv run --script prsim.py <저장소 경로> <쿼리 텍스트...>")
 
 repo_path, *query_parts = args
 query = " ".join(query_parts)

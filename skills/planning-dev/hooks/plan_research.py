@@ -2,13 +2,19 @@
 # 요구사항 요약과 비슷한 과거 계획을 찾아, 관련 부분을 원문 그대로 발췌해 낸다.
 # 해석하지 않는다. 무엇을 적용할지는 이 결과를 받은 쪽이 정한다.
 #
-#   python3 plan_research.py --repo <repo> --summary "<요약>" [--model <모델 ID>]
+#   uv run --script plan_research.py --repo <repo> --summary "<요약>" [--model <모델 ID>]
 #
-# 검색은 같은 폴더의 tasksim.py로 한다. 세션을 연 앱이 검색 기능을 주면 이 스크립트를 쓰지 않는다.
+# 검색은 같은 폴더의 tasksim.py를 이 스크립트와 같은 Python으로 실행해서 한다. 그래서 dependencies에 tasksim.py의 패키지도 함께 적는다.
+# 세션을 연 앱이 검색 기능을 주면 이 스크립트를 쓰지 않는다.
 # Messages API 키는 이 저장소 최상위 .env(git 제외)의 ANTHROPIC_API_KEY만 쓴다. 셸 환경변수는 보지 않는다.
 # ~/.claude/skills는 이 저장소로 가는 심링크라서, 경로는 이 파일의 실제 위치에서 구한다.
 #
 # 종료 코드: 0 정상(관련 계획 없음, 검색 실패 포함), 2 인자 오류, 3 키 또는 anthropic 패키지 없음, 4 API 호출 실패
+
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["anthropic", "kiwipiepy", "scikit-learn"]
+# ///
 
 import argparse
 import json
@@ -217,7 +223,7 @@ def main():
     try:
         import anthropic
     except ImportError:
-        print("anthropic 패키지가 없다. python3 -m pip install anthropic", file=sys.stderr)
+        print("anthropic 패키지가 없다. uv run --script로 실행했는지 확인한다.", file=sys.stderr)
         return EXIT_NO_KEY
     api_key = read_api_key()
     if not api_key:

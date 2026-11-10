@@ -20,12 +20,12 @@
 2. **발췌 스크립트**: 세션 시작 안내에 앱 검색 명령이 아예 없을 때만 실행한다. 스크립트가 안에서 `tasksim.py`로 후보를 찾고, 이 저장소 최상위 `.env`(git 제외)의 API 키로 Messages API를 불러 관련 부분을 원문 그대로 발췌한다. 메인 대화의 청구처와 따로 청구된다. 스크립트가 결과를 돌려주면 3, 4는 하지 않는다.
 
    ```sh
-   python3 ~/.claude/skills/planning-dev/hooks/plan_research.py --repo <repo> --summary "<요구사항 원문 요약>"
+   uv run --script ~/.claude/skills/planning-dev/hooks/plan_research.py --repo <repo> --summary "<요구사항 원문 요약>"
    ```
 
    종료 코드가 3(API 키나 `anthropic` 패키지 없음)이면 그 사실을, 4(API 호출 실패)면 오류 문구를 그대로 사용자에게 알리고 3으로 넘어간다. 결과가 `검색 실패`이면 `tasksim.py`가 검색하지 못한 것이므로, 그 이유를 알리고 3을 건너뛰어 4로 넘어간다.
 
-3. **`tasksim.py` (메인)**: 키 없이 `tasksim.py <repo> <요구사항 원문 요약>`을 돌리고, 유사도가 눈에 띄게 높은 폴더만 `requirements.md`를, 없으면 `tasks.md`를 `Read`로 연다. 라이브러리가 없다는 등의 이유로 건너뛰면 4로 넘어간다.
+3. **`tasksim.py` (메인)**: 키 없이 `uv run --script ~/.claude/skills/planning-dev/hooks/tasksim.py <repo> <요구사항 원문 요약>`을 돌리고, 유사도가 눈에 띄게 높은 폴더만 `requirements.md`를, 없으면 `tasks.md`를 `Read`로 연다. 라이브러리가 없다는 등의 이유로 건너뛰면 4로 넘어간다.
 4. **`~/plans` 직접 검색 (메인)**: `~/plans/{owner}/{repo}/`와 `~/plans/done/{owner}/{repo}/`에서 요구사항의 핵심 단어를 `Grep`으로 찾고, 걸린 폴더의 `requirements.md`를, 없으면 `tasks.md`를 연다.
 
 ### 과거 계획: 결과 다루기
@@ -39,7 +39,7 @@
 메인이 직접 돌린다.
 
 ```sh
-python3 ~/.claude/skills/planning-dev/hooks/prsim.py <저장소 경로> <요구사항 원문 요약>
+uv run --script ~/.claude/skills/planning-dev/hooks/prsim.py <저장소 경로> <요구사항 원문 요약>
 ```
 
 - `prsim.py`는 저장소의 merge된 PR을 본다(`gh`를 못 쓰거나 PR이 없으면 커밋).

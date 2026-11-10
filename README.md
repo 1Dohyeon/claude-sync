@@ -17,7 +17,7 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 - 본인 저장소로 관리하려면 `git remote set-url origin <자기 저장소 주소>`로 원격만 바꿉니다.
 - **기존 설정은 지우지 않습니다.** 실제 파일은 `~/claude-backup/`으로 옮긴 뒤 링크합니다. 다른 도구가 관리하던 심링크는 덮어쓰기 전에 원래 경로를 알려주고 승인을 받습니다.
 - 절차는 `git`·`ln`·`mv`·`mkdir`·`ls`·`find` 명령을 씁니다. 기존 `settings.json`의 `permissions.deny`에 걸려 있으면 중간에 멈춥니다.
-- [`/planning-dev`](skills/planning-dev/SKILL.md)의 깊은 분석에서 과거 유사 태스크를 찾으려면 `kiwipiepy`·`scikit-learn`이 필요합니다. 없으면 그 검색만 건너뜁니다.
+- [`/planning-dev`](skills/planning-dev/SKILL.md)의 깊은 분석에서 과거 유사 태스크를 찾으려면 `uv`가 필요합니다. 필요한 Python 패키지는 uv가 실행할 때 준비합니다.
 
 ## GLOBAL CLAUDE `~/.claude/`
 
