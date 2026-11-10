@@ -95,6 +95,7 @@ uv tool update-shell
 ```
 
 - 위 명령에는 "진행 규칙"의 PATH 갱신 줄을 앞에 붙인다.
+- `--default`는 실험 기능이라 `warning: The --default option is experimental`이 나온다. 설치가 끝났으면 정상이므로 멈추지 않는다.
 - 전역 `pip`은 설치하지 않는다. 패키지는 프로젝트마다 `uv add`(또는 가상 환경 안에서 `uv pip install`)로 설치하고, `ruff` 같은 CLI 도구는 `uv tool install`로 설치한다.
 - 그 밖에 필요한 도구가 있는지 사용자에게 묻는다. 검색은 `scoop search <이름>`으로 한다.
 - pnpm을 쓴다면 별도 설정은 필요하지 않다. pnpm은 프로젝트가 있는 드라이브의 루트(`D:\.pnpm-store`)에 저장소를 자동으로 만든다.
