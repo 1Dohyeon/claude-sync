@@ -10,7 +10,8 @@ if [ -z "${HOME-}" ]; then
     exit 0
 fi
 
-ffc_dir="$HOME/ffc"
+. "$(dirname "$0")/environment-path.sh"
+ffc_dir=$(environment_path FFC_PATH "$HOME/ffc")
 max_days=60
 
 if [ ! -d "$ffc_dir" ]; then

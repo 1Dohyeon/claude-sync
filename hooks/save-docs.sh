@@ -127,10 +127,11 @@ save_repo_locked() {
     return 0
 }
 
+. "$(dirname "$0")/environment-path.sh"
 case ${1:-all} in
-    all|plans) save_repo_locked "$HOME/plans" plans ;;
+    all|plans) save_repo_locked "$(environment_path PLANS_PATH "$HOME/plans")" plans ;;
 esac
 case ${1:-all} in
-    all|worklog) save_repo_locked "$HOME/worklog" worklog ;;
+    all|worklog) save_repo_locked "$(environment_path WORKLOG_PATH "$HOME/worklog")" worklog ;;
 esac
 exit 0

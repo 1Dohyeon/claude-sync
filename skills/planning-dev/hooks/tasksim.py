@@ -15,6 +15,7 @@
 # dependencies = ["kiwipiepy", "scikit-learn"]
 # ///
 
+import re
 import sys
 from pathlib import Path
 
@@ -27,7 +28,16 @@ if len(args) < 2:
 repo, *query_parts = args
 query = " ".join(query_parts)
 
-plans_dir = Path.home() / "plans"
+def read_plans_dir() -> Path:
+    environments = Path(__file__).resolve().parents[3] / "rules" / "environments.md"
+    try:
+        found = re.search(r"^PLANS_PATH=(.+)$", environments.read_text(encoding="utf-8"), re.MULTILINE)
+    except OSError:
+        found = None
+    return Path(found.group(1).strip() if found else "~/plans").expanduser()
+
+
+plans_dir = read_plans_dir()
 
 
 def plan_repo_dirs() -> list[Path]:
@@ -45,7 +55,7 @@ def plan_repo_dirs() -> list[Path]:
 
 repo_dirs = plan_repo_dirs()
 if not repo_dirs:
-    fail(f"~/plans에 {repo} 저장소가 없다 — 유사 태스크 검색을 건너뛴다.")
+    fail(f"{plans_dir}에 {repo} 저장소가 없다 — 유사 태스크 검색을 건너뛴다.")
 
 docs: list[str] = []
 names: list[str] = []

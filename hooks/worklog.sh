@@ -8,7 +8,8 @@ if [ -n "$WORKLOG_HOOK" ]; then
     exit 0
 fi
 
-worklog_dir="$HOME/worklog"
+. "$(dirname "$0")/environment-path.sh"
+worklog_dir=$(environment_path WORKLOG_PATH "$HOME/worklog")
 min_prompts=3
 
 input=$({ command -p cat 2>/dev/null || cat; } 2>/dev/null)
@@ -49,7 +50,7 @@ WORKLOG_HOOK=1 nohup sh -c '
         --no-session-persistence \
         --permission-prompts none \
         --add-dir "$HOME/.claude/projects" "$2" \
-        --allowedTools "Read Grep Glob Edit(~/worklog/**) Bash(date:*)"
+        --allowedTools "Read Grep Glob Edit($2/**) Bash(date:*)"
     GIT_TERMINAL_PROMPT=0 sh "$3" worklog < /dev/null
 ' worklog "$transcript" "$worklog_dir" "$(dirname "$0")/save-docs.sh" >/dev/null 2>&1 &
 
