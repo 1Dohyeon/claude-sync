@@ -55,7 +55,6 @@
       "Bash(gh pr lock:*)",
       "Bash(gh pr unlock:*)",
       "Bash(gh pr checkout:*)",
-      "Bash(gh repo sync 1Dohyeon/orca --branch main)",
       "Edit(~/plans/**)",
       "Read(~/plans/**)"
     ],
