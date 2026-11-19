@@ -12,7 +12,9 @@
 | 테스트 먼저 작성(TDD)                       | [`/dev-tdd`](skills/dev-tdd/SKILL.md)                     |
 | push 전 로컬 커밋 리뷰                      | [`/review-commit`](skills/review-commit/SKILL.md)         |
 | PR 전 브랜치 전체·올라온 PR 리뷰            | [`/review-pr`](skills/review-pr/SKILL.md)                 |
-| git 관련 작업(worktree, commit, push, ...)  | [`/git-workflow`](skills/git-workflow/SKILL.md)           |
+| 브랜치·worktree 만들기·정리                 | [`/git-branch`](skills/git-branch/SKILL.md)               |
+| 커밋 단위·메시지                            | [`/git-commit`](skills/git-commit/SKILL.md)               |
+| PR 생성·수정·머지, PR 나누기                | [`/git-pr`](skills/git-pr/SKILL.md)                       |
 | 조사·리서치·자료 종합·브레인스토밍          | [`/research`](skills/research/SKILL.md)                   |
 | 여러 출처를 종합하는 심층 조사·보고서       | [`/research-deep`](skills/research-deep/SKILL.md)         |
 | 후보 가운데 무엇을 고를지 정하는 비교 조사  | [`/research-compare`](skills/research-compare/SKILL.md)   |
