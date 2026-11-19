@@ -27,13 +27,13 @@ git merge-base origin/<base> HEAD
 git log --oneline 9a3f1c2..HEAD
 ```
 
-4. 확정 명령은 아래와 같다. 끝의 `HEAD`를 빠뜨리면 커밋되지 않은 워킹트리 변경까지 섞여 들어와 [`diff-review`](../diff-review/SKILL.md)와 범위가 겹친다.
+4. 확정 명령은 아래와 같다. 끝의 `HEAD`를 빠뜨리면 커밋되지 않은 워킹트리 변경까지 섞여 들어와 [`review-diff`](../review-diff/SKILL.md)와 범위가 겹친다.
 
 ```sh
 git diff 9a3f1c2 HEAD
 ```
 
-5. 커밋되지 않은 변경은 이 범위에 들어가지 않는다. 아래로 확인해서 있으면 리뷰 대상에서 빠진다는 사실을 사용자에게 알린다. 그 부분을 보려면 `diff-review`가 따로 있다.
+5. 커밋되지 않은 변경은 이 범위에 들어가지 않는다. 아래로 확인해서 있으면 리뷰 대상에서 빠진다는 사실을 사용자에게 알린다. 그 부분을 보려면 `review-diff`가 따로 있다.
 
 ```sh
 git status --porcelain

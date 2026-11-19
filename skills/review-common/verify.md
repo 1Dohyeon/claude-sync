@@ -1,6 +1,6 @@
 # 리뷰 공통 절차
 
-[`diff-review`](../diff-review/SKILL.md)·[`branch-review`](../branch-review/SKILL.md)·[`pr-review`](../pr-review/SKILL.md)가 공유하는 뒷부분이다.
+[`review-diff`](../review-diff/SKILL.md)·[`review-branch`](../review-branch/SKILL.md)·[`review-pr`](../review-pr/SKILL.md)가 공유하는 뒷부분이다.
 각 스킬이 범위와 축을 확정한 뒤 이 문서를 읽고 그대로 이어서 진행한다.
 
 한 모델이 여러 영역을 한 컨텍스트에서 순차로 보면 앞 영역이 뒤 영역 판단에 섞인다.
@@ -17,8 +17,8 @@
 
 | 스킬                          | 출처                                                                             |
 | ----------------------------- | -------------------------------------------------------------------------------- |
-| `diff-review`·`branch-review` | 현재 브랜치의 계획 문서 `requirements.md` → 없으면 PR 설명·커밋 메시지·이번 대화 |
-| `pr-review`                   | PR 헤드 브랜치의 계획 문서 → 없으면 PR 설명과 거기서 이어지는 이슈·링크          |
+| `review-diff`·`review-branch` | 현재 브랜치의 계획 문서 `requirements.md` → 없으면 PR 설명·커밋 메시지·이번 대화 |
+| `review-pr`                   | PR 헤드 브랜치의 계획 문서 → 없으면 PR 설명과 거기서 이어지는 이슈·링크          |
 
 3. 그래도 없으면 아래 "못 찾았을 때"로 간다.
 
@@ -31,12 +31,12 @@
 - 요구사항은 `requirements.md`의 번호 붙은 요구사항이고, 요구사항마다 적힌 확인 기준이 그대로 판정 기준이 된다. 배경은 맥락으로만 넘긴다.
 - `design.md`·`tasks.md`는 구현 계획이므로 요구사항으로 넘기지 않는다.
 
-**`pr-review`에서는 `{branch}`가 다르다.** 남의 브랜치이므로 현재 체크아웃된 브랜치가 아니라 PR의 헤드 브랜치로 찾는다. checkout 확인 때 이미 얻은 `headRefName`을 `{branch}`로 넘긴다.
+**`review-pr`에서는 `{branch}`가 다르다.** 남의 브랜치이므로 현재 체크아웃된 브랜치가 아니라 PR의 헤드 브랜치로 찾는다. checkout 확인 때 이미 얻은 `headRefName`을 `{branch}`로 넘긴다.
 
 - 그 순서로 찾아도 문서가 없으면 스스로 뒤지지 말고 사용자에게 위치를 묻는다. 사용자가 "없다"고 하면 PR 설명으로 내려간다.
 - 이 문서는 **사용자가 작성한 것이지 PR 작성자가 받은 요구가 아닐 수 있다.** 그래서 아래 "출처를 밝힌다"가 특히 중요하다.
 
-### PR 설명을 쓸 때 (`pr-review` 전용)
+### PR 설명을 쓸 때 (`review-pr` 전용)
 
 ```sh
 gh pr view <번호> --json title,body
@@ -90,7 +90,7 @@ gh pr view <번호> --json title,body
 
 ### 라운드 정하기
 
-라운드 기록은 `<스크래치패드>/review/<키>/round-N/`에 둔다. `<키>`는 스킬 이름이고, `pr-review`만 PR마다 따로 세도록 `pr-review-<번호>`로 쓴다.
+라운드 기록은 `<스크래치패드>/review/<키>/round-N/`에 둔다. `<키>`는 스킬 이름이고, `review-pr`만 PR마다 따로 세도록 `review-pr-<번호>`로 쓴다.
 
 ```sh
 ls <스크래치패드>/review/<키>
@@ -107,10 +107,10 @@ ls <스크래치패드>/review/<키>
 
 | 스킬                        | 범위                                                                                      |
 | --------------------------- | ----------------------------------------------------------------------------------------- |
-| `branch-review`·`pr-review` | 직전 라운드의 `head.txt`에 적힌 SHA 이후의 변경만 본다. 명령은 `git diff <직전 SHA> HEAD` |
-| `diff-review`               | 처음과 같은 전체 범위를 다시 뜬다. 수정이 커밋되지 않은 상태라 증분을 뜨지 않는다         |
+| `review-branch`·`review-pr` | 직전 라운드의 `head.txt`에 적힌 SHA 이후의 변경만 본다. 명령은 `git diff <직전 SHA> HEAD` |
+| `review-diff`               | 처음과 같은 전체 범위를 다시 뜬다. 수정이 커밋되지 않은 상태라 증분을 뜨지 않는다         |
 
-- `branch-review`·`pr-review`는 매 라운드 스냅샷을 뜰 때 그 시점의 HEAD SHA를 `round-N/head.txt`에 남긴다.
+- `review-branch`·`review-pr`는 매 라운드 스냅샷을 뜰 때 그 시점의 HEAD SHA를 `round-N/head.txt`에 남긴다.
 
 ```sh
 git rev-parse HEAD > <스크래치패드>/review/<키>/round-N/head.txt
@@ -122,7 +122,7 @@ git rev-parse HEAD > <스크래치패드>/review/<키>/round-N/head.txt
 git merge-base --is-ancestor <직전 SHA> HEAD
 ```
 
-- `pr-review`에서 체크아웃하지 않고 diff만으로 진행하면 디스크의 HEAD가 PR이 아니므로 `head.txt`를 남기지 않고, 재리뷰도 전체 범위로 뜬다.
+- `review-pr`에서 체크아웃하지 않고 diff만으로 진행하면 디스크의 HEAD가 PR이 아니므로 `head.txt`를 남기지 않고, 재리뷰도 전체 범위로 뜬다.
 - 부를 축은 1라운드와 같게 둔다. 증분은 작게 잡히므로 규모를 다시 재면 축이 줄어든다.
 
 ### 직전 지적 넘기기
@@ -148,7 +148,7 @@ mkdir -p <스크래치패드>/review/<키>/round-N
 
 이 파일이 이번 리뷰의 유일한 대상이며, 이후 워킹트리가 바뀌어도 리뷰 범위는 흔들리지 않는다.
 
-`diff-review`는 "지금 커밋하면 올라갈 것 전부"가 범위다. `git diff HEAD`는 추적되지 않은 파일을 담지 않으므로, 스냅샷 명령 앞에 저장소 루트에서 `git add -N .`(새 파일 intent-to-add, `.gitignore` 대상 제외), 뒤에 `git reset`(인덱스만 되돌림)을 붙인다. `-N`은 내용을 스테이징하지 않아 실제 커밋에 영향이 없다. `branch-review`·`pr-review`는 커밋된 범위라 이 처리가 필요 없다.
+`review-diff`는 "지금 커밋하면 올라갈 것 전부"가 범위다. `git diff HEAD`는 추적되지 않은 파일을 담지 않으므로, 스냅샷 명령 앞에 저장소 루트에서 `git add -N .`(새 파일 intent-to-add, `.gitignore` 대상 제외), 뒤에 `git reset`(인덱스만 되돌림)을 붙인다. `-N`은 내용을 스테이징하지 않아 실제 커밋에 영향이 없다. `review-branch`·`review-pr`는 커밋된 범위라 이 처리가 필요 없다.
 
 ## 규모 판단
 
@@ -187,7 +187,7 @@ wc -l <스크래치패드>/review/<키>/round-N/review.diff
 
 ### 부를 축
 
-| 규모     | `branch-review`·`pr-review`                                           | `diff-review`     |
+| 규모     | `review-branch`·`review-pr`                                           | `review-diff`     |
 | -------- | --------------------------------------------------------------------- | ----------------- |
 | trivial  | 서브에이전트를 부르지 않고 상위가 코드 레벨·컨벤션 관점으로 직접 본다 | 같음              |
 | small    | `logic-reviewer`·`impact-reviewer`·`convention-reviewer`              | 스킬이 정한 세 축 |
@@ -195,7 +195,7 @@ wc -l <스크래치패드>/review/<키>/round-N/review.diff
 | large    | 여섯 축 모두. 범위를 나눌 수 있으면 나눠 달라고 한 번 권한다          | 스킬이 정한 세 축 |
 | epic     | 범위가 epic 전체이면 하위 PR 단위로 나눠 달라고 요청한다              | 스킬이 정한 세 축 |
 
-`branch-review`·`pr-review`에서 small이면 유형에 따라 축을 더 붙인다. standard 이상은 이미 여섯 축이라 더할 것이 없다.
+`review-branch`·`review-pr`에서 small이면 유형에 따라 축을 더 붙인다. standard 이상은 이미 여섯 축이라 더할 것이 없다.
 
 | 유형              | 더 붙이는 축            | 이유                             |
 | ----------------- | ----------------------- | -------------------------------- |
@@ -203,8 +203,8 @@ wc -l <스크래치패드>/review/<키>/round-N/review.diff
 | 새 기능·동작 변경 | `requirement-reviewer`  | 요구대로 만들었는지 본다         |
 | 리팩터링          | `architecture-reviewer` | 구조를 바꾼 작업이라 구조를 본다 |
 
-- `diff-review`는 유형별 축을 붙이지 않는다. 그 세 축이 미완성 상태에서 오탐을 내는 이유가 [`diff-review`](../diff-review/SKILL.md)의 "축"에 있다.
-- 스킬이 정한 제외 조건이 이 표보다 우선한다. `pr-review`에서 체크아웃하지 않으면 `impact-reviewer`를 빼고, 요구사항이 없으면 `requirement-reviewer`를 뺀다.
+- `review-diff`는 유형별 축을 붙이지 않는다. 그 세 축이 미완성 상태에서 오탐을 내는 이유가 [`review-diff`](../review-diff/SKILL.md)의 "축"에 있다.
+- 스킬이 정한 제외 조건이 이 표보다 우선한다. `review-pr`에서 체크아웃하지 않으면 `impact-reviewer`를 빼고, 요구사항이 없으면 `requirement-reviewer`를 뺀다.
 - `qa-reviewer` 부록은 규모와 관계없이 화면에 닿는 파일이 있으면 부른다.
 
 ## 병렬 호출
@@ -225,13 +225,13 @@ effort도 각 에이전트 정의의 `effort`가 정하고, 호출할 때 따로
 - 저장소 파일은 디스크에서 그대로 열어 주변 구조와 대조하라고 함께 적는다. 스냅샷은 무엇이 바뀌었는지를 담을 뿐, 주변 코드는 담지 못한다.
 - 추적되지 않은 파일을 포함하기로 했으면 그 경로 목록도 함께 넘긴다.
 - 확보한 요구사항 원문을 그대로 싣는다. 못 얻었으면 "요구사항 원문 없음, 의도와 다르다는 종류의 지적은 세우지 말 것"이라고 명시한다.
-- 2라운드부터는 직전 `findings.md`의 절대경로와 "이미 낸 지적은 다시 세우지 말 것"을 함께 넘긴다. `branch-review`·`pr-review`의 증분 범위이면 스냅샷이 직전 라운드 이후의 수정만 담고 있다는 사실도 적는다.
+- 2라운드부터는 직전 `findings.md`의 절대경로와 "이미 낸 지적은 다시 세우지 말 것"을 함께 넘긴다. `review-branch`·`review-pr`의 증분 범위이면 스냅샷이 직전 라운드 이후의 수정만 담고 있다는 사실도 적는다.
 - "자기 영역만 보고 다른 영역은 지적으로 세우지 말 것" - 각 에이전트 정의에 이미 있으나 한 번 더 못박는다.
 
 ### 조건이 붙는 축
 
 - **요구사항 원문을 못 얻었으면 [`requirement-reviewer`](../../agents/requirement-reviewer.md)를 부르지 않는다.** 대조할 것이 없으면 추측만 하게 된다. 부르지 않았다는 사실을 리포트 머리에 적는다.
-- **디스크가 리뷰 대상 브랜치가 아니면 [`impact-reviewer`](../../agents/impact-reviewer.md)를 부르지 않는다.** 이 축은 저장소를 Grep해서 참조 지점을 찾는 것이 일의 전부라, 디스크가 다른 상태면 찾아낸 참조가 전부 헛것이 된다. [`pr-review`](../pr-review/SKILL.md)에서 체크아웃하지 않기로 한 경우가 여기 해당한다. 부르지 않았다는 사실을 리포트 머리에 적는다.
+- **디스크가 리뷰 대상 브랜치가 아니면 [`impact-reviewer`](../../agents/impact-reviewer.md)를 부르지 않는다.** 이 축은 저장소를 Grep해서 참조 지점을 찾는 것이 일의 전부라, 디스크가 다른 상태면 찾아낸 참조가 전부 헛것이 된다. [`review-pr`](../review-pr/SKILL.md)에서 체크아웃하지 않기로 한 경우가 여기 해당한다. 부르지 않았다는 사실을 리포트 머리에 적는다.
 - **스냅샷에 화면에 닿는 파일(컴포넌트·스타일·라우트)이 하나도 없으면 [`qa-reviewer`](../../agents/qa-reviewer.md)를 부르지 않는다.** 프론트가 아닌 저장소에서 매번 빈 목록이 붙는 것을 막는다.
 - `qa-reviewer`는 지적을 내지 않는 부록이다. 다른 축과 함께 병렬로 띄우되 결과는 아래 검증을 거치지 않는다.
 

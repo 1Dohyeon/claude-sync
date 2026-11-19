@@ -1,6 +1,6 @@
 # PR 멘션 리뷰 (GitHub Actions)
 
-PR 코멘트에 `@claude`를 쓰면 GitHub Actions 러너에서 Claude Code가 이 저장소의 `CLAUDE.md`, `rules/`, `skills/`, `agents/`를 싣고 동작합니다. 리뷰 요청이면 [`/pr-review`](../skills/pr-review/SKILL.md) 절차로 리뷰하고, 수정 요청이면 PR 브랜치에 커밋하고, 질문이면 답합니다. `settings.json`과 `hooks/`는 싣지 않습니다.
+PR 코멘트에 `@claude`를 쓰면 GitHub Actions 러너에서 Claude Code가 이 저장소의 `CLAUDE.md`, `rules/`, `skills/`, `agents/`를 싣고 동작합니다. 리뷰 요청이면 [`/review-pr`](../skills/review-pr/SKILL.md) 절차로 리뷰하고, 수정 요청이면 PR 브랜치에 커밋하고, 질문이면 답합니다. `settings.json`과 `hooks/`는 싣지 않습니다.
 
 다른 저장소에 붙이는 방법입니다.
 

@@ -1,10 +1,10 @@
 # 리뷰 설계
 
-[`/diff-review`](../diff-review/SKILL.md)·[`/branch-review`](../branch-review/SKILL.md)·[`/pr-review`](../pr-review/SKILL.md) 세 리뷰 스킬을 어떻게 나눴고 왜 그렇게 짰는지 적은 문서입니다. 스킬로 로드되지 않으며, 실행 절차는 각 `SKILL.md`와 [`verify.md`](verify.md)에 있습니다.
+[`/review-diff`](../review-diff/SKILL.md)·[`/review-branch`](../review-branch/SKILL.md)·[`/review-pr`](../review-pr/SKILL.md) 세 리뷰 스킬을 어떻게 나눴고 왜 그렇게 짰는지 적은 문서입니다. 스킬로 로드되지 않으며, 실행 절차는 각 `SKILL.md`와 [`verify.md`](verify.md)에 있습니다.
 
 ## 흐름
 
-범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/diff-review`](../diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](../branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](../pr-review/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
+범위에 따라 스킬이 갈립니다. 커밋 전이면 [`/review-diff`](../review-diff/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/review-branch`](../review-branch/SKILL.md), 올라온 PR이면 [`/review-pr`](../review-pr/SKILL.md)입니다. 스킬 이름이 곧 범위 선언이라 대상을 되묻는 단계가 없습니다.
 
 - **범위와 축**: 각 스킬이 자기 범위를 고정된 명령으로 확정합니다. 축도 스킬마다 다릅니다. 커밋 전은 코드 레벨·영향 범위·컨벤션 세 축만 보고, 나머지 둘은 작업 규모와 유형에 따라 축을 고릅니다. standard 이상이면 아키텍처·테스트·요구사항까지 여섯 축을 모두 보고, small이면 코드 레벨·영향 범위·컨벤션에 유형에 맞는 축 하나를 더하며, trivial이면 어느 스킬이든 서브에이전트 없이 상위 모델이 직접 봅니다. 규모는 `requirements.md` 머리에 적힌 값과 diff를 잰 값 가운데 큰 쪽을 씁니다. 확정한 diff는 파일로 한 번 떠서, 모든 축이 같은 스냅샷을 보게 합니다.
   - **부록**: 화면에 닿는 변경이면 `qa-reviewer`를 함께 띄워 브라우저에서 확인할 목록을 만듭니다. 지적이 아니므로 검증과 등급을 거치지 않고 리포트 맨 뒤에 붙습니다.
@@ -18,12 +18,12 @@
 
 ```mermaid
 flowchart LR
-    D["/diff-review<br/>워킹트리 변경"] --> LG["logic-reviewer<br/>Opus · 함수 안"]
+    D["/review-diff<br/>워킹트리 변경"] --> LG["logic-reviewer<br/>Opus · 함수 안"]
     D --> IM["impact-reviewer<br/>Sonnet · 함수 바깥"]
     D --> CV["convention-reviewer<br/>Sonnet"]
     D -.-> QA["qa-reviewer<br/>Sonnet · 화면에 닿는 파일이 있을 때만"]
 
-    BP["/branch-review · /pr-review<br/>브랜치 커밋 전체 · PR 변경 전체"] -.-> AR["architecture-reviewer<br/>Opus · standard 이상 또는 리팩터링"]
+    BP["/review-branch · /review-pr<br/>브랜치 커밋 전체 · PR 변경 전체"] -.-> AR["architecture-reviewer<br/>Opus · standard 이상 또는 리팩터링"]
     BP --> LG
     BP -.-> TS["testing-reviewer<br/>Sonnet · standard 이상 또는 버그 수정"]
     BP --> CV
@@ -40,7 +40,7 @@ flowchart LR
     QA -.-> M
 ```
 
-`/branch-review`와 `/pr-review`는 보는 범위만 다르고 축 구성이 같아서 한 노드로 묶었습니다. 점선으로 들어가는 화살표는 조건이 맞을 때만 호출된다는 뜻입니다. 아키텍처·테스트·요구사항 축은 규모가 standard 이상이면 항상 부르고, small이면 작업 유형에 맞는 하나만 부릅니다. 규모가 trivial이면 도표의 어느 에이전트도 부르지 않고 상위 모델이 직접 봅니다. `impact-reviewer`로 들어가는 화살표가 `/pr-review` 쪽에서만 점선인 이유는, 남의 PR을 체크아웃하지 않고 diff만으로 볼 때는 이 축을 부르지 않기 때문입니다. `qa-reviewer`에서 나가는 화살표도 점선인데, 이 결과는 지적이 아니라서 검증과 등급을 거치지 않고 리포트 맨 뒤에 그대로 붙기 때문입니다.
+`/review-branch`와 `/review-pr`는 보는 범위만 다르고 축 구성이 같아서 한 노드로 묶었습니다. 점선으로 들어가는 화살표는 조건이 맞을 때만 호출된다는 뜻입니다. 아키텍처·테스트·요구사항 축은 규모가 standard 이상이면 항상 부르고, small이면 작업 유형에 맞는 하나만 부릅니다. 규모가 trivial이면 도표의 어느 에이전트도 부르지 않고 상위 모델이 직접 봅니다. `impact-reviewer`로 들어가는 화살표가 `/review-pr` 쪽에서만 점선인 이유는, 남의 PR을 체크아웃하지 않고 diff만으로 볼 때는 이 축을 부르지 않기 때문입니다. `qa-reviewer`에서 나가는 화살표도 점선인데, 이 결과는 지적이 아니라서 검증과 등급을 거치지 않고 리포트 맨 뒤에 그대로 붙기 때문입니다.
 
 노드에 붙은 모델 이름은 그 축을 어느 모델로 띄우는지를 뜻하며, [`agents/`](../../agents/)의 각 정의 앞머리에 적혀 있습니다.
 
