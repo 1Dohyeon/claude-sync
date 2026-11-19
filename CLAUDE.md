@@ -23,6 +23,7 @@
 | Google Calendar 일정 생성·수정              | [`/google-calendar`](skills/google-calendar/SKILL.md)     |
 | Claude 세션 기록(`~/.claude/projects`) 정리 | [`/chore-sessions`](skills/chore-sessions/SKILL.md)       |
 | 작업 규칙 위반을 지적받았거나 스스로 알아챔 | [`/ffc`](skills/ffc/SKILL.md)                             |
+| rules에 규칙 추가·수정                      | [`/write-rule`](skills/write-rule/SKILL.md)               |
 
 - 어느 트리거인지 판단이 서지 않으면 스킬을 고르기 전에 사용자에게 종류를 확인한다.
 - 트리거는 맞으나 해당 skill의 적용 범위(입력 형태·전제)가 이번 요청과 맞지 않으면, 스킬 없이 진행하되 어느 전제가 맞지 않았는지 먼저 밝힌다.
