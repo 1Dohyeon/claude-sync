@@ -330,9 +330,6 @@
       }
     ]
   },
-  "enabledPlugins": {
-    "subagents-status@inline": false
-  },
   "outputStyle": "fluent-korean",
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
