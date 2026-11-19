@@ -1,5 +1,5 @@
 ---
-description: 작업 브랜치를 만들거나 정리할 때 사용한다. 베이스 브랜치를 고르고, 원격 브랜치를 먼저 만든 뒤 메인 클론이나 worktree에 체크아웃한다. 머지된 브랜치와 worktree를 유실 없이 지우는 절차도 담는다.
+description: 작업 브랜치를 만들거나 정리할 때 사용한다. 베이스 브랜치를 고르고, 원격 브랜치 없이 origin/<base>에서 로컬 브랜치를 메인 클론이나 worktree에 만든다. 머지된 브랜치와 worktree를 유실 없이 지우는 절차도 담는다.
 when_to_use: '예: "브랜치 만들어줘", "worktree 만들어줘", "브랜치 정리해줘", "워크트리 삭제해줘", 베이스 브랜치를 정해야 할 때'
 ---
 
@@ -35,6 +35,8 @@ git branch -r
 
 작업 브랜치는 메인 클론에서 만들거나 새 worktree로 만든다. 어느 쪽으로 할지는 사용자가 고른다. `<base>`는 위 "베이스 브랜치 고르기"로 정한 베이스다. `dev-plan`에서 작업 브랜치와 베이스를 이미 확정했으면 그 값을 쓴다. 계획 문서의 `requirements.md` 브랜치 줄에 있다.
 
+원격 브랜치는 만들 때 만들지 않는다. 로컬에서 커밋을 쌓고, 처음 push할 때 [`git-push`](../git-push/SKILL.md)가 원격 브랜치를 만든다. push하면 git이 원격에 없는 커밋만 보내고, 원격 브랜치의 히스토리는 `origin/<base>`에서 갈라진 시점을 그대로 이어받는다.
+
 worktree로 정했으면 [`worktree.md`](worktree.md)를 Read하고 그 순서대로 만든다. 아래 1단계와 3단계는 worktree에서도 같다.
 
 ### 메인 클론에서 만드는 순서
@@ -45,37 +47,32 @@ worktree로 정했으면 [`worktree.md`](worktree.md)를 Read하고 그 순서�
 git status --porcelain
 ```
 
-1. 베이스 브랜치에서 새 브랜치를 원격에 먼저 만든다(로컬엔 아직 없는 빈 브랜치).
+1. 베이스의 최신 상태를 받아 온다.
 
 ```sh
 git fetch origin
-git push origin origin/<base>:refs/heads/<branch>
 ```
 
-2. 방금 만든 원격 브랜치를 시작점으로 로컬 브랜치를 만들고 옮긴다. 시작점이 `origin/<branch>`라 upstream이 베이스가 아니라 `<branch>` 자신으로 잡힌다.
+2. `origin/<base>`를 시작점으로 로컬 브랜치를 만들고 옮긴다. `--no-track`을 붙여 upstream을 잡지 않는다.
 
 ```sh
-git fetch origin
-git switch -c <branch> origin/<branch>
+git switch --no-track -c <branch> origin/<base>
 ```
 
-3. upstream이 베이스 브랜치가 아니라 `<branch>` 자신인지 확인한다.
+- 사유: 원격 추적 브랜치를 시작점으로 만들면 git이 upstream을 `origin/<base>`로 잡는다. 그러면 이후 `git push`·`git pull`이 베이스를 대상으로 동작하려 한다.
+
+3. upstream이 잡히지 않았는지 확인한다.
 
 ```sh
 git status -sb
 ```
 
-`## <branch>...origin/<branch>`로 나와야 한다. 그렇지 않으면 아래로 고친다.
+| status 출력                   | 상태                 | 조치                       |
+| ----------------------------- | -------------------- | -------------------------- |
+| `## <branch>`                 | 정상(upstream 없음)  | 다음 단계로                |
+| `## <branch>...origin/<base>` | 베이스 브랜치를 추적 | `git branch --unset-upstream` |
 
-| status 출력                     | 상태                                          | 조치                                                     |
-| ------------------------------- | --------------------------------------------- | -------------------------------------------------------- |
-| `## <branch>...origin/<branch>` | 정상                                          | 다음 단계로                                              |
-| `## <branch>...origin/<base>`   | 베이스 브랜치를 추적                          | `git branch --set-upstream-to=origin/<branch>`           |
-| `## <branch>`                   | upstream 없음 (`branch.autoSetupMerge=false`) | 위와 동일                                                |
-
-- 사유: upstream이 베이스로 잡히면, 이후 평범한 `git push` 한 번에 커밋이 바로 베이스로 들어간다.
-
-고친 뒤 `status -sb`로 다시 확인한다.
+고친 뒤 `status -sb`로 다시 확인한다. upstream은 처음 push할 때 `git-push`가 자기 원격 브랜치로 잡는다.
 
 ## 브랜치 정리
 
@@ -111,7 +108,7 @@ git branch -d <branch>
 
 ### 원격이 이미 삭제된 경우 (`: gone`)
 
-선임이 원격 브랜치를 지운 뒤라 ②③이 없다. 원격 사본이 없으니, **베이스에 반영됐는지를 확인**하고 나서 지운다.
+선임이 원격 브랜치를 지웠거나 한 번도 push하지 않아 ②③이 없다. 원격 사본이 없으니, **베이스에 반영됐는지를 확인**하고 나서 지운다.
 
 | 확인       | 명령                                   | 판정                   |
 | ---------- | -------------------------------------- | ---------------------- |
