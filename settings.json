@@ -24,9 +24,6 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git add:*)",
-      "Bash(git -C * add *)",
-      "Bash(git -C * commit *)",
-      "Bash(git -C * push *)",
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(rg:*)",
@@ -61,8 +58,7 @@
     "ask": [
       "Bash(gh pr merge:*)",
       "Bash(git merge:*)",
-      "Edit(~/.claude/projects/*/memory/**)",
-      "Write(~/.claude/projects/*/memory/**)"
+      "Edit(~/.claude/projects/*/memory/**)"
     ]
   },
   "hooks": {
