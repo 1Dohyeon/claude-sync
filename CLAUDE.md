@@ -14,6 +14,8 @@
 | PR 리뷰 요청(번호·링크로 지정)              | [`/pr-review`](skills/pr-review/SKILL.md)                 |
 | git 관련 작업(worktree, commit, push, ...)  | [`/git-workflow`](skills/git-workflow/SKILL.md)           |
 | 조사·리서치·자료 종합·브레인스토밍          | [`/research`](skills/research/SKILL.md)                   |
+| 여러 출처를 종합하는 심층 조사·보고서       | [`/research-deep`](skills/research-deep/SKILL.md)         |
+| 후보 가운데 무엇을 고를지 정하는 비교 조사  | [`/research-compare`](skills/research-compare/SKILL.md)   |
 | 논문·긴 기술 문서 정독·정리                 | [`/paper-reading`](skills/paper-reading/SKILL.md)         |
 | 세션 작업 일기 기록("worklog 써줘" 등)      | [`/worklog`](skills/worklog/SKILL.md)                     |
 | Windows 디스크 용량 확인·정리               | [`/windows-disk-scan`](skills/windows-disk-scan/SKILL.md) |
