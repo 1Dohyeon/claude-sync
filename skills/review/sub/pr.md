@@ -1,20 +1,15 @@
----
-description: 올라온 PR을 리뷰할 때 사용한다. 남이 쓴 코드를 승인할지 판단하는 자리이며, 그 PR의 변경 전체를 범위로, 작업 규모와 유형에 따라 아키텍처·코드 레벨·영향 범위·테스트·컨벤션·요구사항 가운데 필요한 축(standard 이상이면 여섯 축 전부)을 격리된 서브에이전트로 병렬로 본다. 화면 변경이 있으면 브라우저 확인 목록을 부록으로 덧붙인다.
-when_to_use: '예: "3번 PR 리뷰해줘", PR 링크를 줄 때'
----
-
 # PR 리뷰
 
 지정된 PR의 변경 전체가 대상이다. 판단할 것은 "승인해도 되는가"다.
 
-앞의 두 리뷰([`review-diff`](../review-diff/SKILL.md)·[`review-branch`](../review-branch/SKILL.md))는 대체로 자기가 쓴 코드를 보는 셀프 리뷰지만, 이쪽은 남이 쓴 코드일 수 있다. 그래서 태도가 다르다.
+[커밋 전 리뷰](diff.md)는 대체로 자기가 쓴 코드를 보는 셀프 리뷰지만, 이쪽은 남이 쓴 코드일 수 있다. 그래서 태도가 다르다.
 
 - 작성자에게 의도를 물을 수 없으므로, 근거가 모자란 항목은 억지로 지적으로 세우지 말고 "확인 필요"에 남긴다.
 - 지적 문구가 작성자에게 그대로 전달될 수 있다. 사람이 아니라 코드를 가리키고, 무엇이 어떻게 틀리는지 사실로 쓴다.
 
 ## 범위
 
-같은 세션의 2라운드부터는 체크아웃 확인까지 그대로 하되, 체크아웃했으면 `gh pr checkout <번호>`로 PR의 새 커밋을 받아 온다. 스냅샷은 `gh pr diff` 대신 [`review-common/verify.md`의 "재리뷰"](../review-common/verify.md#재리뷰)가 정한 범위로 뜬다.
+같은 세션의 2라운드부터는 체크아웃 확인까지 그대로 하되, 체크아웃했으면 `gh pr checkout <번호>`로 PR의 새 커밋을 받아 온다. 스냅샷은 `gh pr diff` 대신 [`verify.md`의 "재리뷰"](../verify.md#재리뷰)가 정한 범위로 뜬다.
 
 PR 번호는 사용자가 준 것만 쓴다. 링크를 받았으면 거기서 번호를 읽는다. 번호를 못 찾으면 추측하지 말고 되묻는다.
 
@@ -37,22 +32,22 @@ gh pr view <번호> --json headRefName,state
 
 ## 축
 
-부를 축은 [`review-common/verify.md`](../review-common/verify.md)의 "규모 판단"이 규모와 유형으로 정한다. standard 이상이면 아래 여섯 축을 모두 부른다. 남의 PR은 계획 문서가 없는 경우가 많아, 그때는 diff 실측으로 규모를 정한다.
+부를 축은 [`verify.md`](../verify.md)의 "규모 판단"이 규모와 유형으로 정한다. standard 이상이면 아래 여섯 축을 모두 부른다. 남의 PR은 계획 문서가 없는 경우가 많아, 그때는 diff 실측으로 규모를 정한다.
 
-- [`architecture-reviewer`](../../agents/architecture-reviewer.md)
-- [`logic-reviewer`](../../agents/logic-reviewer.md)
-- [`impact-reviewer`](../../agents/impact-reviewer.md)
-- [`testing-reviewer`](../../agents/testing-reviewer.md)
-- [`convention-reviewer`](../../agents/convention-reviewer.md)
-- [`requirement-reviewer`](../../agents/requirement-reviewer.md)
+- [`architecture-reviewer`](../../../agents/architecture-reviewer.md)
+- [`logic-reviewer`](../../../agents/logic-reviewer.md)
+- [`impact-reviewer`](../../../agents/impact-reviewer.md)
+- [`testing-reviewer`](../../../agents/testing-reviewer.md)
+- [`convention-reviewer`](../../../agents/convention-reviewer.md)
+- [`requirement-reviewer`](../../../agents/requirement-reviewer.md)
 
 `requirement-reviewer`에게 넘길 요구사항은 사용자가 붙여넣은 텍스트, 사용자가 만든 계획 문서(`requirements.md`), PR 설명 순으로 찾는다. 셋 다 없으면 이 축은 부르지 않는다. 남의 PR이라 요구사항을 짐작해서 채우면 근거 없는 지적만 나온다.
 
-화면에 닿는 파일이 있으면 [`qa-reviewer`](../../agents/qa-reviewer.md)를 부록으로 함께 부른다. 남이 쓴 코드를 직접 눌러 볼 절차가 된다.
+화면에 닿는 파일이 있으면 [`qa-reviewer`](../../../agents/qa-reviewer.md)를 부록으로 함께 부른다. 남이 쓴 코드를 직접 눌러 볼 절차가 된다.
 
 ## 이어서
 
-[`review-common/verify.md`](../review-common/verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다.
+[`verify.md`](../verify.md)를 읽고 요구사항 확보부터 출력까지 그대로 진행한다.
 
 요구사항 출처가 남의 PR에서는 세 갈래다. 사용자가 요청과 함께 붙여넣었으면 그것이 1순위다. 사용자가 이 PR을 위해 계획 문서를 만들어 두었으면(남의 작업이어도 만들 수 있다) 그 `requirements.md`가 2순위이고, 경로의 `{branch}`는 현재 브랜치가 아니라 PR의 `headRefName`으로 찾는다. 둘 다 없으면 PR 설명과 거기서 이어지는 이슈·링크를 쓴다.
 
