@@ -6,9 +6,9 @@ description: git worktree를 만들거나 정리할 때, 커밋과 PR의 범위�
 
 ## 베이스 브랜치 고르기
 
-새 브랜치를 어디서 딸지(베이스)는 아래 순서로 정하고, 사용자에게 묻지 않는다. worktree 생성, [`planning-dev`](../planning-dev/SKILL.md)의 계획 문서, [`branch-review`](../branch-review/SKILL.md)의 범위가 이 규칙을 쓴다.
+새 브랜치를 어디서 딸지(베이스)는 아래 순서로 정하고, 사용자에게 묻지 않는다. worktree 생성, [`dev-plan`](../dev-plan/SKILL.md)의 계획 문서, [`branch-review`](../branch-review/SKILL.md)의 범위가 이 규칙을 쓴다.
 
-1. 이번 대화에서 이미 확정한 베이스가 있거나, 계획 문서의 `requirements.md`에 `브랜치: <브랜치> (베이스: <베이스>)` 줄이 있으면 그 베이스를 쓴다. 계획 문서는 `planning-dev`의 "계획 문서 찾기" 순서로 찾는다.
+1. 이번 대화에서 이미 확정한 베이스가 있거나, 계획 문서의 `requirements.md`에 `브랜치: <브랜치> (베이스: <베이스>)` 줄이 있으면 그 베이스를 쓴다. 계획 문서는 `dev-plan`의 "계획 문서 찾기" 순서로 찾는다.
 2. 하위 PR의 브랜치이면 부모 브랜치가 베이스다. 아래 "커밋·PR 범위"를 참고한다.
 3. 없으면 원격에 실제로 있는 브랜치를 확인하고 아래 순서로 정한다.
 
@@ -32,7 +32,7 @@ git branch -r
 
 ## worktree 생성
 
-작업 브랜치는 새 worktree로 만들거나, 아래 "메인 클론에서 브랜치 만들기"대로 메인 클론에서 만든다. 어느 쪽으로 할지는 사용자가 고른다. worktree로 정했으면 아래 순서로 만든다. `<base>`는 위 "베이스 브랜치 고르기"로 정한 베이스다. `planning-dev`에서 작업 브랜치와 베이스를 이미 확정했으면 그 값을 쓴다. 계획 문서의 `requirements.md` 브랜치 줄에 있다.
+작업 브랜치는 새 worktree로 만들거나, 아래 "메인 클론에서 브랜치 만들기"대로 메인 클론에서 만든다. 어느 쪽으로 할지는 사용자가 고른다. worktree로 정했으면 아래 순서로 만든다. `<base>`는 위 "베이스 브랜치 고르기"로 정한 베이스다. `dev-plan`에서 작업 브랜치와 베이스를 이미 확정했으면 그 값을 쓴다. 계획 문서의 `requirements.md` 브랜치 줄에 있다.
 
 ### worktree 위치 정하기
 
@@ -278,7 +278,7 @@ git log origin/develop --oneline --grep=<제목 일부>
 
 ## 커밋·PR 범위
 
-PR 구조(단일 PR, 순차 PR, 부모 PR + 하위 PR)는 계획 단계에서 정한다. 판정 기준과 파일 세는 방식은 [`planning-dev/sub/analyze-task.md`](../planning-dev/sub/analyze-task.md)의 "규모"와 "PR 구조"에 있다.
+PR 구조(단일 PR, 순차 PR, 부모 PR + 하위 PR)는 계획 단계에서 정한다. 판정 기준과 파일 세는 방식은 [`dev-plan/sub/analyze-task.md`](../dev-plan/sub/analyze-task.md)의 "규모"와 "PR 구조"에 있다.
 
 ### 커밋
 

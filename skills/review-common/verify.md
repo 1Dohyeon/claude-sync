@@ -24,9 +24,9 @@
 
 ### 계획 문서
 
-계획 문서의 위치와 역할은 [`planning-dev`](../planning-dev/SKILL.md)에 있다.
+계획 문서의 위치와 역할은 [`dev-plan`](../dev-plan/SKILL.md)에 있다.
 
-- [`planning-dev`의 "계획 문서 찾기"](../planning-dev/SKILL.md#계획-문서-찾기) 순서로 찾고, 찾은 폴더의 `requirements.md`를 Read한다.
+- [`dev-plan`의 "계획 문서 찾기"](../dev-plan/SKILL.md#계획-문서-찾기) 순서로 찾고, 찾은 폴더의 `requirements.md`를 Read한다.
 - 그 순서의 5번(완료 위치)에서 하는 확인 질문은 위의 "사용자에게 먼저 묻지 않고"의 예외다. 찾은 문서가 이번 작업의 것인지는 사용자만 알 수 있다.
 - 요구사항은 `requirements.md`의 번호 붙은 요구사항이고, 요구사항마다 적힌 확인 기준이 그대로 판정 기준이 된다. 배경은 맥락으로만 넘긴다.
 - `design.md`·`tasks.md`는 구현 계획이므로 요구사항으로 넘기지 않는다.
@@ -152,7 +152,7 @@ mkdir -p <스크래치패드>/review/<키>/round-N
 
 ## 규모 판단
 
-이번 리뷰의 규모와 유형을 먼저 정하고, 그에 따라 부를 축을 정한다. 규모와 유형의 정의는 [`planning-dev/sub/analyze-task.md`](../planning-dev/sub/analyze-task.md)의 "유형과 규모"에 있다.
+이번 리뷰의 규모와 유형을 먼저 정하고, 그에 따라 부를 축을 정한다. 규모와 유형의 정의는 [`dev-plan/sub/analyze-task.md`](../dev-plan/sub/analyze-task.md)의 "유형과 규모"에 있다.
 
 ### 규모 정하기
 

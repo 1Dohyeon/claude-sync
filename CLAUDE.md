@@ -7,8 +7,9 @@
 
 | 요청 유형 (트리거)                          | 호출 대상                                                 |
 | ------------------------------------------- | --------------------------------------------------------- |
-| 코드 작성·수정(개발 작업)                   | [`/development`](skills/development/SKILL.md)             |
-| 요청사항 분석·설계("태스크 분석해줘" 등)    | [`/planning-dev`](skills/planning-dev/SKILL.md)           |
+| 코드 작성·수정(개발 작업)                   | [`/dev`](skills/dev/SKILL.md)                             |
+| 요청사항 분석·설계("태스크 분석해줘" 등)    | [`/dev-plan`](skills/dev-plan/SKILL.md)                   |
+| 테스트 먼저 작성(TDD)                       | [`/dev-tdd`](skills/dev-tdd/SKILL.md)                     |
 | 커밋 전 변경 리뷰 요청                      | [`/diff-review`](skills/diff-review/SKILL.md)             |
 | 브랜치 전체 리뷰 요청(PR 올리기 전)         | [`/branch-review`](skills/branch-review/SKILL.md)         |
 | PR 리뷰 요청(번호·링크로 지정)              | [`/pr-review`](skills/pr-review/SKILL.md)                 |

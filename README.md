@@ -17,7 +17,7 @@ https://github.com/1Dohyeon/claude-sync 읽고 설치해줘
 - 본인 저장소로 관리하려면 `git remote set-url origin <자기 저장소 주소>`로 원격만 바꿉니다.
 - **기존 설정은 지우지 않습니다.** 실제 파일은 `~/claude-backup/`으로 옮긴 뒤 링크합니다. 다른 도구가 관리하던 심링크는 덮어쓰기 전에 원래 경로를 알려주고 승인을 받습니다.
 - 절차는 `git`·`ln`·`mv`·`mkdir`·`ls`·`find` 명령을 씁니다. 기존 `settings.json`의 `permissions.deny`에 걸려 있으면 중간에 멈춥니다.
-- [`/planning-dev`](skills/planning-dev/SKILL.md)의 깊은 분석에서 과거 유사 태스크를 찾으려면 `uv`가 필요합니다. 필요한 Python 패키지는 uv가 실행할 때 준비합니다.
+- [`/dev-plan`](skills/dev-plan/SKILL.md)의 깊은 분석에서 과거 유사 태스크를 찾으려면 `uv`가 필요합니다. 필요한 Python 패키지는 uv가 실행할 때 준비합니다.
 
 ## PR 멘션 리뷰 (GitHub Actions)
 
@@ -74,8 +74,9 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 
 | 요청 유형                         | 호출되는 skill                                            |
 | --------------------------------- | --------------------------------------------------------- |
-| 코드 작성·수정                    | [`/development`](skills/development/SKILL.md)             |
-| 요청사항 분석·설계                | [`/planning-dev`](skills/planning-dev/SKILL.md)           |
+| 코드 작성·수정                    | [`/dev`](skills/dev/SKILL.md)                             |
+| 요청사항 분석·설계                | [`/dev-plan`](skills/dev-plan/SKILL.md)                   |
+| 테스트 먼저 작성(TDD)             | [`/dev-tdd`](skills/dev-tdd/SKILL.md)                     |
 | 커밋 전 변경 리뷰                 | [`/diff-review`](skills/diff-review/SKILL.md)             |
 | 브랜치 전체 리뷰(PR 전)           | [`/branch-review`](skills/branch-review/SKILL.md)         |
 | PR 리뷰                           | [`/pr-review`](skills/pr-review/SKILL.md)                 |
@@ -97,8 +98,8 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 flowchart TD
     A["세션 시작<br/>rules 자동 주입"] --> B["요청"]
     B --> C{"CLAUDE.md 라우팅"}
-    C -->|"요청사항 분석·설계"| D["planning-dev<br/>분석 → 문서 위치 선택 → 세 문서"]
-    C -->|"코드 작성·수정"| E["development<br/>저장소 규칙 우선, TDD"]
+    C -->|"요청사항 분석·설계"| D["dev-plan<br/>분석 → 문서 위치 선택 → 세 문서"]
+    C -->|"코드 작성·수정"| E["dev<br/>저장소 규칙 우선, TDD"]
     D -.->|"요청하거나 보강할 때"| DD["deep-dive<br/>과거 유사 태스크, 서브에이전트 분석"]
     D --> E
     E --> F["검증<br/>테스트·린트·실행, tasks.md 갱신"]
@@ -109,11 +110,11 @@ flowchart TD
     I --> J["PLANS_PATH에 둔 문서는<br/>done/으로 이동"]
 ```
 
-1. **세션 시작**: [`rules/`](rules/)는 자동으로 주입되고, 계획 문서는 필요할 때 [`/planning-dev`](skills/planning-dev/SKILL.md)의 "계획 문서 찾기" 순서로 찾아 읽습니다.
+1. **세션 시작**: [`rules/`](rules/)는 자동으로 주입되고, 계획 문서는 필요할 때 [`/dev-plan`](skills/dev-plan/SKILL.md)의 "계획 문서 찾기" 순서로 찾아 읽습니다.
 2. **요청**: "○○ 요청사항 분석해줘"
-3. **분석**: [`/planning-dev`](skills/planning-dev/SKILL.md)가 목적, 유형, 규모, 할 일을 보고합니다. 깊은 분석은 요청하거나 계획 문서를 보강할 때만 합니다.
+3. **분석**: [`/dev-plan`](skills/dev-plan/SKILL.md)가 목적, 유형, 규모, 할 일을 보고합니다. 깊은 분석은 요청하거나 계획 문서를 보강할 때만 합니다.
 4. **계획 문서**: 문서를 둘 위치를 묻고, `requirements.md`·`design.md`·`tasks.md`를 모두 쓴 뒤 한 번에 확인받습니다.
-5. **구현**: [`/development`](skills/development/SKILL.md)가 저장소 규칙을 우선하며 TDD로 작업하고, 작업 브랜치는 [`/git-workflow`](skills/git-workflow/SKILL.md)대로 만듭니다. 답이 서지 않는 점은 판정으로 임의 진행과 착수 전 질문을 가르고, 임의로 진행한 결정은 `adr.md`·`adr.dev.md`에 남깁니다.
+5. **구현**: [`/dev`](skills/dev/SKILL.md)가 저장소 규칙을 우선하며 TDD로 작업하고, 작업 브랜치는 [`/git-workflow`](skills/git-workflow/SKILL.md)대로 만듭니다. 답이 서지 않는 점은 판정으로 임의 진행과 착수 전 질문을 가르고, 임의로 진행한 결정은 `adr.md`·`adr.dev.md`에 남깁니다.
 6. **검증**: 테스트, 린트, 실제 실행으로 확인하고 `tasks.md`를 갱신합니다.
 7. **리뷰**: 커밋 전이면 [`/diff-review`](skills/diff-review/SKILL.md), PR을 올리기 전 브랜치 전체면 [`/branch-review`](skills/branch-review/SKILL.md), 올라온 PR이면 [`/pr-review`](skills/pr-review/SKILL.md)입니다. 축 구성과 그렇게 나눈 이유는 [`skills/review-common/README.md`](skills/review-common/README.md)에 있습니다.
 8. **완료**: 사용자가 끝났다고 확인하면 `tasks.md`를 완료로 바꾸고, `$PLANS_PATH`에 둔 문서는 `done/`으로 옮깁니다.
