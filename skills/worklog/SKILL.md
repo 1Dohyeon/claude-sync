@@ -19,7 +19,7 @@ when_to_use: '예: "worklog 써줘", "오늘 한 거 기록해줘"'
 
 ## 저장 위치
 
-`$WORKLOG_PATH/{YYYY}/{MM}/{DD}-{HHmm}-{주제}.md`, `$WORKLOG_PATH`는 [`rules/environments.md`](../../rules/environments.md)에 있다.
+`$WORKLOG_PATH/{YYYY}/{MM}/{DD}-{HHmm}-{주제}.md`, `$WORKLOG_PATH`는 [`rules/common/environments.md`](../../rules/common/environments.md)에 있다.
 
 - 시각은 세션이 끝난 시점(지금 대화면 지금)의 로컬 시간이다. 인자가 없으면 `date '+%Y %m %d %H%M'`로 얻는다.
 - `{주제}`는 세션에서 한 일을 2~5단어로 줄여 붙임표로 잇는다. 예: `worklog-스킬-설계`.

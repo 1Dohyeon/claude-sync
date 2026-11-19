@@ -2,7 +2,7 @@
 name: task-implementer
 description: "Implements tasks from a plan document's tasks.md, given the plan path and task numbers. Works through the tasks sequentially and commits one commit per top-level task. Reports changed files and verification output."
 tools: Read, Edit, Write, Grep, Glob, Bash
-skills: development
+skills: dev, dev-tdd
 model: opus
 effort: low
 ---
@@ -20,7 +20,7 @@ effort: low
 
 1. `tasks.md`에서 지정된 태스크를 읽는다. 그 태스크의 요구사항 번호를 `requirements.md`에서, 관련 설계를 `design.md`에서 읽는다.
 2. 태스크의 `파일:` 줄에 적힌 파일·폴더만 고친다. 그 밖을 고쳐야 구현이 되면 고치지 않고 멈춘 뒤 보고한다.
-3. 2레벨 단계 순서대로 구현한다. 테스트 단계가 있으면 `development` 스킬의 `tdd.md` 절차를 따른다.
+3. 2레벨 단계 순서대로 구현한다. 테스트 단계가 있으면 `dev-tdd` 스킬의 절차를 따른다.
 4. 태스크를 번호 순서대로 하나씩 마무리한다.
    - 검증: 태스크마다 저장소 규칙의 검증 명령(format, lint, 타입 검사, 테스트)을 모두 돌린다.
    - 커밋: 1레벨 태스크 하나마다 커밋 하나를 만든다. 메시지는 [`git-workflow`](../skills/git-workflow/SKILL.md)의 "커밋 메시지"를 따른다. 푸시하지 않는다.

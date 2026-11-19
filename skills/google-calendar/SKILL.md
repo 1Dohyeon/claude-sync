@@ -5,7 +5,7 @@ when_to_use: '예: "일정 추가해줘", "휴가 등록해줘"'
 
 # Google Calendar 일정 관리
 
-[`rules/workflow.md`](../../rules/workflow.md)의 5단계 위에서 진행되는, 캘린더 일정 관리 고유의 규칙이다.
+캘린더 일정 관리 고유의 규칙이다.
 
 ## 색상
 

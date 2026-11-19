@@ -24,16 +24,13 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git add:*)",
-      "Bash(git -C * add *)",
-      "Bash(git -C * commit *)",
-      "Bash(git -C * push *)",
       "Bash(ls:*)",
       "Bash(find:*)",
       "Bash(rg:*)",
       "Bash(grep:*)",
-      "Bash(node ~/.claude/skills/planning-dev/hooks/cochange.js:*)",
-      "Bash(uv run --script ~/.claude/skills/planning-dev/hooks/tasksim.py:*)",
-      "Bash(uv run --script ~/.claude/skills/planning-dev/hooks/prsim.py:*)",
+      "Bash(node ~/.claude/skills/dev-plan/hooks/cochange.js:*)",
+      "Bash(uv run --script ~/.claude/skills/dev-plan/hooks/tasksim.py:*)",
+      "Bash(uv run --script ~/.claude/skills/dev-plan/hooks/prsim.py:*)",
       "Bash(pnpm lint:*)",
       "Bash(pnpm check-types:*)",
       "Bash(pnpm test:*)",
@@ -58,16 +55,10 @@
       "Edit(~/plans/**)",
       "Read(~/plans/**)"
     ],
-    "deny": [
-      "Bash(cat:*)",
-      "Bash(head:*)",
-      "Bash(tail:*)"
-    ],
     "ask": [
       "Bash(gh pr merge:*)",
       "Bash(git merge:*)",
-      "Edit(~/.claude/projects/*/memory/**)",
-      "Write(~/.claude/projects/*/memory/**)"
+      "Edit(~/.claude/projects/*/memory/**)"
     ]
   },
   "hooks": {
@@ -329,9 +320,6 @@
         ]
       }
     ]
-  },
-  "enabledPlugins": {
-    "subagents-status@inline": false
   },
   "outputStyle": "fluent-korean",
   "autoUpdatesChannel": "latest",
