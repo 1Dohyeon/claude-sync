@@ -14,6 +14,7 @@
 | PR 전 브랜치 전체·올라온 PR 리뷰            | [`/review-pr`](skills/review-pr/SKILL.md)                 |
 | 브랜치·worktree 만들기·정리                 | [`/git-branch`](skills/git-branch/SKILL.md)               |
 | 커밋 단위·메시지                            | [`/git-commit`](skills/git-commit/SKILL.md)               |
+| 원격에 push                                 | [`/git-push`](skills/git-push/SKILL.md)                   |
 | PR 생성·수정·머지, PR 나누기                | [`/git-pr`](skills/git-pr/SKILL.md)                       |
 | 조사·리서치·자료 종합·브레인스토밍          | [`/research`](skills/research/SKILL.md)                   |
 | 여러 출처를 종합하는 심층 조사·보고서       | [`/research-deep`](skills/research-deep/SKILL.md)         |
