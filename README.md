@@ -81,6 +81,8 @@ Claude는 세션을 시작할 때 [`CLAUDE.md`](CLAUDE.md), [`rules/`](rules/) �
 | PR 리뷰                           | [`/pr-review`](skills/pr-review/SKILL.md)                 |
 | git 작업(worktree·commit·push 등) | [`/git-workflow`](skills/git-workflow/SKILL.md)           |
 | 조사·리서치·자료 종합             | [`/research`](skills/research/SKILL.md)                   |
+| 심층 조사·보고서                  | [`/research-deep`](skills/research-deep/SKILL.md)         |
+| 비교·결정 조사                    | [`/research-compare`](skills/research-compare/SKILL.md)   |
 | 논문·긴 기술 문서 정독            | [`/paper-reading`](skills/paper-reading/SKILL.md)         |
 | 세션 작업 일기                    | [`/worklog`](skills/worklog/SKILL.md)                     |
 | Windows 디스크 용량 확인·정리     | [`/windows-disk-scan`](skills/windows-disk-scan/SKILL.md) |
