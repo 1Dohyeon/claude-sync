@@ -98,13 +98,13 @@ git -C <dir> checkout -- <lockfile>
 
 6. env 파일을 연결한다. `.env`는 gitignore 대상이라 새 worktree엔 없다. 메인 클론(`<main-dir>`)에 실제로 존재하는 `apps/*/.env`, `apps/*/.env.local`을 찾아 새 worktree의 같은 상대경로에 **심링크**로 연결한다. 어떤 경우에도 복사하지 않는다.
 
+대상 파일은 Glob으로 `<main-dir>`에서 `apps/*/.env`와 `apps/*/.env.local` 패턴을 찾는다. 찾은 파일의 상대경로 `<f>`마다 아래 명령을 하나씩 실행한다.
+
 ```sh
-cd <main-dir> && find apps -maxdepth 2 \( -name '.env' -o -name '.env.local' \) | while read -r f; do
-  ln -sf "<main-dir>/$f" "<dir>/$f"
-done
+ln -sf <main-dir>/<f> <dir>/<f>
 ```
 
-연결한 뒤 `ls -l <dir>/$f`로 `->` 화살표가 뜨는지 반드시 확인한다. 심링크 생성이 실패하면 복사로 대신하지 않고 오류 원문과 함께 중단하고 보고한다.
+연결한 뒤 `ls -l <dir>/<f>`로 `->` 화살표가 뜨는지 반드시 확인한다. 심링크 생성이 실패하면 복사로 대신하지 않고 오류 원문과 함께 중단하고 보고한다.
 
 Windows에서 심링크를 쓰려면 개발자 모드가 켜져 있어야 한다. 꺼져 있으면 에러 없이 복사본이 생겨 겉보기엔 성공한 것처럼 보이므로, `->` 화살표 확인이 특히 중요하다. 화살표가 없으면 실패로 보고 중단한다.
 
