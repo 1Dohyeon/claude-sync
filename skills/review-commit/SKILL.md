@@ -11,15 +11,13 @@ when_to_use: '예: "push 전에 리뷰해줘", "커밋한 것 리뷰해줘", "�
 
 범위는 "push하지 않은 커밋 전부"다. 커밋하지 않은 변경은 범위에 넣지 않는다. 되묻지 않는다.
 
-비교 기준은 아래로 정한다.
-
-1. upstream이 있으면 `@{upstream}`이다. 아래 명령이 성공하면 upstream이 있다.
+비교 기준은 작업 브랜치의 원격 브랜치 `origin/<작업 브랜치>`다. upstream 설정은 보지 않는다. 먼저 원격 상태를 받아 온다.
 
 ```sh
-git -C <작업 폴더> rev-parse --abbrev-ref @{upstream}
+git -C <작업 폴더> fetch origin
 ```
 
-2. upstream이 없으면 베이스와의 갈림점이다. 베이스는 [`git-workflow`](../git-workflow/SKILL.md)의 "베이스 브랜치 고르기"로 정하고, 갈림점은 아래로 구한다.
+원격 브랜치가 없으면(아직 한 번도 push하지 않았으면) 아래 스냅샷 명령이 `unknown revision` 오류로 실패한다. 그때는 베이스와의 갈림점을 비교 기준으로 쓴다. 베이스는 [`git-workflow`](../git-workflow/SKILL.md)의 "베이스 브랜치 고르기"로 정한다.
 
 ```sh
 git -C <작업 폴더> merge-base origin/<base> HEAD
