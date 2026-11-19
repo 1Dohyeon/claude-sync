@@ -10,7 +10,8 @@
 | 코드 작성·수정(개발 작업)                   | [`/dev`](skills/dev/SKILL.md)                             |
 | 요청사항 분석·설계("태스크 분석해줘" 등)    | [`/dev-plan`](skills/dev-plan/SKILL.md)                   |
 | 테스트 먼저 작성(TDD)                       | [`/dev-tdd`](skills/dev-tdd/SKILL.md)                     |
-| 코드 변경 리뷰(push 전·PR)                  | [`/review`](skills/review/SKILL.md)                       |
+| push 전 로컬 커밋 리뷰                      | [`/review-commit`](skills/review-commit/SKILL.md)         |
+| PR 전 브랜치 전체·올라온 PR 리뷰            | [`/review-pr`](skills/review-pr/SKILL.md)                 |
 | git 관련 작업(worktree, commit, push, ...)  | [`/git-workflow`](skills/git-workflow/SKILL.md)           |
 | 조사·리서치·자료 종합·브레인스토밍          | [`/research`](skills/research/SKILL.md)                   |
 | 여러 출처를 종합하는 심층 조사·보고서       | [`/research-deep`](skills/research-deep/SKILL.md)         |

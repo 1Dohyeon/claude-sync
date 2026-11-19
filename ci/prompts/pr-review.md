@@ -20,7 +20,7 @@
 
 **리뷰 요청**
 
-`review` 스킬의 pr 범위(`skills/review/sub/pr.md`)와 `skills/review/verify.md`를 따르되 다음을 바꾼다.
+`review-pr` 스킬의 PR 모드와 `review-pr/verify.md`를 따르되 다음을 바꾼다.
 
 - 범위와 체크아웃: PR 번호는 Action이 준 컨텍스트의 것을 쓴다. 체크아웃 여부는 묻지 않는다. diff는 `gh pr diff <번호>`로 뜬다.
   - 열린 PR이면 Action이 PR 브랜치를 체크아웃해 두므로 `impact-reviewer`도 부를 수 있다.
