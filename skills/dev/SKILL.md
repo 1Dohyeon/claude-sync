@@ -4,7 +4,7 @@ description: 코드를 작성·수정하는 개발 작업을 할 때 사용한�
 
 # 개발 작업 규칙
 
-[`rules/workflow.md`](../../rules/workflow.md) 규칙 위에서 진행되는 개발 작업에서의 규칙이다.
+[`rules/common/workflow.md`](../../rules/common/workflow.md) 규칙 위에서 진행되는 개발 작업에서의 규칙이다.
 
 ## 규칙 우선순위
 

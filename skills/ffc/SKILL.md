@@ -28,7 +28,7 @@ Claude가 작업 규칙을 어긴 사례를 어느 배경에서 무엇을 잘못
 
 ## 저장 위치
 
-`$FFC_PATH/{YYYY}/{MM}/{DD}-{HHmm}-{주제}.md`, `$FFC_PATH`는 [`rules/environments.md`](../../rules/environments.md)에 있다.
+`$FFC_PATH/{YYYY}/{MM}/{DD}-{HHmm}-{주제}.md`, `$FFC_PATH`는 [`rules/common/environments.md`](../../rules/common/environments.md)에 있다.
 
 - 시각은 `date '+%Y %m %d %H%M'`로 얻은 로컬 시간이다.
 - `{주제}`는 어긴 내용을 2~5단어로 줄여 붙임표로 잇는다. 예: `승인-없이-커밋`.
@@ -40,7 +40,7 @@ Claude가 작업 규칙을 어긴 사례를 어느 배경에서 무엇을 잘못
 | 필드      | 값                                                                                     |
 | --------- | -------------------------------------------------------------------------------------- |
 | `trigger` | 사용자가 지적했으면 `user`, Claude가 스스로 알아챘으면 `self`                          |
-| `rule`    | 어긴 규칙의 파일 경로와 절 제목. 예: `rules/workflow.md#HOW TO WORK`. 모르면 비워 둔다 |
+| `rule`    | 어긴 규칙의 파일 경로와 절 제목. 예: `rules/common/workflow.md#HOW TO WORK`. 모르면 비워 둔다 |
 
 ## 규칙
 

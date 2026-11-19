@@ -5,7 +5,7 @@ when_to_use: '예: "C 드라이브 용량 줄이고 싶어", "최근에 뭐가 �
 
 # Windows 디스크 용량 확인·정리
 
-[`rules/workflow.md`](../../rules/workflow.md)의 5단계 위에서 진행되는, 디스크 용량 확인·정리 고유의 규칙이다.
+[`rules/common/workflow.md`](../../rules/common/workflow.md)의 5단계 위에서 진행되는, 디스크 용량 확인·정리 고유의 규칙이다.
 
 ## 도구
 

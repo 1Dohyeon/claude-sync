@@ -41,7 +41,7 @@ git branch -r
 | 순위 | 선택지                     | 위치                                                                                                                                                                              |
 | ---- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1    | 앱의 훅이 안내하는 위치    | 세션을 연 앱이 훅(세션 시작 안내)으로 안내하는 경로. 안내가 없으면 이 선택지를 빼고, 있으면 추천으로 표시한다                                                                     |
-| 2    | worktree 모음 위치         | `$WORKTREES_PATH/{owner}/{repo}/{branch}/`. `WORKTREES_PATH`의 값은 [`rules/environments.md`](../../rules/environments.md)에 있다. 1순위 선택지가 없으면 이것을 추천으로 표시한다 |
+| 2    | worktree 모음 위치         | `$WORKTREES_PATH/{owner}/{repo}/{branch}/`. `WORKTREES_PATH`의 값은 [`rules/common/environments.md`](../../rules/common/environments.md)에 있다. 1순위 선택지가 없으면 이것을 추천으로 표시한다 |
 | 3    | 메인 작업 폴더와 형제 위치 | 메인 클론(`<main-dir>`)과 같은 부모 폴더 아래                                                                                                                                     |
 
 - `{owner}`·`{repo}`는 `git remote get-url origin`에서 얻는다. 원격이 없으면 `{owner}` 자리에 `_local`을 쓰고, `{repo}`는 메인 클론의 폴더 이름을 쓴다.
