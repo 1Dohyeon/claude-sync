@@ -7,7 +7,7 @@
 # 스크립트(hooks/save-docs.sh, skills/dev-plan/hooks/tasksim.py)는 이 파일을 읽지 못해 값을 바꿔도 ~/plans 를 쓴다.
 PLANS_PATH=~/plans
 
-# git-branch 스킬이 worktree를 두는 2순위 위치다. worktree는 $WORKTREES_PATH/{owner}/{repo}/{branch}/ 에 둔다. 기본값은 ~/worktrees 다.
+# git-worktree 스킬이 worktree를 두는 2순위 위치다. worktree는 $WORKTREES_PATH/{owner}/{repo}/{branch}/ 에 둔다. 기본값은 ~/worktrees 다.
 WORKTREES_PATH=~/worktrees
 
 # worklog 스킬이 작업 일기를 두는 곳이다. 문서는 $WORKLOG_PATH/{YYYY}/{MM}/ 에 둔다. 기본값은 ~/worklog 다.

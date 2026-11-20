@@ -5,7 +5,7 @@ when_to_use: '예: "푸시해줘", "커밋 푸시"'
 
 # push
 
-작업 브랜치는 [`git-branch`](../git-branch/SKILL.md)대로 원격 브랜치 없이 만들어진다. 원격 브랜치는 처음 push할 때 생긴다.
+작업 브랜치는 [`git-worktree`](../git-worktree/SKILL.md)대로 원격 브랜치 없이 만들어진다. 원격 브랜치는 처음 push할 때 생긴다.
 
 - push 전에 `git status -sb`로 upstream을 확인하고 아래 표대로 push한다.
 

@@ -1,6 +1,15 @@
-# WORKTREE
+---
+description: 작업 브랜치를 만들거나 정리할 때 사용한다. 베이스 브랜치를 고르고, 원격 브랜치 없이 origin/<base>에서 로컬 브랜치를 worktree나 메인 클론에 만든다. 머지된 브랜치와 worktree를 유실 없이 지우는 절차도 담는다.
+when_to_use: '예: "worktree 만들어줘", "브랜치 만들어줘", "워크트리 삭제해줘", "브랜치 정리해줘", 베이스 브랜치를 정해야 할 때'
+---
+# GIT WORKTREE
 
-worktree에서 브랜치를 만들거나 정리하는 경우만 다룬다. `<main-dir>`은 메인 클론 경로, `<dir>`은 worktree 경로다.
+> [!IMPORTANT]
+> 이 문서는 worktree에서 브랜치를 만들거나 정리하는 경우만 다룬다. 메인 클론에 브랜치를 체크아웃해서 작업하면 [`branch.md`](branch.md)만 읽고 이 문서는 따르지 않는다.
+> - 만들기: 요청에 위치가 없으면(단순 "개발 진행해" 프롬프트) 묻지 않고 이 문서대로 새 worktree로 만든다. 사용자가 메인 클론을 지정했을 때만 `branch.md`를 따른다.
+> - 정리: `git worktree list`에서 지울 브랜치가 메인 클론이 아닌 worktree에 체크아웃되어 있을 때만 이 문서를 따르고, 그 밖에는 `branch.md`를 따른다.
+
+`<main-dir>`은 메인 클론 경로, `<dir>`은 worktree 경로다.
 
 ## create worktree
 
