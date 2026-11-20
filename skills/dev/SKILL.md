@@ -55,6 +55,8 @@ description: 코드를 작성·수정하는 개발 작업을 할 때 사용한�
 | Orca worker 세션                | 기본. Orca 안(`ORCA_CLI_COMMAND`나 `ORCA_TERMINAL_HANDLE`이 있을 때)이면 저장소 수와 상관없이 쓴다 | [`sub/orca-worker.md`](sub/orca-worker.md) |
 | `task-implementer` 서브에이전트 | Orca 밖(일반 터미널, Windows 등)이라 worker를 띄울 수 없을 때만                                    | 이 절의 "지시"\~"맡긴 범위가 끝난 뒤"      |
 
+- 지시를 받아 맡겨진 worker나 서브에이전트는 이 절을 적용하지 않는다. 다시 맡기지 않고 직접 구현한다.
+  - 사유: worker도 Orca 안에서 실행되어 위 표의 조건을 만족하므로, 막지 않으면 하위 worker가 중첩해서 생긴다.
 - 이 절은 구현을 맡기는 경우만 다룬다. 리뷰·조사용 서브에이전트(`review-pr`, `review-commit`의 축별 리뷰어, Explore 등)는 각 스킬을 따른다.
 
 ### 직접 할지 맡길지
