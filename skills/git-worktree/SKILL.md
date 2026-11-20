@@ -78,7 +78,7 @@ Orca 안에서 실행 중일 때(`ORCA_CLI_COMMAND`나 `ORCA_TERMINAL_HANDLE` �
 - 사유: git으로 직접 만든 worktree는 Orca가 부모를 기록하지 않아 계보가 끊긴다.
 - `ORCA_CLI_COMMAND`는 Orca 채팅 세션에만 있고 Orca 터미널에는 없다. 터미널에서는 PATH의 `orca`를 쓴다.
 - `current`는 현재 폴더가 아니라 명령을 실행한 터미널·채팅이 속한 워크스페이스로 풀린다. bot이 지휘한 세션이면 bot 홈 폴더가, 메인 클론 세션이면 메인 클론이 부모가 된다.
-- bot 사이드바의 Home Chat 아래에는 bot 홈 폴더를 부모로 둔 worktree만 보인다.
+- 부모가 bot 홈이면 사이드바에서 그 bot 아래에 보인다. 어느 채팅 아래에 보일지는 [`dev/sub/orca-worker.md`](../dev/sub/orca-worker.md)를 본다.
 - Orca 메타데이터만 바꾸고 git은 건드리지 않는다. `--no-parent`로 되돌릴 수 있다.
 - `"${ORCA_CLI_COMMAND:-orca}" worktree show --worktree path:<dir> --json`에서 `parent.selector`(또는 `workspaceLineage.parentWorkspaceKey`)가 기대한 부모인지 확인한다. 부모가 폴더 워크스페이스면 부모 쪽 `childWorktreeIds`에는 나오지 않는다. 부모가 git worktree면 `parentWorktreeId`도 채워진다.
 - 실패하면 worktree 작업은 계속하되 오류 원문을 보고에 적는다. 조용히 넘기지 않는다.
@@ -152,6 +152,26 @@ git -C <dir> stash list
 - `--merged`만 믿지 않는다. 머지 전에 리베이스하는 저장소에서는 로컬 tip이 베이스의 조상이 아니다. `git cherry`의 `-`는 같은 patch가 베이스에 있다는 뜻이라 리베이스를 통과한다.
 - `+`가 남으면 커밋 제목으로 `git -C <dir> log origin/<base> --oneline --grep=<제목 일부>`를 찾고, 같은 제목이 있으면 `git -C <dir> diff <로컬커밋> <베이스커밋> -- <파일>`이 비는지 본다.
 - 어느 것도 확인되지 않으면 로컬에만 있는 커밋이므로 멈추고 보고한다.
+
+### release orca worker
+
+Orca 안에서 실행 중일 때(`ORCA_CLI_COMMAND`나 `ORCA_TERMINAL_HANDLE` 중 하나라도 비어 있지 않을 때)만 한다. 둘 다 없으면 Orca 밖이므로 건너뛴다.
+
+이 worktree에 붙은 worker를 찾는다. `workspace`가 `::<dir>`로 끝나고 `terminalState`가 `released`가 아닌 행이 대상이다.
+
+```sh
+"${ORCA_CLI_COMMAND:-orca}" orchestration worker-list --json
+```
+
+대상 행의 `dispatchId`마다 release한다.
+
+```sh
+"${ORCA_CLI_COMMAND:-orca}" orchestration worker-release --dispatch <dispatch_id>
+```
+
+- 사유: `--keep-open`으로 띄운 worker는 스스로 닫히지 않아, worktree를 지운 뒤에도 터미널이 남는다.
+- `worker-release`는 끝난(settled) worker만 닫는다. 아직 일하는 worker(`outcome`이 `in_progress`)가 있으면 멈추고 보고한다. `worker-stop`으로 멈추는 것은 사용자가 요청할 때만 한다.
+- 목록은 기본 100행까지만 나온다. 응답에 `nextCursor`가 있으면 `--cursor`로 이어서 본다.
 
 ### delete
 
