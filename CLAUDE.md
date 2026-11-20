@@ -7,7 +7,7 @@
 
 | 요청 유형 (트리거)                          | 호출 대상                                                 |
 | ------------------------------------------- | --------------------------------------------------------- |
-| 코드 작성·수정(개발 작업)                   | [`/dev`](skills/dev/SKILL.md)                             |
+| 코드 작성·수정(개발 작업), worker 위임      | [`/dev`](skills/dev/SKILL.md)                             |
 | 요청사항 분석·설계("태스크 분석해줘" 등)    | [`/dev-plan`](skills/dev-plan/SKILL.md)                   |
 | 테스트 먼저 작성(TDD)                       | [`/dev-tdd`](skills/dev-tdd/SKILL.md)                     |
 | push 전 로컬 커밋 리뷰                      | [`/review-commit`](skills/review-commit/SKILL.md)         |
