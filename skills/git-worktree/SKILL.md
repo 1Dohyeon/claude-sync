@@ -67,6 +67,20 @@ git -C <dir> status -sb
 
 `## <branch>`(upstream 없음)로 나와야 한다. `## <branch>...origin/<base>`로 나오면 `git -C <dir> branch --unset-upstream`으로 푼다.
 
+### link orca parent
+
+Orca 안에서 실행 중일 때(`ORCA_CLI_COMMAND`가 비어 있지 않을 때)만 한다. Orca 밖이면 건너뛴다.
+
+```sh
+"${ORCA_CLI_COMMAND:-orca}" worktree set --worktree path:<dir> --parent-worktree path:<main-dir>
+```
+
+- 사유: git으로 직접 만든 worktree는 Orca가 부모를 기록하지 않아 계보가 끊긴다.
+- 부모는 `current`가 아니라 `path:<main-dir>`로 준다. 명령을 어느 세션에서 실행하든 부모가 메인 클론으로 고정된다.
+- Orca 메타데이터만 바꾸고 git은 건드리지 않는다. `--no-parent`로 되돌릴 수 있다.
+- `orca worktree ps --json`에서 메인 클론 행의 `childWorktreeIds`에 `<dir>`이 들어갔는지 확인한다. 새 worktree 행은 활동이 없으면 `--since` 필터에 나오지 않을 수 있어 부모 쪽으로 본다.
+- 실패하면 worktree 작업은 계속하되 오류 원문을 보고에 적는다. 조용히 넘기지 않는다.
+
 ### setup
 
 1. 의존성을 설치한다. 새 worktree엔 `node_modules`가 없다. 저장소의 패키지 매니저를 쓴다(`bun.lock` → `bun install`, `pnpm-lock.yaml` → `pnpm install` 등).
