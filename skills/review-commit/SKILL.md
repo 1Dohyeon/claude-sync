@@ -17,7 +17,7 @@ when_to_use: '예: "push 전에 리뷰해줘", "커밋한 것 리뷰해줘", "�
 git -C <작업 폴더> fetch origin
 ```
 
-원격 브랜치가 없으면(아직 한 번도 push하지 않았으면) 아래 스냅샷 명령이 `unknown revision` 오류로 실패한다. 그때는 베이스와의 갈림점을 비교 기준으로 쓴다. 베이스는 [`git-branch`](../git-branch/SKILL.md)의 "select base"로 정한다.
+원격 브랜치가 없으면(아직 한 번도 push하지 않았으면) 아래 스냅샷 명령이 `unknown revision` 오류로 실패한다. 그때는 베이스와의 갈림점을 비교 기준으로 쓴다. 베이스는 [`git-worktree`](../git-worktree/SKILL.md)의 "select base"로 정한다.
 
 ```sh
 git -C <작업 폴더> merge-base origin/<base> HEAD
