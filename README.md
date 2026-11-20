@@ -1,9 +1,8 @@
 # claude-sync
 
-> [!IMPORTANT]  
-> 설치하면 `~/.claude/`는 실제 폴더로 두고, 이 저장소의 하네스 설정을 그 안으로 **심링크**합니다. 저장소에서 고친 내용이 `~/.claude/`에 바로 반영됩니다. 기존 설정은 지우지 않고 `~/claude-backup/`으로 옮긴 뒤 연결합니다.
+Claude Code 개인 설정을 관리하고, `~/.claude/`에 심링크로 연결해 쓰는 저장소입니다.
 
-## Setting (clone)
+## Install
 
 Claude에게 아래 한 줄을 그대로 전달합니다.
 
