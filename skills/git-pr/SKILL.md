@@ -24,7 +24,7 @@ PR 구조(단일 PR, 순차 PR, 부모 PR + 하위 PR)는 계획 단계에서 �
 - 브랜치는 "베이스 → 부모 → 하위" 세 단계를 넘지 않는다. 영역별 중간 브랜치를 두지 않는다.
 - 하위 PR이 너무 커지면 그 아래에 브랜치를 만들지 않고, 같은 단계의 형제 하위 PR로 나눈다.
 - epic의 마일스톤은 계획 문서에만 두고 브랜치로 만들지 않는다.
-- 부모 브랜치는 [`git-branch`](../git-branch/SKILL.md)의 "select base"로 정한 베이스에서, 하위 브랜치는 부모 브랜치에서 만든다. 만드는 순서는 `git-branch`의 "create branch or worktree"와 같다.
+- 부모 브랜치는 [`git-branch`](../git-branch/SKILL.md)의 "select base"로 정한 베이스에서, 하위 브랜치는 부모 브랜치에서 만든다. 만드는 순서는 `git-branch`의 "create branch"(worktree면 `worktree.md`의 "create worktree")와 같다.
 
 ## 하위 PR 진행
 
