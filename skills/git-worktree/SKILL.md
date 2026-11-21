@@ -137,26 +137,6 @@ git -C <dir> stash list
 - `+`가 남으면 커밋 제목으로 `git -C <dir> log origin/<base> --oneline --grep=<제목 일부>`를 찾고, 같은 제목이 있으면 `git -C <dir> diff <로컬커밋> <베이스커밋> -- <파일>`이 비는지 본다.
 - 어느 것도 확인되지 않으면 로컬에만 있는 커밋이므로 멈추고 보고한다.
 
-### release orca worker
-
-Orca 안에서 실행 중일 때(`ORCA_CLI_COMMAND`나 `ORCA_TERMINAL_HANDLE` 중 하나라도 비어 있지 않을 때)만 한다. 둘 다 없으면 Orca 밖이므로 건너뛴다.
-
-이 worktree에 붙은 worker를 찾는다. `workspace`가 `::<dir>`로 끝나고 `terminalState`가 `released`가 아닌 행이 대상이다.
-
-```sh
-"${ORCA_CLI_COMMAND:-orca}" orchestration worker-list --json
-```
-
-대상 행의 `dispatchId`마다 release한다.
-
-```sh
-"${ORCA_CLI_COMMAND:-orca}" orchestration worker-release --dispatch <dispatch_id>
-```
-
-- 사유: `--keep-open`으로 띄운 worker는 스스로 닫히지 않아, worktree를 지운 뒤에도 터미널이 남는다.
-- `worker-release`는 끝난(settled) worker만 닫는다. 아직 일하는 worker(`outcome`이 `in_progress`)가 있으면 멈추고 보고한다. `worker-stop`으로 멈추는 것은 사용자가 요청할 때만 한다.
-- 목록은 기본 100행까지만 나온다. 응답에 `nextCursor`가 있으면 `--cursor`로 이어서 본다.
-
 ### delete
 
 1. worktree를 지운다. 로컬 브랜치보다 먼저 지워야 한다. 순서를 바꾸면 `checked out at ...`으로 거부된다.
