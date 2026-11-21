@@ -20,7 +20,7 @@ Orca 안에서 실행 중일 때(`ORCA_CLI_COMMAND`나 `ORCA_TERMINAL_HANDLE` �
 
 ## 2. worktree
 
-PR마다 [`git-worktree`](../../git-worktree/SKILL.md)의 "create worktree"로 worktree를 만든다. 그 안의 "link orca parent" 단계가 지휘한 세션의 워크스페이스(`current`)를 Orca 부모로 기록한다. bot이 지휘하면 bot 홈이, 메인 클론 세션이 지휘하면 메인 클론이 부모가 된다.
+PR마다 [`git-worktree`](../../git-worktree/SKILL.md)의 "create worktree"로 worktree를 만든다.
 
 - `worker-start --worktree new-child`(또는 `new-top-level`)로 Orca가 worktree를 만들게 하지 않는다.
   - 사유: Orca가 직접 만든 worktree에는 위치 규칙(`$WORKTREES_PATH/{owner}/{repo}/{branch}`), `--no-track`, env 심링크가 빠진다.
