@@ -5,15 +5,13 @@ when_to_use: '예: "worktree 만들어줘", "브랜치 만들어줘", "워크트
 # GIT WORKTREE
 
 > [!IMPORTANT]
-> 이 문서는 worktree에서 브랜치를 만들거나 정리하는 경우만 다룬다. 메인 클론에 브랜치를 체크아웃해서 작업하면 [`branch.md`](branch.md)만 읽고 이 문서는 따르지 않는다.
-> - 만들기: 요청에 위치가 없으면(단순 "개발 진행해" 프롬프트) 묻지 않고 이 문서대로 새 worktree로 만든다. 사용자가 메인 클론을 지정했을 때만 `branch.md`를 따른다.
-> - 정리: `git worktree list`에서 지울 브랜치가 메인 클론이 아닌 worktree에 체크아웃되어 있을 때만 이 문서를 따르고, 그 밖에는 `branch.md`를 따른다.
+> 이 문서는 브랜치를 worktree에서 다루는지, 메인 클론에서 다루는지에 따라 갈래가 나뉜다. 소절에 "worktree"와 "메인 클론"이 따로 있으면 해당하는 갈래만 따르고, 갈래 표시가 없는 소절은 두 갈래가 함께 쓴다.
+> - 만들기: 요청에 위치가 없으면(단순 "개발 진행해" 프롬프트) 묻지 않고 이 문서의 worktree 갈래대로 새 worktree로 만든다. 사용자가 메인 클론을 지정했을 때만 메인 클론 갈래를 따른다.
+> - 정리: `git worktree list`에서 지울 브랜치가 메인 클론이 아닌 worktree에 체크아웃되어 있을 때만 worktree 갈래를 따르고, 그 밖에는 메인 클론 갈래를 따른다.
 
-`<main-dir>`은 메인 클론 경로, `<dir>`은 worktree 경로다.
+`<main-dir>`은 메인 클론 경로, `<dir>`은 worktree 경로다. 명령은 worktree 기준으로 적었다. 메인 클론에서 작업할 때는 `git -C <dir>`·`git -C <main-dir>`의 `-C <...>`를 빼고 그 폴더에서 그대로 실행한다.
 
-## create worktree
-
-### select base
+## select base
 
 계획 문서 `requirements.md`에 베이스가 적혀 있으면 그것을 쓴다. 없으면 `git branch -r`로 원격 브랜치를 보고 아래 표로 정한다.
 
@@ -26,13 +24,15 @@ when_to_use: '예: "worktree 만들어줘", "브랜치 만들어줘", "워크트
 - 어느 것도 원격에 없으면 멈추고 묻는다.
 - 정한 베이스와 근거를 보고에 적는다.
 
-### fetch base
+## fetch base
 
 `origin/<base>`는 마지막 fetch 때의 사본이라, 만들기 직전에 원격의 최신 상태로 맞춘다.
 
 ```sh
 git -C <main-dir> fetch origin <base>
 ```
+
+## create worktree
 
 ### choose location
 
@@ -88,22 +88,59 @@ ln -sf <main-dir>/<f> <dir>/<f>
 
 4. `git -C <dir> status -sb`로 작업 트리가 clean한지 확인하고 보고한다.
 
-## cleanup worktree
+## create branch
+
+메인 클론에 브랜치를 체크아웃해서 작업하는 갈래다. 베이스 고르기와 fetch는 위 "select base", "fetch base"를 따른다.
+
+### create
+
+원격 브랜치는 만들지 않는다. 로컬에서 커밋을 쌓고, 처음 push할 때 [`git-push`](../git-push/SKILL.md)가 원격 브랜치를 만든다.
+
+작업 트리가 clean한지 먼저 확인한다. 커밋하지 않은 변경이 있으면 새 브랜치로 따라오므로 멈추고 알린다.
+
+```sh
+git status --porcelain
+```
+
+`origin/<base>`에서 브랜치를 만든다.
+
+```sh
+git switch --no-track -c <branch> origin/<base>
+```
+
+- 사유: `--no-track`이 없으면 upstream이 `origin/<base>`로 잡혀, 이후 `git push`·`git pull`이 베이스를 대상으로 동작한다.
+
+### check
+
+```sh
+git status -sb
+```
+
+`## <branch>`(upstream 없음)로 나와야 한다. `## <branch>...origin/<base>`로 나오면 `git branch --unset-upstream`으로 푼다.
+
+## cleanup
 
 ### what to delete
 
-"워크트리 삭제해줘"는 worktree 폴더와 그 로컬 브랜치를 지우는 것이다. 로컬 브랜치를 남길지 따로 묻지 않는다.
+"워크트리 삭제해줘"는 worktree 폴더와 그 로컬 브랜치를 지우는 것이다. "브랜치 삭제해줘"(메인 클론)는 로컬 브랜치를 지우는 것이다. 어느 쪽이든 로컬 브랜치를 남길지 따로 묻지 않는다.
 
 |                                 | 기본 정리에서                                                                         |
 | ------------------------------- | ------------------------------------------------------------------------------------- |
-| worktree 폴더 `<dir>`           | **지운다**                                                                            |
+| worktree 폴더 `<dir>`           | **지운다**(worktree 갈래만)                                                           |
 | 로컬 브랜치 `<branch>`          | **지운다**                                                                            |
 | 원격 추적 ref `origin/<branch>` | 두고, 건드리지 않는다                                                                 |
 | GitHub의 원격 브랜치            | 사용자가 요청할 때만 `git push origin --delete <branch>`로 지우고 `git fetch --prune` |
 
+<!--
+정리를 빠뜨리면 로컬 브랜치가 계속 쌓인다.
+- 원격 브랜치를 지우고 git fetch --prune을 해도 원격 추적 ref만 사라지고, 로컬 브랜치는 upstream이 ": gone"으로 표시된 채 남는다.
+- GitHub Desktop의 BranchPruner는 기본 브랜치(main)에 머지된 브랜치만 정리해서, develop으로 머지하는 저장소에서는 걸리지 않는다.
+git branch -vv에서 ": gone"이 붙은 것들이 밀린 정리 후보다.
+-->
+
 ### check nothing is lost
 
-**로컬에만 있는 것이 없는지 먼저 본다.** 아래 중 하나라도 걸리면 멈추고 보고한다. 조용히 우회하거나 `-D`로 밀지 않는다.
+**로컬에만 있는 것이 없는지 먼저 본다.** 아래 중 하나라도 걸리면 멈추고 보고한다. 조용히 우회하거나 `-D`로 밀지 않는다. 메인 클론에서는 지울 브랜치가 현재 브랜치가 아니면 먼저 그 브랜치로 옮겨서 본다.
 
 ```sh
 git -C <dir> status -sb
@@ -139,6 +176,8 @@ git -C <dir> stash list
 
 ### delete
 
+#### worktree
+
 1. worktree를 지운다. 로컬 브랜치보다 먼저 지워야 한다. 순서를 바꾸면 `checked out at ...`으로 거부된다.
 
 ```sh
@@ -151,9 +190,18 @@ git -C <main-dir> worktree remove <dir>
 git -C <main-dir> branch -D <branch>
 ```
 
+#### 메인 클론
+
+1. 지울 브랜치가 현재 브랜치이면 다른 브랜치로 먼저 옮긴다.
+2. 로컬 브랜치를 지운다. 조상 여부로 반영을 확인했으면 `-d`, 원격 사본이나 patch 단위로 확인했으면 `-D`를 쓴다.
+
+```sh
+git branch -d <branch>
+```
+
 #### Filename too long (Windows)
 
-`git worktree remove`가 `Filename too long`으로 실패하면 긴 경로(`node_modules` 등) 때문에 폴더를 다 못 지운 것이다. 아래 순서로 연결을 끊고 Git Bash의 `rm -rf`로 지운다. **허용하는 삭제 방법은 이 `rm -rf` 한 번뿐이고, 위 확인을 통과한 폴더에만 쓴다.**
+worktree 갈래에서만 해당한다. `git worktree remove`가 `Filename too long`으로 실패하면 긴 경로(`node_modules` 등) 때문에 폴더를 다 못 지운 것이다. 아래 순서로 연결을 끊고 Git Bash의 `rm -rf`로 지운다. **허용하는 삭제 방법은 이 `rm -rf` 한 번뿐이고, 위 확인을 통과한 폴더에만 쓴다.**
 
 ```sh
 rm -f <dir>/.git
@@ -171,6 +219,8 @@ rm -rf <dir>
 
 ### verify
 
+#### worktree
+
 ```sh
 git -C <main-dir> worktree list
 ```
@@ -180,3 +230,11 @@ git -C <main-dir> branch -vv
 ```
 
 지운 브랜치와 worktree가 목록에서 사라졌는지 확인하고 보고한다. 원격 브랜치를 지우지 않았으면 `git branch -r`에 `origin/<branch>`가 남아 있는 것도 함께 적는다.
+
+#### 메인 클론
+
+```sh
+git branch -vv
+```
+
+지운 브랜치가 목록에서 사라졌는지 확인하고 보고한다. 원격 브랜치를 지우지 않았으면 `git branch -r`에 `origin/<branch>`가 남아 있는 것도 함께 적는다.
